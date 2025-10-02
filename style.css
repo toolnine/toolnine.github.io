@@ -96,6 +96,78 @@ main {
 [data-theme="dark"] .theme-btn:hover { background-color: #475569; }
 [data-theme="black"] .theme-btn:hover { background-color: #2a2a2a; }
 
+/* Hamburger Menu styles for mobile (start) */
+.hamburger-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: var(--text);
+    display: none; /* Hide on desktop */
+}
+/* Mega Menu Overlay */
+.mega-menu {
+    position: fixed;
+    top: var(--header-height);
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 300px; /* Adjust as needed for smaller screens */
+    background: var(--card);
+    border-left: 1px solid var(--border-color);
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    padding: 1rem;
+    overflow-y: auto;
+}
+.mega-menu.show {
+    transform: translateX(0);
+}
+/* Mega Menu Search Bar */
+.mega-menu-search {
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.mega-menu-search input {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: var(--bg);
+    color: var(--text);
+}
+.mega-menu-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+.mega-menu-category h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+.mega-menu-category ul {
+    list-style: none;
+}
+.mega-menu-category li a {
+    display: block;
+    padding: 0.5rem;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.95rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+.mega-menu-category li a:hover { background-color: #f1f5f9; }
+[data-theme="dark"] .mega-menu-category li a:hover { background-color: #475569; }
+[data-theme="black"] .mega-menu-category li a:hover { background-color: #2a2a2a; }
+/* Hamburger Menu styles for mobile (end) */
+
+/* Home Page Specifics */
 .home-hero {
     text-align: center;
     padding-top: 1rem;
@@ -249,9 +321,106 @@ main {
 [data-theme="black"] .btn { background-color: var(--accent); }
 [data-theme="black"] .btn:hover { background-color: #2563eb; }
 
+/* Tool Card Specifics (Favorites Icon) */
+.tool-card-home {
+    position: relative;
+}
+.favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    opacity: 0.8;
+    transition: opacity 0.2s, fill 0.2s, stroke 0.2s;
+    z-index: 50; /* Ensure button is above other elements in the card */
+}
+.favorite-btn:hover {
+    opacity: 1;
+}
+.favorite-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--text); /* Default outline color */
+    fill: none; /* Default fill color (empty heart) */
+}
+.favorite-btn.active svg {
+    fill: #f59e0b; /* Filled heart color (yellow/orange) */
+    stroke: #f59e0b; /* Filled heart stroke color */
+}
+#favoritesSection {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    display: none; /* Hide by default, show via JS when populated */
+}
+#favoritesSection h2 {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+/* Tool Page Layouts (common styles) */
+.tool-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 2rem;
+    flex-grow: 1;
+    width: 100%;
+}
+.tool-page .tool-card {
+    max-width: 900px;
+    padding: 2rem;
+    width: 100%;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    background: var(--card);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+.tool-header { text-align: center; margin-bottom: 1.5rem; }
+.tool-header h1 { font-size: 2rem; color: var(--accent); font-weight: 700; }
+.tool-header .tool-desc { font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.5; }
+[data-theme="dark"] .tool-header .tool-desc { color: #94a3b8; }
+
+.tool-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 1rem;
+}
+.tool-controls {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Mobile responsive adjustments */
 @media (max-width: 900px) {
-    .all-tools-btn { display: none; }
-    .hamburger-btn { display: block; }
-    .main-nav ul { display: none; }
-    .quick-search-bar { display: block; margin-bottom: 1rem; }
+    .main-header { padding: 0 1rem; }
+    .main-nav ul { display: none; } /* Hide desktop nav links on mobile */
+    .hamburger-btn { display: block; } /* Show hamburger button on mobile */
+    .mega-menu { max-width: 100%; } /* Full width mega menu on mobile */
+}
+
+@media (min-width: 901px) {
+    .mega-menu { width: 300px; } /* Reset mega menu width for larger screens */
+    .hamburger-btn { display: none; } /* Hide hamburger on desktop */
+    .main-nav ul { display: flex; } /* Show desktop nav links on desktop */
+}
+
+@media (max-width: 600px) {
+    .home-hero h1 { font-size: 2rem; }
+    .feature-highlights { gap: 1rem; }
+    .feature-highlights .highlight-item { max-width: 45%; }
+    .main-footer .footer-links { gap: 1rem; font-size: 0.9em; }
+    .tool-grid-home { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+    main { padding: 0 1rem; }
 }

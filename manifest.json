@@ -1,6 +1,6 @@
 {
-  "name": "OneTool",
-  "short_name": "OneTool",
+  "name": "ToolNine",
+  "short_name": "ToolNine",
   "description": "All-in-One Online Toolkit. Privacy-first tools for creators and developers.",
   "start_url": "/index.html",
   "display": "standalone",
@@ -19,15 +19,3 @@
     }
   ]
 }
-
-// Service Worker Code for PWA installation and caching
-
-const CACHE_NAME = 'onetool-cache-v1'; // Cache version name
-const urlsToCache = [
-  // ...other existing files...
-  // Update icon paths:
-  '/icon/icon-192x192.png', // <-- Updated path
-  '/icon/icon-512x512.png', // <-- Updated path
-  // ...other existing files...
-];
-// ... rest of the code remains unchanged ...

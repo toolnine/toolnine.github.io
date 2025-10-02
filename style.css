@@ -195,6 +195,7 @@ main {
 [data-theme="dark"] .quick-search-bar input { background: #475569; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 [data-theme="black"] .quick-search-bar input { background: #2a2a2a; box-shadow: 0 4px 12px rgba(255,255,255,0.05); }
 
+/* Improvement: Feature Highlights Layout for Mobile */
 .feature-highlights {
     display: flex;
     justify-content: center;
@@ -241,7 +242,13 @@ main {
 [data-theme="black"] .tab-btn:hover { background-color: #2a2a2a; }
 .tab-btn.active { background-color: var(--accent); color: white; border-color: var(--accent); }
 
-.tool-grid-home { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+/* Improvement: Tool Card Grid Layout for Mobile */
+.tool-grid-home {
+    display: grid;
+    /* Default: desktop layout (300px min-width) */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
 .tool-card-home {
     position: relative;
     background: var(--card);
@@ -402,25 +409,63 @@ main {
     align-items: center;
 }
 
-/* Mobile responsive adjustments */
+/* --- Mobile responsive adjustments (start) --- */
+
+/* 1. Hamburger Menu & Mega Menu (Mobile View) */
 @media (max-width: 900px) {
     .main-header { padding: 0 1rem; }
     .main-nav ul { display: none; } /* Hide desktop nav links on mobile */
     .hamburger-btn { display: block; } /* Show hamburger button on mobile */
-    .mega-menu { max-width: 100%; } /* Full width mega menu on mobile */
+    /* Mega menu for smaller screens - expand full width */
+    .mega-menu { max-width: 100%; }
 }
 
+/* 2. Highlight Section (feature-highlights) - Two Columns on mobile */
+@media (max-width: 600px) {
+    .feature-highlights {
+        display: flex; /* Ensure flexbox layout for aligning */
+        justify-content: center; /* Center items horizontally */
+        flex-wrap: wrap; /* Allow wrapping to next line */
+        gap: 1rem; /* Adjust space between items */
+    }
+    .feature-highlights .highlight-item {
+        max-width: none; /* Override desktop max-width */
+        flex-basis: calc(50% - 1rem); /* Force 2 items per row, subtracting gap */
+        padding: 1rem 0.5rem;
+        border: 1px solid var(--border-color); /* Add border to make cards distinct */
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .feature-highlights .highlight-item p { font-size: 0.85rem; }
+}
+
+/* 3. Tool Card Grid (tool-grid-home) - Two Columns on mobile */
+@media (max-width: 768px) {
+    .tool-grid-home {
+        /* Adjust grid-template-columns to fit two columns on tablets/large phones */
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+}
+@media (max-width: 480px) {
+    .tool-grid-home {
+        /* Further adjust grid-template-columns for smaller phone screens */
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 0.8rem;
+    }
+}
+
+/* Global mobile padding adjustment */
+@media (max-width: 600px) {
+    main { padding: 0 1rem; }
+    .main-footer .footer-links { gap: 1rem; font-size: 0.9em; }
+}
+
+/* --- Mobile responsive adjustments (end) --- */
+
+/* Desktop only styles to override mobile styles when necessary */
 @media (min-width: 901px) {
     .mega-menu { width: 300px; } /* Reset mega menu width for larger screens */
     .hamburger-btn { display: none; } /* Hide hamburger on desktop */
     .main-nav ul { display: flex; } /* Show desktop nav links on desktop */
-}
-
-@media (max-width: 600px) {
-    .home-hero h1 { font-size: 2rem; }
-    .feature-highlights { gap: 1rem; }
-    .feature-highlights .highlight-item { max-width: 45%; }
-    .main-footer .footer-links { gap: 1rem; font-size: 0.9em; }
-    .tool-grid-home { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
-    main { padding: 0 1rem; }
 }

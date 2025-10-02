@@ -424,7 +424,7 @@ main {
 /* Ensure highlights are displayed clearly, maybe two columns on small screens */
 @media (max-width: 600px) {
     .home-hero h1 {
-        font-size: 1.8rem; /* Reduce font size for small screens */
+        font-size: 1.6rem; /* Reduced font size for better fit on small screens */
     }
     .feature-highlights {
         display: flex;

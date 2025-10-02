@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OneTool – All-in-One Online Toolkit | Privacy-First Web Tools</title>
-    <meta name="description" content="Access a powerful collection of free, privacy-first online tools. All processing runs directly in your browser without uploading files to our servers." />
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 </head>
@@ -22,12 +21,6 @@
         </nav>
     </header>
 
-    <div class="mega-menu" id="allToolsMenu">
-        <div class="mega-menu-grid">
-            <!-- ...Mega menu categories same as your code... -->
-        </div>
-    </div>
-
     <main>
         <section class="home-hero" id="homeHero">
             <h1>Every tool you need, right in your browser</h1>
@@ -38,18 +31,17 @@
         </section>
 
         <section class="feature-highlights" id="featureHighlights">
-            <!-- ... highlight items ... -->
-        </section>
-
-        <section id="favoritesSection" style="display: none;">
-            <h2 class="section-title">My Favourites</h2>
-            <div class="tool-grid-home" id="favoritesGrid"></div>
-        </section>
-
-        <section class="popular-tools" id="popularTools">
-            <h2 class="section-title">Popular Tools</h2>
-            <div class="tool-grid-home popular-grid">
-                <!-- ... popular tool cards ... -->
+            <div class="highlight-item">
+                <span>Privacy First</span>
+                <p>No files uploaded. Everything runs in your browser.</p>
+            </div>
+            <div class="highlight-item">
+                <span>100% Free</span>
+                <p>Full access to all tools without any hidden fees.</p>
+            </div>
+            <div class="highlight-item">
+                <span>Secure & Fast</span>
+                <p>Fast processing on your device without server communication.</p>
             </div>
         </section>
 
@@ -64,7 +56,16 @@
         </div>
 
         <div class="tool-grid-home" id="toolGrid">
-            <!-- ... all tool cards ... -->
+            <!-- Example Tool Cards: -->
+            <a href="tools/image-to-pdf.html" class="tool-card-home" data-category="image" data-keywords="image pdf jpg png convert" data-tool-id="image-to-pdf">
+                <div class="tool-header-home"><h2 class="tool-title">Image to PDF</h2></div>
+                <p class="tool-desc">Combine multiple images into a single PDF.</p>
+            </a>
+            <a href="tools/text-diff.html" class="tool-card-home" data-category="text" data-keywords="text diff compare" data-tool-id="text-diff">
+                <div class="tool-header-home"><h2 class="tool-title">Text Diff Checker</h2></div>
+                <p class="tool-desc">Visually compare two texts to see the differences.</p>
+            </a>
+            <!-- Add all your other tool cards here -->
         </div>
     </main>
 
@@ -80,8 +81,7 @@
     </footer>
 
     <script src="theme.js"></script>
-    <script>
-        // Your JS as in your code, no change required.
-    </script>
+    <script src="script.js"></script>
+    <!-- Your homepage JS, like filter/search logic, must work with .tool-card-home elements -->
 </body>
 </html>

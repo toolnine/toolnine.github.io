@@ -421,18 +421,23 @@ main {
 }
 
 /* 2. Highlight Section (feature-highlights) - Two Columns on mobile */
+/* Ensure highlights are displayed clearly, maybe two columns on small screens */
 @media (max-width: 600px) {
+    .home-hero h1 {
+        font-size: 1.8rem; /* Reduce font size for small screens */
+    }
     .feature-highlights {
-        display: flex; /* Ensure flexbox layout for aligning */
-        justify-content: center; /* Center items horizontally */
-        flex-wrap: wrap; /* Allow wrapping to next line */
-        gap: 1rem; /* Adjust space between items */
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 0 1rem; /* Add horizontal padding */
     }
     .feature-highlights .highlight-item {
         max-width: none; /* Override desktop max-width */
         flex-basis: calc(50% - 1rem); /* Force 2 items per row, subtracting gap */
         padding: 1rem 0.5rem;
-        border: 1px solid var(--border-color); /* Add border to make cards distinct */
+        border: 1px solid var(--border-color); /* Add border for definition */
         border-radius: 8px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }

@@ -170,10 +170,13 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
     gap: 2rem;
     margin-top: 1rem;
     margin-bottom: 2rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Prevent items from wrapping to new lines */
     text-align: center;
+    overflow-x: auto; /* Enable horizontal scrolling if items exceed screen width */
+    padding: 0 1rem; /* Add horizontal padding to prevent elements touching edges */
 }
 .highlight-item {
+    min-width: 150px; /* Ensure minimum width for each item on small screens */
     max-width: 200px;
     display: flex;
     flex-direction: column;
@@ -194,7 +197,17 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
 }
 
 .filter-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
-.tab-btn { background-color: var(--card); color: var(--text); border: 1px solid var(--border-color); padding: 0.6rem 1.2rem; border-radius: 99px; font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
+.tab-btn {
+    background-color: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border-color);
+    padding: 0.6rem 1.2rem;
+    border-radius: 99px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
 .tab-btn:hover { background-color: #f1f5f9; }
 [data-theme="dark"] .tab-btn:hover { background-color: #475569; }
 [data-theme="black"] .tab-btn:hover { background-color: #2a2a2a; }
@@ -410,7 +423,7 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
     .feature-highlights {
         display: flex;
         justify-content: center;
-        flex-wrap: wrap;
+        flex-wrap: wrap; /* Re-enabled wrapping, but adjusted sizing for better fit */
         gap: 1rem;
         padding: 0 1rem; /* Add horizontal padding */
     }

@@ -113,7 +113,7 @@ main {
     right: 0;
     bottom: 0;
     width: 100%;
-    max-width: 300px; /* Adjust as needed for smaller screens */
+    max-width: 300px; /* Default for desktop side menu */
     background: var(--card);
     border-left: 1px solid var(--border-color);
     z-index: 1000;

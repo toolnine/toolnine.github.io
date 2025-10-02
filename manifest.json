@@ -1,0 +1,33 @@
+{
+  "name": "OneTool",
+  "short_name": "OneTool",
+  "description": "All-in-One Online Toolkit. Privacy-first tools for creators and developers.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "icon/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+
+// Service Worker Code for PWA installation and caching
+
+const CACHE_NAME = 'onetool-cache-v1'; // Cache version name
+const urlsToCache = [
+  // ...other existing files...
+  // Update icon paths:
+  '/icon/icon-192x192.png', // <-- Updated path
+  '/icon/icon-512x512.png', // <-- Updated path
+  // ...other existing files...
+];
+// ... rest of the code remains unchanged ...

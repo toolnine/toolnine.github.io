@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- SEO OPTIMIZATION -->
-    <title>Image Palette Extractor | OneTool</title>
+    <title>Image Palette Extractor | ToolNine</title>
     <meta name="description" content="Extract the dominant color palette from any image. Analyze and get HEX codes directly in your browser. Privacy-first." />
     <!-- END SEO OPTIMIZATION -->
     <link rel="stylesheet" href="../style.css">
@@ -72,7 +72,7 @@
 <body>
 
     <header class="main-header">
-        <a href="../index.html" class="logo">OneTool</a>
+        <a href="../index.html" class="logo">ToolNine</a>
         <button class="hamburger-btn" id="hamburgerBtn">☰</button>
         <nav class="main-nav">
             <ul>
@@ -108,6 +108,7 @@
                     <li><a href="word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
                     <li><a href="line-operations.html"><span class="tool-icon">🔠</span> Line Operations</a></li>
                     <li><a href="text-cleaner.html"><span class="tool-icon">🧹</span> Text Cleaner</a></li>
+                    <li><a href="delivery-note-generator.html"><span class="tool-icon">📝</span> Delivery Note Generator</a></li>
                 </ul>
             </div>
             <div class="mega-menu-category">
@@ -115,6 +116,8 @@
                 <ul>
                     <li><a href="unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
                     <li><a href="document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
+                    <li><a href="csv-editor.html"><span class="tool-icon">📊</span> CSV Editor</a></li>
+                    <li><a href="calculator.html"><span class="tool-icon">🧮</span> Calculator</a></li>
                 </ul>
             </div>
             <div class="mega-menu-category">
@@ -122,8 +125,10 @@
                 <ul>
                     <li><a href="url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
                     <li><a href="hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
+                    <li><a href="password-manager.html"><span class="tool-icon">🔑</span> Password Manager</a></li>
                     <li><a href="password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
                     <li><a href="qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
+                    <li><a href="pwa-manifest-generator.html"><span class="tool-icon">⚙️</span> PWA Manifest Generator</a></li>
                 </ul>
             </div>
              <div class="mega-menu-category">
@@ -186,22 +191,14 @@
             <li><a href="../privacy.html">Privacy Policy</a></li>
             <li><a href="../disclaimer.html">Disclaimer</a></li>
         </ul>
-        <p class="footer-copyright">&copy; 2025 OneTool. All Tools Run in Your Browser.</p>
+        <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
     </footer>
 
     <!-- Scripts -->
     <script src="../theme.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Common Navigation and PWA Logic (keep as before) ---
-            const hamburgerBtn = document.getElementById('hamburgerBtn');
-            const allToolsMenu = document.getElementById('allToolsMenu');
-            const themeToggle = document.getElementById('theme-toggle');
-
-            // --- Navigation Logic ---
-            // PWA install logic in separate files (index.html, other tool pages)
-
-            // --- Image Palette Extractor Tool Specific Logic ---
+            // --- Palette Extractor Tool Specific Logic ---
             const dropZone = document.getElementById('dropZone');
             const imgInput = document.getElementById('imgInput');
             const imagePreview = document.getElementById('imagePreview');
@@ -254,7 +251,9 @@
                     const colorCounts = {};
 
                     // Sample pixels (to speed up processing)
-                    for (let i = 0; i < pixels.length; i += 20 * 4) {
+                    // Sample rate of 1 pixel out of every 20 for large images
+                    const step = 20 * 4;
+                    for (let i = 0; i < pixels.length; i += step) {
                         const r = pixels[i];
                         const g = pixels[i + 1];
                         const b = pixels[i + 2];

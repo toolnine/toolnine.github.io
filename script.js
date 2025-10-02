@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const favoritesSection = document.getElementById('favoritesSection');
     const favoritesGrid = document.getElementById('favoritesGrid');
-    const favoritesKey = 'oneToolFavourites';
+    const favoritesKey = 'ToolNineFavourites';
 
     // --- Search Logic ---
     function performInPlaceSearch(query) {

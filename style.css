@@ -202,7 +202,7 @@ main {
     gap: 2rem;
     margin-top: 1rem;
     margin-bottom: 2rem;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* Keep wrap for larger screens if items don't fit on one line */
     text-align: center;
 }
 .highlight-item {
@@ -213,7 +213,7 @@ main {
 }
 .highlight-item svg { width: 32px; height: 32px; stroke: var(--accent); margin-bottom: 0.5rem; }
 .highlight-item span { font-size: 1.1rem; font-weight: 600; color: var(--text); }
-.highlight-item p { font-size: 0.9rem; color: #64748b; margin-top: 0.2rem; }
+.highlight-item p { font-size: 0.9rem; color: #475569; margin-top: 0.2rem; }
 [data-theme="dark"] .highlight-item p { color: #94a3b8; }
 [data-theme="black"] .highlight-item p { color: #aaaaaa; }
 

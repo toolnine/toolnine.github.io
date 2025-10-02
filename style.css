@@ -34,13 +34,13 @@ body {
     min-height: 100vh;
     transition: background 0.3s, color 0.3s;
 }
-main {
-    flex-grow: 1;
-    width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 2rem;
+
+/* New: Prevent scrolling when mobile menu is open */
+body.menu-open {
+    overflow: hidden;
 }
+
+/* ==== Header & Navigation ==== */
 .main-header {
     height: var(--header-height);
     width: 100%;
@@ -55,44 +55,15 @@ main {
     z-index: 1001;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
-.logo {
-    font-size: 1.6rem;
-    font-weight: bold;
-    color: var(--accent);
-    text-decoration: none;
-}
-.main-nav {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-.main-nav ul {
-    display: flex;
-    list-style: none;
-    gap: 0.5rem;
-}
-.main-nav ul a {
-    padding: 0.5rem 1rem;
-    text-decoration: none;
-    color: var(--text);
-    font-weight: 500;
-    border-radius: 6px;
-    transition: background-color 0.2s;
-}
+.logo { font-size: 1.6rem; font-weight: bold; color: var(--accent); text-decoration: none; }
+.main-nav { display: flex; align-items: center; gap: 0.5rem; }
+.main-nav ul { display: flex; list-style: none; gap: 0.5rem; }
+.main-nav ul a { padding: 0.5rem 1rem; text-decoration: none; color: var(--text); font-weight: 500; border-radius: 6px; transition: background-color 0.2s; }
 .main-nav ul a:hover { background-color: #f1f5f9; }
 [data-theme="dark"] .main-nav ul a:hover { background-color: #475569; }
 [data-theme="black"] .main-nav ul a:hover { background-color: #2a2a2a; }
 
-.theme-btn {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 6px;
-    color: var(--text);
-    transition: background-color 0.2s;
-}
+.theme-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 0.5rem; border-radius: 6px; color: var(--text); transition: background-color 0.2s; }
 .theme-btn:hover { background-color: #f1f5f9; }
 [data-theme="dark"] .theme-btn:hover { background-color: #475569; }
 [data-theme="black"] .theme-btn:hover { background-color: #2a2a2a; }
@@ -107,18 +78,18 @@ main {
     color: var(--text);
     display: none; /* Hide on desktop */
 }
-/* Mega Menu Overlay */
+/* Mega Menu Overlay (Mobile) */
 .mega-menu {
     position: fixed;
     top: var(--header-height);
-    right: 0;
+    right: 0; /* Changed to right for slide-in from right */
     bottom: 0;
     width: 100%;
-    max-width: 300px; /* Default for desktop side menu */
+    max-width: 300px; /* Default width for side menu */
     background: var(--card);
     border-left: 1px solid var(--border-color);
     z-index: 1000;
-    transform: translateX(100%);
+    transform: translateX(100%); /* Changed for slide-in from right */
     transition: transform 0.3s ease-in-out;
     padding: 1rem;
     overflow-y: auto;
@@ -166,14 +137,10 @@ main {
 .mega-menu-category li a:hover { background-color: #f1f5f9; }
 [data-theme="dark"] .mega-menu-category li a:hover { background-color: #475569; }
 [data-theme="black"] .mega-menu-category li a:hover { background-color: #2a2a2a; }
-/* Hamburger Menu styles for mobile (end) */
 
-/* Home Page Specifics */
-.home-hero {
-    text-align: center;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-}
+/* ==== Main Content & Homepage ==== */
+main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+.home-hero { text-align: center; padding-top: 1rem; padding-bottom: 1rem; }
 .home-hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
 .home-hero .subtitle { font-size: 1.05rem; color: #475569; max-width: 650px; margin: 0 auto; }
 [data-theme="dark"] .home-hero .subtitle { color: #94a3b8; }
@@ -227,17 +194,7 @@ main {
 }
 
 .filter-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
-.tab-btn {
-    background-color: var(--card);
-    color: var(--text);
-    border: 1px solid var(--border-color);
-    padding: 0.6rem 1.2rem;
-    border-radius: 99px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
+.tab-btn { background-color: var(--card); color: var(--text); border: 1px solid var(--border-color); padding: 0.6rem 1.2rem; border-radius: 99px; font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
 .tab-btn:hover { background-color: #f1f5f9; }
 [data-theme="dark"] .tab-btn:hover { background-color: #475569; }
 [data-theme="black"] .tab-btn:hover { background-color: #2a2a2a; }
@@ -308,7 +265,7 @@ main {
 .tool-page h1, .tool-page h2 { color: var(--accent); text-align: center; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
 .tool-page .small { font-size: 1rem; color: #475569; max-width: 600px; text-align: center; margin-bottom: 1.5rem; }
 [data-theme="dark"] .tool-page .small { color: #94a3b8; }
-[data-theme="black"] .tool-page .small { color: #aaaaaa; } /* Black mode adjustment */
+[data-theme="black"] .tool-page .small { color: #aaaaaa; }
 
 .tool-card { background: var(--card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; max-width: 700px; width: 100%; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
 .tool-controls { display: flex; gap: 1rem; margin-top: 1.5rem; align-items: center; }
@@ -321,71 +278,180 @@ main {
 .footer-links a { color: #475569; text-decoration: none; font-weight: 500; }
 .footer-links a:hover { color: var(--accent); }
 [data-theme="dark"] .footer-links a { color: #94a3b8; }
-[data-theme="black"] .footer-links a { color: #aaaaaa; } /* Black mode adjustment */
+[data-theme="black"] .footer-links a { color: #aaaaaa; }
 .footer-copyright { font-size: 0.9em; color: #64748b; }
 [data-theme="dark"] .footer-copyright { color: #94a3b8; }
-[data-theme="black"] .footer-copyright { color: #aaaaaa; } /* Black mode adjustment */
+[data-theme="black"] .footer-copyright { color: #aaaaaa; }
 
-/* ==== General Elements ==== */
 .btn { background-color: var(--accent); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background-color 0.2s; }
 .btn:hover { background-color: #1e40af; }
 [data-theme="dark"] .btn:hover { background-color: #2563eb; }
-[data-theme="black"] .btn { background-color: var(--accent); } /* Black mode buttons */
-[data-theme="black"] .btn:hover { background-color: #2563eb; } /* Black mode button hover */
+[data-theme="black"] .btn { background-color: var(--accent); }
+[data-theme="black"] .btn:hover { background-color: #2563eb; }
 
-/* New: PWA Install Button Container Styling */
-.pwa-install-container {
-    text-align: center;
-    padding: 2rem 1rem;
-    background: var(--bg);
+/* Tool Card Specifics (Favorites Icon) */
+.tool-card-home {
+    position: relative;
 }
-.pwa-install-container .btn {
-    font-size: 1.1rem;
-    padding: 0.8rem 2rem;
+.favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    opacity: 0.8;
+    transition: opacity 0.2s, fill 0.2s, stroke 0.2s;
+    z-index: 50; /* Ensure button is above other elements in the card */
 }
-
-/* ==== Mobile Responsiveness ==== */
-.hamburger-btn { display: none; background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--text); }
-
-@media (max-width: 900px) {
-  /* Hide desktop "All Tools" button on mobile */
-  .all-tools-btn { display: none; }
-
-  /* Show Hamburger Menu on mobile */
-  .hamburger-btn { display: block; }
-
-  /* Hide desktop navigation list on mobile */
-  .main-nav ul { display: none; }
-
-  /* Mobile Mega Menu as Side Menu */
-  .mega-menu {
-    position: fixed;
-    top: 0;
-    left: 0; /* Changed from right: 0; for left-side opening */
-    width: 300px;
-    height: 100vh;
-    padding: 2rem;
-    transform: translateX(-100%); /* Changed from translateX(100%); for left-side opening */
+.favorite-btn:hover {
     opacity: 1;
-    visibility: hidden;
-    transition: transform 0.3s ease-in-out, visibility 0s 0.3s;
-    border-radius: 0;
-    overflow-y: auto;
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-  }
-  .mega-menu.show { transform: translateX(0); visibility: visible; transition: transform 0.3s ease-in-out; }
-  .mega-menu-grid { display: block; }
-  .mega-menu-category { margin-bottom: 1rem; }
+}
+.favorite-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--text); /* Default outline color */
+    fill: none; /* Default fill color (empty heart) */
+}
+.favorite-btn.active svg {
+    fill: #f59e0b; /* Filled heart color (yellow/orange) */
+    stroke: #f59e0b; /* Filled heart stroke color */
+}
+#favoritesSection {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    display: none; /* Hide by default, show via JS when populated */
+}
+#favoritesSection h2 {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
 
-  /* Horizontal scroll fix */
-  main { padding: 1rem; overflow-x: hidden; }
+/* Tool Page Layouts (common styles) */
+.tool-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 2rem;
+    flex-grow: 1;
+    width: 100%;
+}
+.tool-page .tool-card {
+    max-width: 900px;
+    padding: 2rem;
+    width: 100%;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    background: var(--card);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+.tool-header { text-align: center; margin-bottom: 1.5rem; }
+.tool-header h1 { font-size: 2rem; color: var(--accent); font-weight: 700; }
+.tool-header .tool-desc { font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.5; }
+[data-theme="dark"] .tool-header .tool-desc { color: #94a3b8; }
 
-  /* Mobile layout for tool grids (2 columns) */
-  .popular-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
-  .tool-grid-home { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+.tool-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 1rem;
+}
+.tool-controls {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
 
-  /* Mobile layout for feature highlights */
-  .feature-highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 1rem; margin-bottom: 2rem; }
-  .highlight-item { max-width: unset; }
-  .highlight-item p { display: none; }
+/* --- Mobile responsive adjustments (start) --- */
+
+/* 1. Hamburger Menu & Mega Menu (Mobile View) */
+@media (max-width: 900px) {
+    .main-header { padding: 0 1rem; }
+    .main-nav ul { display: none; } /* Hide desktop nav links on mobile */
+    .hamburger-btn { display: block; } /* Show hamburger button on mobile */
+
+    /* Mega menu for smaller screens - expand full width */
+    .mega-menu {
+        position: fixed;
+        top: var(--header-height);
+        right: 0; /* Changed back to right: 0; for slide-in from right */
+        bottom: 0;
+        width: 100%;
+        max-width: 300px; /* Default width for side menu */
+        height: auto; /* Allow content to dictate height, overflow-y is active */
+        padding: 1rem;
+        border-left: 1px solid var(--border-color);
+        transform: translateX(100%); /* Changed for slide-in from right */
+        transition: transform 0.3s ease-in-out;
+    }
+    .mega-menu.show {
+        transform: translateX(0);
+    }
+    /* Hide scroll on body when menu is open */
+    body.menu-open {
+        overflow: hidden;
+    }
+}
+
+/* 2. Highlight Section (feature-highlights) - Two Columns on mobile */
+/* Ensure highlights are displayed clearly, maybe two columns on small screens */
+@media (max-width: 600px) {
+    .home-hero h1 {
+        font-size: 1.6rem; /* Reduced font size for better fit on small screens */
+    }
+    .feature-highlights {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 0 1rem; /* Add horizontal padding */
+    }
+    .feature-highlights .highlight-item {
+        max-width: none; /* Override desktop max-width */
+        flex-basis: calc(50% - 1rem); /* Force 2 items per row, subtracting gap */
+        padding: 1rem 0.5rem;
+        border: 1px solid var(--border-color); /* Add border for definition */
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .feature-highlights .highlight-item p { font-size: 0.85rem; }
+}
+
+/* 3. Tool Card Grid (tool-grid-home) - Two Columns on mobile */
+@media (max-width: 768px) {
+    .tool-grid-home {
+        /* Adjust grid-template-columns to fit two columns on tablets/large phones */
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+}
+@media (max-width: 480px) {
+    .tool-grid-home {
+        /* Further adjust grid-template-columns for smaller phone screens */
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 0.8rem;
+    }
+}
+
+/* Global mobile padding adjustment */
+@media (max-width: 600px) {
+    main { padding: 0 1rem; }
+    .main-footer .footer-links { gap: 1rem; font-size: 0.9em; }
+}
+
+/* --- Mobile responsive adjustments (end) --- */
+
+/* Desktop only styles to override mobile styles when necessary */
+@media (min-width: 901px) {
+    .mega-menu { width: 300px; } /* Reset mega menu width for larger screens */
+    .hamburger-btn { display: none; } /* Hide hamburger on desktop */
+    .main-nav ul { display: flex; } /* Show desktop nav links on desktop */
 }

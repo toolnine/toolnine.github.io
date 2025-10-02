@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OneTool – All-in-One Online Toolkit | Privacy-First Web Tools</title>
+    <title>ToolNine – All-in-One Online Toolkit | Privacy-First Web Tools</title>
+    <meta name="description" content="Access a powerful collection of free, privacy-first online tools. All processing runs directly in your browser without uploading files to our servers." />
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="main-header">
-        <a href="index.html" class="logo">OneTool</a>
+        <a href="index.html" class="logo">ToolNine</a>
         <nav class="main-nav">
             <ul>
                 <li><a href="#category-image">Image Tools</a></li>
@@ -47,7 +48,7 @@
         </div>
 
         <div class="tool-grid-home" id="toolGrid">
-            <!-- ADD ALL YOUR TOOL CARDS HERE (example below, add as many as you want) -->
+            <!-- Add ALL your tools here, new and old. Example cards below: -->
             <a href="tools/image-to-pdf.html" class="tool-card-home" data-category="image" data-keywords="image pdf jpg png convert" data-tool-id="image-to-pdf">
                 <div class="tool-header-home"><h2 class="tool-title">Image to PDF</h2></div>
                 <p class="tool-desc">Combine multiple images into a single PDF.</p>
@@ -63,6 +64,14 @@
             <a href="tools/convert-png-jpg.html" class="tool-card-home" data-category="image" data-keywords="png jpg convert image format" data-tool-id="convert-png-jpg">
                 <div class="tool-header-home"><h2 class="tool-title">PNG <> JPG</h2></div>
                 <p class="tool-desc">Convert PNG to JPG and vice versa.</p>
+            </a>
+            <a href="tools/image-palette-extractor.html" class="tool-card-home" data-category="image" data-keywords="palette color extract image" data-tool-id="image-palette-extractor">
+                <div class="tool-header-home"><h2 class="tool-title">Palette Extractor</h2></div>
+                <p class="tool-desc">Extract color palette from images.</p>
+            </a>
+            <a href="tools/image-placeholder-generator.html" class="tool-card-home" data-category="image" data-keywords="placeholder generator image" data-tool-id="image-placeholder-generator">
+                <div class="tool-header-home"><h2 class="tool-title">Placeholder Generator</h2></div>
+                <p class="tool-desc">Generate placeholder images.</p>
             </a>
             <a href="tools/text-diff.html" class="tool-card-home" data-category="text" data-keywords="text diff compare" data-tool-id="text-diff">
                 <div class="tool-header-home"><h2 class="tool-title">Text Diff Checker</h2></div>
@@ -80,6 +89,10 @@
                 <div class="tool-header-home"><h2 class="tool-title">Text to PDF</h2></div>
                 <p class="tool-desc">Convert your text to a PDF document.</p>
             </a>
+            <a href="tools/delivery-note-generator.html" class="tool-card-home" data-category="text" data-keywords="delivery note generator pdf" data-tool-id="delivery-note-generator">
+                <div class="tool-header-home"><h2 class="tool-title">Delivery Note Generator</h2></div>
+                <p class="tool-desc">Generate delivery note documents (PDF).</p>
+            </a>
             <a href="tools/unit-converter.html" class="tool-card-home" data-category="convert" data-keywords="unit converter length weight area" data-tool-id="unit-converter">
                 <div class="tool-header-home"><h2 class="tool-title">Unit Converter</h2></div>
                 <p class="tool-desc">Convert between various units.</p>
@@ -88,6 +101,14 @@
                 <div class="tool-header-home"><h2 class="tool-title">Document Scanner</h2></div>
                 <p class="tool-desc">Scan and crop documents using your camera.</p>
             </a>
+            <a href="tools/csv-editor.html" class="tool-card-home" data-category="convert" data-keywords="csv editor spreadsheet" data-tool-id="csv-editor">
+                <div class="tool-header-home"><h2 class="tool-title">CSV Editor</h2></div>
+                <p class="tool-desc">Edit and manage CSV files.</p>
+            </a>
+            <a href="tools/calculator.html" class="tool-card-home" data-category="convert" data-keywords="calculator math" data-tool-id="calculator">
+                <div class="tool-header-home"><h2 class="tool-title">Calculator</h2></div>
+                <p class="tool-desc">Simple online calculator.</p>
+            </a>
             <a href="tools/url-encoder.html" class="tool-card-home" data-category="encode" data-keywords="url encode decode query string" data-tool-id="url-encoder">
                 <div class="tool-header-home"><h2 class="tool-title">URL Encoder</h2></div>
                 <p class="tool-desc">Encode/decode URLs easily.</p>
@@ -95,6 +116,10 @@
             <a href="tools/hash-generator.html" class="tool-card-home" data-category="encode" data-keywords="hash generator md5 sha256 secure" data-tool-id="hash-generator">
                 <div class="tool-header-home"><h2 class="tool-title">Hash Generator</h2></div>
                 <p class="tool-desc">Generate hashes for text/files.</p>
+            </a>
+            <a href="tools/password-manager.html" class="tool-card-home" data-category="encode" data-keywords="password manager store security encryption" data-tool-id="password-manager">
+                <div class="tool-header-home"><h2 class="tool-title">Password Manager</h2></div>
+                <p class="tool-desc">Store and manage your passwords securely in your browser.</p>
             </a>
             <a href="tools/password-generator.html" class="tool-card-home" data-category="encode" data-keywords="password generator strong random secure" data-tool-id="password-generator">
                 <div class="tool-header-home"><h2 class="tool-title">Password Generator</h2></div>
@@ -112,7 +137,22 @@
                 <div class="tool-header-home"><h2 class="tool-title">JSON Formatter</h2></div>
                 <p class="tool-desc">Beautify and validate JSON.</p>
             </a>
-            <!-- Add more tools as needed -->
+            <a href="tools/html-viewer.html" class="tool-card-home" data-category="ai" data-keywords="html viewer live code sandbox" data-tool-id="html-viewer">
+                <div class="tool-header-home"><h2 class="tool-title">HTML Viewer</h2></div>
+                <p class="tool-desc">View and edit HTML live.</p>
+            </a>
+            <a href="tools/line-operations.html" class="tool-card-home" data-category="text" data-keywords="line operations sort shuffle duplicates" data-tool-id="line-operations">
+                <div class="tool-header-home"><h2 class="tool-title">Line Operations</h2></div>
+                <p class="tool-desc">Sort, shuffle, and manage lines of text.</p>
+            </a>
+            <a href="tools/text-cleaner.html" class="tool-card-home" data-category="text" data-keywords="text cleaner spaces line breaks html" data-tool-id="text-cleaner">
+                <div class="tool-header-home"><h2 class="tool-title">Text Cleaner</h2></div>
+                <p class="tool-desc">Clean up text formatting and spaces.</p>
+            </a>
+            <a href="tools/steganography.html" class="tool-card-home" data-category="image" data-keywords="steganography hide text image secret" data-tool-id="steganography">
+                <div class="tool-header-home"><h2 class="tool-title">Steganography</h2></div>
+                <p class="tool-desc">Hide text inside images.</p>
+            </a>
         </div>
     </main>
 
@@ -124,7 +164,7 @@
             <li><a href="privacy.html">Privacy Policy</a></li>
             <li><a href="disclaimer.html">Disclaimer</a></li>
         </ul>
-        <p class="footer-copyright">&copy; 2025 OneTool. All Tools Run in Your Browser.</p>
+        <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
     </footer>
 
     <script src="theme.js"></script>

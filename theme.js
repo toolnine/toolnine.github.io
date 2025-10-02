@@ -1,4 +1,3 @@
-// Theme toggle with localStorage
 const themeToggle = document.getElementById("theme-toggle");
 const body = document.body;
 
@@ -9,20 +8,17 @@ function setInitialTheme() {
     if (themeToggle) themeToggle.textContent = "☀️";
   } else if (savedTheme === "black") {
     body.setAttribute("data-theme", "black");
-    if (themeToggle) themeToggle.textContent = "🌑"; // New icon for black mode
+    if (themeToggle) themeToggle.textContent = "🌑";
   } else {
     body.removeAttribute("data-theme");
     if (themeToggle) themeToggle.textContent = "🌙";
   }
 }
-
-// Set initial theme on page load
 setInitialTheme();
 
 if (themeToggle) {
   themeToggle.addEventListener("click", () => {
     const currentTheme = localStorage.getItem("theme") || "light";
-
     if (currentTheme === "light") {
       body.setAttribute("data-theme", "dark");
       localStorage.setItem("theme", "dark");
@@ -31,7 +27,7 @@ if (themeToggle) {
       body.setAttribute("data-theme", "black");
       localStorage.setItem("theme", "black");
       themeToggle.textContent = "🌑";
-    } else { // currentTheme === "black"
+    } else {
       body.removeAttribute("data-theme");
       localStorage.setItem("theme", "light");
       themeToggle.textContent = "🌙";
@@ -39,5 +35,26 @@ if (themeToggle) {
   });
 }
 
-// Site name change
-document.title = document.title.replace("ToolMancer", "OneTool");
+// Branding fix
+document.title = document.title.replace("OneTool", "ToolNine");
+
+// Improved PWA Install Button (hide after install/dismiss)
+const installButton = document.getElementById('installButton');
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installButton) installButton.style.display = 'block';
+});
+if (installButton) {
+  installButton.addEventListener('click', () => {
+    installButton.style.display = 'none';
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => {
+        deferredPrompt = null;
+      });
+    }
+  });
+  window.addEventListener('appinstalled', () => installButton.style.display = 'none');
+}

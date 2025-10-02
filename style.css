@@ -1,46 +1,63 @@
 /* ==== Global Reset & Variables ==== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
-    --bg: #f8fafc;        /* Light Mode Background */
-    --text: #0f172a;      /* Light Mode Text */
-    --card: #ffffff;      /* Light Mode Card Background */
-    --accent: #2563eb;    /* Accent Color (Blue) */
-    --border-color: #e2e8f0; /* Light Mode Border Color */
+    --bg: #f8fafc;
+    --text: #0f172a;
+    --card: #ffffff;
+    --accent: #2563eb;
+    --border-color: #e2e8f0;
     --header-height: 70px;
 }
 [data-theme="dark"] {
-    --bg: #1e293b;        /* Dark Mode Background (Slate Blue) */
-    --text: #f8fafc;      /* Dark Mode Text */
-    --card: #334155;      /* Dark Mode Card Background */
-    --accent: #60a5fa;    /* Dark Mode Accent Color (Lighter Blue) */
-    --border-color: #475569; /* Dark Mode Border Color */
+    --bg: #1e293b;
+    --text: #f8fafc;
+    --card: #334155;
+    --accent: #60a5fa;
+    --border-color: #475569;
 }
-/* New Black Mode (True Black) */
 [data-theme="black"] {
-    --bg: #000000;        /* True Black Background */
-    --text: #f8fafc;      /* Light Text on Black Background */
-    --card: #1f1f1f;      /* Dark Grey Card Background */
-    --accent: #60a5fa;    /* Accent Color (Lighter Blue) */
-    --border-color: #333333; /* Dark Border Color */
+    --bg: #000000;
+    --text: #f8fafc;
+    --card: #1f1f1f;
+    --accent: #60a5fa;
+    --border-color: #333333;
 }
 
-body { font-family: "Inter", "Segoe UI", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; transition: background 0.3s, color 0.3s; }
+/* ==== Flexbox Layout Fix ==== */
+body {
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background 0.2s, color 0.2s;
+}
+
+/* Make main area grow to fill available space */
+main {
+    flex-grow: 1;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
 
 /* ==== Header & Navigation ==== */
-.main-header { height: var(--header-height); width: 100%; background: var(--card); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; position: sticky; top: 0; z-index: 1001; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.main-header { height: var(--header-height); width: 100%; background: var(--card); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; pad[...]
 .logo { font-size: 1.6rem; font-weight: bold; color: var(--accent); text-decoration: none; }
 .main-nav { display: flex; align-items: center; gap: 0.5rem; }
 .main-nav ul { display: flex; list-style: none; gap: 0.5rem; }
 .main-nav ul a { padding: 0.5rem 1rem; text-decoration: none; color: var(--text); font-weight: 500; border-radius: 6px; transition: background-color 0.2s; }
 .main-nav ul a:hover { background-color: #f1f5f9; }
 [data-theme="dark"] .main-nav ul a:hover { background-color: #475569; }
-[data-theme="black"] .main-nav ul a:hover { background-color: #2a2a2a; } /* Black mode hover effect */
+[data-theme="black"] .main-nav ul a:hover { background-color: #2a2a2a; }
 
-/* Removed .all-tools-btn and .search-btn styles as they are removed for a cleaner UI */
 .theme-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 0.5rem; border-radius: 6px; color: var(--text); transition: background-color 0.2s; }
 .theme-btn:hover { background-color: #f1f5f9; }
 [data-theme="dark"] .theme-btn:hover { background-color: #475569; }
-[data-theme="black"] .theme-btn:hover { background-color: #2a2a2a; } /* Black mode hover effect */
+[data-theme="black"] .theme-btn:hover { background-color: #2a2a2a; }
 
 /* ==== Mega Menu ==== */
 .mega-menu {
@@ -62,22 +79,21 @@ body { font-family: "Inter", "Segoe UI", Arial, sans-serif; background: var(--bg
 .mega-menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem 2.5rem; }
 .mega-menu-category h3 { font-size: 0.9rem; font-weight: 600; color: #64748b; text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); }
 .mega-menu-category ul { list-style: none; }
-.mega-menu-category ul a { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem; border-radius: 6px; text-decoration: none; color: var(--text); font-weight: 500; transition: background-color 0.2s; }
+.mega-menu-category ul a { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem; border-radius: 6px; text-decoration: none; color: var(--text); font-weight: 500; transition: background-co[...]
 .mega-menu-category ul a:hover { background-color: #f1f5f9; }
 [data-theme="dark"] .mega-menu-category h3 { color: #94a3b8; border-bottom-color: #475569; }
 [data-theme="dark"] .mega-menu-category ul a:hover { background-color: #475569; }
-[data-theme="black"] .mega-menu-category h3 { color: #aaaaaa; border-bottom-color: #333333; } /* Black mode adjustment */
-[data-theme="black"] .mega-menu-category ul a:hover { background-color: #2a2a2a; } /* Black mode adjustment */
+[data-theme="black"] .mega-menu-category h3 { color: #aaaaaa; border-bottom-color: #333333; }
+[data-theme="black"] .mega-menu-category ul a:hover { background-color: #2a2a2a; }
 
 .mega-menu-category ul a .tool-icon { font-size: 1.2rem; }
 
 /* ==== Main Content & Homepage ==== */
-main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 2rem; } /* Update: Removed vertical padding here */
 .home-hero { text-align: center; padding-top: 1rem; padding-bottom: 1rem; }
 .home-hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
 .home-hero .subtitle { font-size: 1.05rem; color: #475569; max-width: 650px; margin: 0 auto; }
 [data-theme="dark"] .home-hero .subtitle { color: #94a3b8; }
-[data-theme="black"] .home-hero .subtitle { color: #aaaaaa; } /* Black mode adjustment */
+[data-theme="black"] .home-hero .subtitle { color: #aaaaaa; }
 
 .quick-search-bar { width: 100%; max-width: 500px; margin: 1rem auto; position: relative; }
 .quick-search-bar input {
@@ -94,7 +110,7 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
 }
 .quick-search-bar input:focus { outline: none; border-color: var(--accent); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1); }
 [data-theme="dark"] .quick-search-bar input { background: #475569; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-[data-theme="black"] .quick-search-bar input { background: #2a2a2a; box-shadow: 0 4px 12px rgba(255,255,255,0.05); } /* Black mode adjustment */
+[data-theme="black"] .quick-search-bar input { background: #2a2a2a; box-shadow: 0 4px 12px rgba(255,255,255,0.05); }
 
 .feature-highlights {
     display: flex;
@@ -115,7 +131,7 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
 .highlight-item span { font-size: 1.1rem; font-weight: 600; color: var(--text); }
 .highlight-item p { font-size: 0.9rem; color: #64748b; margin-top: 0.2rem; }
 [data-theme="dark"] .highlight-item p { color: #94a3b8; }
-[data-theme="black"] .highlight-item p { color: #aaaaaa; } /* Black mode adjustment */
+[data-theme="black"] .highlight-item p { color: #aaaaaa; }
 
 .section-title {
     font-size: 1.8rem;
@@ -126,40 +142,36 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
 }
 
 .filter-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
-.tab-btn { background-color: var(--card); color: var(--text); border: 1px solid var(--border-color); padding: 0.6rem 1.2rem; border-radius: 99px; font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
+.tab-btn { background-color: var(--card); color: var(--text); border: 1px solid var(--border-color); padding: 0.6rem 1.2rem; border-radius: 99px; font-size: 0.95rem; font-weight: 500; cursor: pointer;[...]
 .tab-btn:hover { background-color: #f1f5f9; }
 [data-theme="dark"] .tab-btn:hover { background-color: #475569; }
-[data-theme="black"] .tab-btn:hover { background-color: #2a2a2a; } /* Black mode adjustment */
+[data-theme="black"] .tab-btn:hover { background-color: #2a2a2a; }
 .tab-btn.active { background-color: var(--accent); color: white; border-color: var(--accent); }
 
-/* Grid container for popular tools and all tools */
 .tool-grid-home { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-.tool-card-home { position: relative; background: var(--card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; text-decoration: none; color: var(--text); transition: all 0.2s ease; }
+.tool-card-home { position: relative; background: var(--card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; text-decoration: none; color: var(--text); transition: all 0[...]
 .tool-card-home:hover { transform: translateY(-5px); box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.1); border-color: var(--accent); }
 [data-theme="dark"] .tool-card-home { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
 [data-theme="dark"] .tool-card-home:hover { box-shadow: 0 10px 25px -5px rgba(96, 165, 250, 0.2); border-color: var(--accent); }
-[data-theme="black"] .tool-card-home { box-shadow: 0 10px 25px -5px rgba(255,255,255,0.05); } /* Black mode adjustment */
-[data-theme="black"] .tool-card-home:hover { box-shadow: 0 10px 25px -5px rgba(96, 165, 250, 0.2); border-color: var(--accent); } /* Black mode adjustment */
+[data-theme="black"] .tool-card-home { box-shadow: 0 10px 25px -5px rgba(255,255,255,0.05); }
+[data-theme="black"] .tool-card-home:hover { box-shadow: 0 10px 25px -5px rgba(96, 165, 250, 0.2); border-color: var(--accent); }
 
 .tool-header-home { display: flex; align-items: center; gap: 1rem; }
 .tool-logo { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
 .tool-logo svg { width: 24px; height: 24px; stroke: currentColor; }
 
-/* Light mode tool logo colors */
 .tool-logo-image { background-color: #e0f2fe; } .tool-logo-image svg { color: #0ea5e9; }
 .tool-logo-text { background-color: #eef2ff; } .tool-logo-text svg { color: #6366f1; }
 .tool-logo-convert { background-color: #f0fdf4; } .tool-logo-convert svg { color: #22c55e; }
 .tool-logo-encode { background-color: #fffbeb; } .tool-logo-encode svg { color: #f59e0b; }
 .tool-logo-ai { background-color: #f3e8ff; } .tool-logo-ai svg { color: #a855f7; }
 
-/* Dark mode tool logo colors */
 [data-theme="dark"] .tool-logo-image { background-color: #0c4a6e; } [data-theme="dark"] .tool-logo-image svg { color: #93c5fd; }
 [data-theme="dark"] .tool-logo-text { background-color: #312e81; } [data-theme="dark"] .tool-logo-text svg { color: #a5b4fc; }
 [data-theme="dark"] .tool-logo-convert { background-color: #166534; } [data-theme="dark"] .tool-logo-convert svg { color: #86efac; }
 [data-theme="dark"] .tool-logo-encode { background-color: #78350f; } [data-theme="dark"] .tool-logo-encode svg { color: #fde68a; }
 [data-theme="dark"] .tool-logo-ai { background-color: #581c87; } [data-theme="dark"] .tool-logo-ai svg { color: #d8b4fe; }
 
-/* Black mode tool logo colors (using similar dark palette) */
 [data-theme="black"] .tool-logo-image { background-color: #0c4a6e; } [data-theme="black"] .tool-logo-image svg { color: #93c5fd; }
 [data-theme="black"] .tool-logo-text { background-color: #312e81; } [data-theme="black"] .tool-logo-text svg { color: #a5b4fc; }
 [data-theme="black"] .tool-logo-convert { background-color: #166534; } [data-theme="black"] .tool-logo-convert svg { color: #86efac; }
@@ -170,15 +182,15 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
 .tool-card-home:hover .tool-title { color: var(--accent); }
 .tool-desc { font-size: 0.9rem; color: #475569; margin-top: 0.5rem; }
 [data-theme="dark"] .tool-desc { color: #94a3b8; }
-[data-theme="black"] .tool-desc { color: #aaaaaa; } /* Black mode adjustment */
+[data-theme="black"] .tool-desc { color: #aaaaaa; }
 
-/* ==== Tool Page Layout (New) ==== */
-/* Update: Added padding-bottom to tool-page to ensure content spacing before footer */
+/* ==== Tool Page Layout ==== */
+/* Padding-bottom can be removed if you use flexbox layout */
 .tool-page { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 2rem 0; flex-grow: 1; width: 100%; }
 .tool-page h1, .tool-page h2 { color: var(--accent); text-align: center; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
 .tool-page .small { font-size: 1rem; color: #475569; max-width: 600px; text-align: center; margin-bottom: 1.5rem; }
 [data-theme="dark"] .tool-page .small { color: #94a3b8; }
-[data-theme="black"] .tool-page .small { color: #aaaaaa; } /* Black mode adjustment */
+[data-theme="black"] .tool-page .small { color: #aaaaaa; }
 
 .tool-card { background: var(--card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; max-width: 700px; width: 100%; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
 .tool-controls { display: flex; gap: 1rem; margin-top: 1.5rem; align-items: center; }
@@ -191,19 +203,18 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
 .footer-links a { color: #475569; text-decoration: none; font-weight: 500; }
 .footer-links a:hover { color: var(--accent); }
 [data-theme="dark"] .footer-links a { color: #94a3b8; }
-[data-theme="black"] .footer-links a { color: #aaaaaa; } /* Black mode adjustment */
+[data-theme="black"] .footer-links a { color: #aaaaaa; }
 .footer-copyright { font-size: 0.9em; color: #64748b; }
 [data-theme="dark"] .footer-copyright { color: #94a3b8; }
-[data-theme="black"] .footer-copyright { color: #aaaaaa; } /* Black mode adjustment */
+[data-theme="black"] .footer-copyright { color: #aaaaaa; }
 
 /* ==== General Elements ==== */
 .btn { background-color: var(--accent); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background-color 0.2s; }
 .btn:hover { background-color: #1e40af; }
 [data-theme="dark"] .btn:hover { background-color: #2563eb; }
-[data-theme="black"] .btn { background-color: var(--accent); } /* Black mode buttons */
-[data-theme="black"] .btn:hover { background-color: #2563eb; } /* Black mode button hover */
+[data-theme="black"] .btn { background-color: var(--accent); }
+[data-theme="black"] .btn:hover { background-color: #2563eb; }
 
-/* New: PWA Install Button Container Styling */
 .pwa-install-container {
     text-align: center;
     padding: 2rem 1rem;
@@ -218,24 +229,17 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
 .hamburger-btn { display: none; background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--text); }
 
 @media (max-width: 900px) {
-  /* Hide desktop "All Tools" button on mobile */
   .all-tools-btn { display: none; }
-
-  /* Show Hamburger Menu on mobile */
   .hamburger-btn { display: block; }
-
-  /* Hide desktop navigation list on mobile */
   .main-nav ul { display: none; }
-
-  /* Mobile Mega Menu as Side Menu */
   .mega-menu {
     position: fixed;
     top: 0;
-    left: 0; /* Changed from right: 0; for left-side opening */
+    left: 0;
     width: 300px;
     height: 100vh;
     padding: 2rem;
-    transform: translateX(-100%); /* Changed from translateX(100%); for left-side opening */
+    transform: translateX(-100%);
     opacity: 1;
     visibility: hidden;
     transition: transform 0.3s ease-in-out, visibility 0s 0.3s;
@@ -246,15 +250,9 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
   .mega-menu.show { transform: translateX(0); visibility: visible; transition: transform 0.3s ease-in-out; }
   .mega-menu-grid { display: block; }
   .mega-menu-category { margin-bottom: 1rem; }
-
-  /* Horizontal scroll fix */
   main { padding: 1rem; overflow-x: hidden; }
-
-  /* Mobile layout for tool grids (2 columns) */
   .popular-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
   .tool-grid-home { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
-
-  /* Mobile layout for feature highlights */
   .feature-highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 1rem; margin-bottom: 2rem; }
   .highlight-item { max-width: unset; }
   .highlight-item p { display: none; }

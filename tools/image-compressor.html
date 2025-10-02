@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Compressor | OneTool</title>
+    <title>Image Compressor | ToolNine</title>
     <link rel="stylesheet" href="../style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <style>
@@ -88,7 +88,7 @@
 <body>
 
     <header class="main-header">
-        <a href="../index.html" class="logo">OneTool</a>
+        <a href="../index.html" class="logo">ToolNine</a>
         <button class="hamburger-btn" id="hamburgerBtn">☰</button>
         <nav class="main-nav">
             <ul>
@@ -122,6 +122,9 @@
                     <li><a href="text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
                     <li><a href="text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
                     <li><a href="word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
+                    <li><a href="line-operations.html"><span class="tool-icon">🔠</span> Line Operations</a></li>
+                    <li><a href="text-cleaner.html"><span class="tool-icon">🧹</span> Text Cleaner</a></li>
+                    <li><a href="delivery-note-generator.html"><span class="tool-icon">📝</span> Delivery Note Generator</a></li>
                 </ul>
             </div>
             <div class="mega-menu-category">
@@ -129,6 +132,8 @@
                 <ul>
                     <li><a href="unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
                     <li><a href="document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
+                    <li><a href="csv-editor.html"><span class="tool-icon">📊</span> CSV Editor</a></li>
+                    <li><a href="calculator.html"><span class="tool-icon">🧮</span> Calculator</a></li>
                 </ul>
             </div>
             <div class="mega-menu-category">
@@ -136,8 +141,10 @@
                 <ul>
                     <li><a href="url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
                     <li><a href="hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
+                    <li><a href="password-manager.html"><span class="tool-icon">🔑</span> Password Manager</a></li>
                     <li><a href="password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
                     <li><a href="qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
+                    <li><a href="pwa-manifest-generator.html"><span class="tool-icon">⚙️</span> PWA Manifest Generator</a></li>
                 </ul>
             </div>
              <div class="mega-menu-category">
@@ -145,6 +152,7 @@
                 <ul>
                     <li><a href="image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
                     <li><a href="json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
+                    <li><a href="html-viewer.html"><span class="tool-icon">💻</span> HTML Viewer</a></li>
                 </ul>
             </div>
         </div>
@@ -208,63 +216,13 @@
             <li><a href="../privacy.html">Privacy Policy</a></li>
             <li><a href="../disclaimer.html">Disclaimer</a></li>
         </ul>
-        <p class="footer-copyright">&copy; 2025 OneTool. All Tools Run in Your Browser.</p>
+        <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
     </footer>
 
     <!-- Scripts -->
     <script src="../theme.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Navigation and Theme Toggle Logic ---
-            const allToolsBtn = document.getElementById('allToolsBtn');
-            const hamburgerBtn = document.getElementById('hamburgerBtn');
-            const allToolsMenu = document.getElementById('allToolsMenu');
-            const searchBtn = document.getElementById('searchBtn');
-
-            const toggleMenu = (event) => { event.stopPropagation(); allToolsMenu.classList.toggle('show'); allToolsBtn.classList.toggle('open'); };
-            allToolsBtn.addEventListener('click', toggleMenu);
-            hamburgerBtn.addEventListener('click', () => {
-                allToolsMenu.classList.toggle('show');
-                document.body.classList.toggle('menu-open');
-            });
-            document.addEventListener('click', (event) => {
-                if (window.innerWidth > 900) {
-                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && !event.target.closest('.main-nav')) {
-                        allToolsMenu.classList.remove('show'); allToolsBtn.classList.remove('open');
-                    }
-                } else {
-                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && event.target !== hamburgerBtn) {
-                        allToolsMenu.classList.remove('show');
-                        document.body.classList.remove('menu-open');
-                    }
-                }
-            });
-
-            // --- PWA Install Logic ---
-            let deferredPrompt;
-            const installButton = document.getElementById('installButton');
-
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                installButton.style.display = 'block';
-            });
-
-            installButton.addEventListener('click', () => {
-                installButton.style.display = 'none';
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        console.log('User response to install prompt:', choiceResult.outcome);
-                        deferredPrompt = null;
-                    });
-                }
-            });
-
-            window.addEventListener('appinstalled', () => {
-                installButton.style.display = 'none';
-            });
-
             // --- Image Compressor Tool Specific Logic ---
             const dropZone = document.getElementById('dropZone');
             const imgInput = document.getElementById('imgInput');
@@ -368,7 +326,7 @@
                     navigator.share({
                         files: [file],
                         title: 'Compressed Image',
-                        text: 'Sharing my compressed image from OneTool!'
+                        text: 'Sharing my compressed image from ToolNine!'
                     }).catch(error => console.error('Error sharing:', error));
                 } else {
                     alert('Web Share API not supported in this browser. Please use the download button.');

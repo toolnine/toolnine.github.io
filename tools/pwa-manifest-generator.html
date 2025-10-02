@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO OPTIMIZATION -->
+    <title>PWA Manifest Generator | OneTool</title>
+    <meta name="description" content="Generate a valid manifest.json file for your Progressive Web App. Customize app name, colors, and display mode easily." />
+    <!-- END SEO OPTIMIZATION -->
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Tool-specific styles based on the common layout */
+        .tool-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 2rem;
+            flex-grow: 1;
+            width: 100%;
+        }
+        .tool-page .tool-card {
+            max-width: 700px;
+            padding: 2rem;
+            width: 100%;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            background: var(--card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        .tool-header { text-align: center; margin-bottom: 1.5rem; }
+        .tool-header h1 { font-size: 2rem; color: var(--accent); font-weight: 700; }
+        .tool-header .tool-desc { font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.5; }
+        [data-theme="dark"] .tool-header .tool-desc { color: #94a3b8; }
+
+        /* --- Custom UI for Manifest Generator --- */
+        .manifest-form-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        .manifest-form-grid input, .manifest-form-grid select { font-size: 1em; }
+        .manifest-form-grid label { font-size: 0.9em; font-weight: 500; margin-bottom: 0.2rem; display: block; }
+
+        .output-container { margin-top: 1.5rem; position: relative; }
+        .output-text {
+            word-wrap: break-word;
+            min-height: 200px;
+            background: var(--bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            color: var(--text);
+            font-size: 0.95em;
+            font-family: monospace;
+        }
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="../index.html" class="logo">OneTool</a>
+        <button class="hamburger-btn" id="hamburgerBtn">☰</button>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="../index.html#category-image">Image Tools</a></li>
+                <li><a href="../index.html#category-text">Text Tools</a></li>
+                <li><a href="../blog.html">Blog</a></li>
+            </ul>
+            <button class="search-btn" id="searchBtn" aria-label="Search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+            <button class="all-tools-btn" id="allToolsBtn">All Tools <span class="arrow">▼</span></button>
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
+        </nav>
+    </header>
+
+    <div class="mega-menu" id="allToolsMenu">
+        <!-- Mega menu content (full menu) -->
+        <div class="mega-menu-grid">
+            <div class="mega-menu-category">
+                <h3>Image Tools</h3>
+                <ul>
+                    <li><a href="image-to-pdf.html"><span class="tool-icon">📄</span> Image to PDF</a></li>
+                    <li><a href="image-compressor.html"><span class="tool-icon">🗜️</span> Image Compressor</a></li>
+                    <li><a href="image-resizer.html"><span class="tool-icon">📏</span> Image Resizer</a></li>
+                    <li><a href="convert-png-jpg.html"><span class="tool-icon">🖼️</span> PNG <> JPG</a></li>
+                    <li><a href="steganography.html"><span class="tool-icon">🕵️</span> Steganography</a></li>
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Text & Writing</h3>
+                <ul>
+                    <li><a href="text-diff.html"><span class="tool-icon">🔍</span> Text Diff</a></li>
+                    <li><a href="text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
+                    <li><a href="text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
+                    <li><a href="word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
+                    <li><a href="line-operations.html"><span class="tool-icon">🔠</span> Line Operations</a></li>
+                    <li><a href="text-cleaner.html"><span class="tool-icon">🧹</span> Text Cleaner</a></li>
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Converters</h3>
+                <ul>
+                    <li><a href="unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
+                    <li><a href="document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Encoder/Decoder</h3>
+                <ul>
+                    <li><a href="url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
+                    <li><a href="hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
+                    <li><a href="password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
+                    <li><a href="qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
+                </ul>
+            </div>
+             <div class="mega-menu-category">
+                <h3>AI Tools</h3>
+                <ul>
+                    <li><a href="image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
+                    <li><a href="json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
+                    <li><a href="html-viewer.html"><span class="tool-icon">💻</span> HTML Viewer</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <main class="content tool-page">
+        <section class="tool-card">
+            <header class="tool-header">
+                <h1>⚙️ PWA Manifest Generator</h1>
+                <p class="tool-desc">Create the manifest.json file needed to turn your website into an installable Progressive Web App (PWA).</p>
+            </header>
+
+            <div class="manifest-form-grid">
+                <div>
+                    <label for="appName">App Name:</label>
+                    <input type="text" id="appName" value="My Awesome App" class="tool-input">
+                </div>
+                <div>
+                    <label for="shortName">Short Name (for homescreen icon):</label>
+                    <input type="text" id="shortName" value="AwesomeApp" class="tool-input">
+                </div>
+                <div>
+                    <label for="startUrl">Start URL (e.g., /index.html):</label>
+                    <input type="text" id="startUrl" value="/" class="tool-input">
+                </div>
+                <div>
+                    <label for="displayMode">Display Mode:</label>
+                    <select id="displayMode" class="tool-input">
+                        <option value="standalone">Standalone</option>
+                        <option value="fullscreen">Fullscreen</option>
+                        <option value="minimal-ui">Minimal UI</option>
+                        <option value="browser">Browser</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="themeColor">Theme Color (Browser UI):</label>
+                    <input type="color" id="themeColor" value="#2563eb" class="tool-input">
+                </div>
+                <div>
+                    <label for="bgColor">Background Color (Splash Screen):</label>
+                    <input type="color" id="bgColor" value="#ffffff" class="tool-input">
+                </div>
+                <div>
+                    <label for="iconPath">Icons Path (e.g., /images/icons/):</label>
+                    <input type="text" id="iconPath" value="/icons/" class="tool-input">
+                </div>
+            </div>
+
+            <h3 style="margin-top: 2rem;">Generated Code:</h3>
+            <div class="output-container">
+                <textarea id="jsonOutput" class="output-text" readonly></textarea>
+                <button class="copy-button" id="copyBtn">Copy</button>
+            </div>
+
+            <a class="btn" id="downloadBtn" download="manifest.json" style="margin-top: 1rem;">⬇️ Download manifest.json</a>
+        </section>
+
+        <section class="how-to">
+            <h3>How to Use</h3>
+            <ol>
+                <li>Fill out the form with your PWA details (app name, start URL, colors).</li>
+                <li>The `manifest.json` code will automatically update in the box below.</li>
+                <li>Click "Download manifest.json" to save the file.</li>
+                <li>Place this file in the root directory of your website and link to it in your HTML `<head>`.</li>
+            </ol>
+        </section>
+    </main>
+
+    <!-- PWA Install Button -->
+    <div class="pwa-install-container">
+        <button class="btn" id="installButton" style="display:none;">Install App</button>
+    </div>
+
+    <footer class="main-footer">
+        <ul class="footer-links">
+            <li><a href="../about.html">About Us</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+            <li><a href="../blog.html">Blog</a></li>
+            <li><a href="../privacy.html">Privacy Policy</a></li>
+            <li><a href="../disclaimer.html">Disclaimer</a></li>
+        </ul>
+        <p class="footer-copyright">&copy; 2025 OneTool. All Tools Run in Your Browser.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../theme.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Common Navigation and PWA Logic (keep as before) ---
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const allToolsMenu = document.getElementById('allToolsMenu');
+            const themeToggle = document.getElementById('theme-toggle');
+
+            // --- Navigation Logic ---
+            hamburgerBtn.addEventListener('click', () => { allToolsMenu.classList.toggle('show'); document.body.classList.toggle('menu-open'); });
+            document.addEventListener('click', (event) => {
+                if (window.innerWidth > 900) {
+                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && !event.target.closest('.main-nav')) { allToolsMenu.classList.remove('show'); }
+                } else {
+                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && event.target !== hamburgerBtn) { allToolsMenu.classList.remove('show'); document.body.classList.remove('menu-open'); }
+                }
+            });
+
+            // --- Manifest Generator Tool Specific Logic ---
+            const appNameInput = document.getElementById('appName');
+            const shortNameInput = document.getElementById('shortName');
+            const startUrlInput = document.getElementById('startUrl');
+            const displayModeInput = document.getElementById('displayMode');
+            const themeColorInput = document.getElementById('themeColor');
+            const bgColorInput = document.getElementById('bgColor');
+            const iconPathInput = document.getElementById('iconPath');
+            const jsonOutput = document.getElementById('jsonOutput');
+            const copyBtn = document.getElementById('copyBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            // Function to generate manifest JSON object
+            function generateManifest() {
+                const iconPath = iconPathInput.value.replace(/\/$/, ''); // Remove trailing slash
+                const manifest = {
+                    name: appNameInput.value,
+                    short_name: shortNameInput.value,
+                    start_url: startUrlInput.value,
+                    display: displayModeInput.value,
+                    background_color: bgColorInput.value,
+                    theme_color: themeColorInput.value,
+                    icons: [
+                        { src: `${iconPath}/icon-192x192.png`, sizes: "192x192", type: "image/png" },
+                        { src: `${iconPath}/icon-512x512.png`, sizes: "512x512", type: "image/png" }
+                    ]
+                };
+                return manifest;
+            }
+
+            // Function to render and update outputs
+            function updateManifestOutput() {
+                const manifest = generateManifest();
+                const jsonString = JSON.stringify(manifest, null, 2);
+                jsonOutput.value = jsonString;
+
+                const dataUri = "data:text/json;charset=utf-8," + encodeURIComponent(jsonString);
+                downloadBtn.href = dataUri;
+                downloadBtn.download = "manifest.json";
+            }
+
+            // --- Event Listeners ---
+            appNameInput.addEventListener('input', updateManifestOutput);
+            shortNameInput.addEventListener('input', updateManifestOutput);
+            startUrlInput.addEventListener('input', updateManifestOutput);
+            displayModeInput.addEventListener('input', updateManifestOutput);
+            themeColorInput.addEventListener('input', updateManifestOutput);
+            bgColorInput.addEventListener('input', updateManifestOutput);
+            iconPathInput.addEventListener('input', updateManifestOutput);
+
+            copyBtn.addEventListener('click', () => {
+                jsonOutput.select();
+                navigator.clipboard.writeText(jsonOutput.value)
+                    .then(() => alert('Copied to clipboard!'))
+                    .catch(err => console.error('Copy failed:', err));
+            });
+
+            // Initial output generation on page load
+            updateManifestOutput();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO OPTIMIZATION -->
+    <title>Delivery Note & Challan Generator | OneTool</title>
+    <meta name="description" content="Create professional delivery notes or challans online for free. Customize details and export as PDF or image, all processed in your browser." />
+    <!-- END SEO OPTIMIZATION -->
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <!-- Include jsPDF Library for generating PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Include html2canvas for converting HTML to image for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* Tool-specific styles based on the common layout */
+        .tool-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 2rem;
+            flex-grow: 1;
+            width: 100%;
+        }
+        .tool-page .tool-card {
+            max-width: 900px; /* Wider card for form and preview layout */
+            padding: 2rem;
+            width: 100%;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            background: var(--card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        .tool-header { text-align: center; margin-bottom: 1.5rem; }
+        .tool-header h1 { font-size: 2rem; color: var(--accent); font-weight: 700; }
+        .tool-header .tool-desc { font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.5; }
+        [data-theme="dark"] .tool-header .tool-desc { color: #94a3b8; }
+
+        /* --- Custom UI for Delivery Note Generator --- */
+        .generator-layout { display: flex; gap: 2rem; }
+        .generator-form { flex: 1; min-width: 300px; max-width: 400px; display: flex; flex-direction: column; gap: 1rem; }
+        .generator-form .input-group { margin-bottom: 0.5rem; }
+        .generator-form label { font-size: 0.9em; font-weight: 500; display: block; margin-bottom: 0.2rem; }
+        .generator-form input, .generator-form textarea { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg); color: var(--text); }
+        .generator-form textarea { min-height: 80px; }
+
+        .item-list-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .item-list-table th, .item-list-table td { border: 1px solid var(--border-color); padding: 8px; text-align: left; font-size: 0.9em; }
+        .item-list-table th { background: var(--bg); }
+        .item-list-table input { width: 100%; box-sizing: border-box; padding: 4px; border: 1px solid var(--border-color); background: var(--card); color: var(--text); }
+
+        .generator-preview { flex: 1; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; }
+        .document-preview { background-color: white; color: black; padding: 2rem; border-radius: 6px; min-height: 400px; font-family: Arial, sans-serif; }
+        .preview-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; }
+        .preview-sender-info, .preview-recipient-info { font-size: 0.9em; line-height: 1.4; }
+        .preview-items-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .preview-items-table th, .preview-items-table td { border: 1px solid #ddd; padding: 8px; font-size: 0.8em; }
+        .preview-total { text-align: right; margin-top: 1rem; }
+        .preview-signature { margin-top: 3rem; text-align: right; font-size: 0.9em; }
+        .preview-document-type { font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem; }
+
+        .export-controls { margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+
+        @media (max-width: 900px) {
+            .generator-layout { flex-direction: column; }
+            .generator-form { max-width: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="../index.html" class="logo">OneTool</a>
+        <button class="hamburger-btn" id="hamburgerBtn">☰</button>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="../index.html#category-image">Image Tools</a></li>
+                <li><a href="../index.html#category-text">Text Tools</a></li>
+                <li><a href="../blog.html">Blog</a></li>
+            </ul>
+            <button class="search-btn" id="searchBtn" aria-label="Search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+            <button class="all-tools-btn" id="allToolsBtn">All Tools <span class="arrow">▼</span></button>
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
+        </nav>
+    </header>
+
+    <div class="mega-menu" id="allToolsMenu">
+        <!-- Mega menu content (full menu) -->
+        <div class="mega-menu-grid">
+            <div class="mega-menu-category">
+                <h3>Image Tools</h3>
+                <ul>
+                    <li><a href="image-to-pdf.html"><span class="tool-icon">📄</span> Image to PDF</a></li>
+                    <li><a href="image-compressor.html"><span class="tool-icon">🗜️</span> Image Compressor</a></li>
+                    <li><a href="image-resizer.html"><span class="tool-icon">📏</span> Image Resizer</a></li>
+                    <li><a href="convert-png-jpg.html"><span class="tool-icon">🖼️</span> PNG <> JPG</a></li>
+                    <li><a href="steganography.html"><span class="tool-icon">🕵️</span> Steganography</a></li>
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Text & Writing</h3>
+                <ul>
+                    <li><a href="text-diff.html"><span class="tool-icon">🔍</span> Text Diff</a></li>
+                    <li><a href="text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
+                    <li><a href="text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
+                    <li><a href="word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
+                    <li><a href="line-operations.html"><span class="tool-icon">🔠</span> Line Operations</a></li>
+                    <li><a href="text-cleaner.html"><span class="tool-icon">🧹</span> Text Cleaner</a></li>
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Converters</h3>
+                <ul>
+                    <li><a href="unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
+                    <li><a href="document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Encoder/Decoder</h3>
+                <ul>
+                    <li><a href="url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
+                    <li><a href="hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
+                    <li><a href="password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
+                    <li><a href="qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
+                </ul>
+            </div>
+             <div class="mega-menu-category">
+                <h3>AI Tools</h3>
+                <ul>
+                    <li><a href="image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
+                    <li><a href="json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
+                    <li><a href="html-viewer.html"><span class="tool-icon">💻</span> HTML Viewer</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <main class="content tool-page">
+        <section class="tool-card">
+            <header class="tool-header">
+                <h1>📝 Delivery Note / Challan Generator</h1>
+                <p class="tool-desc">Create customizable delivery notes, challans, or basic invoices. Fill out the form below and export as PDF or image.</p>
+            </header>
+
+            <div class="generator-layout">
+                <div class="generator-form">
+                    <!-- Sender Details -->
+                    <h3 style="margin-top:0;">Document Details</h3>
+                    <div class="input-group">
+                        <label for="docType">Document Type:</label>
+                        <select id="docType" class="tool-input">
+                            <option value="Delivery Note">Delivery Note</option>
+                            <option value="Challan">Challan</option>
+                            <option value="Invoice">Invoice</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="senderName">Sender Name:</label>
+                        <input type="text" id="senderName" value="OneTool Solutions" class="tool-input">
+                    </div>
+                    <div class="input-group">
+                        <label for="senderAddress">Sender Address:</label>
+                        <textarea id="senderAddress" class="tool-input">123 Main Street, New Delhi, India</textarea>
+                    </div>
+
+                    <!-- Recipient Details -->
+                    <h3 style="margin-top:1rem;">Recipient Details</h3>
+                    <div class="input-group">
+                        <label for="recipientName">Recipient Name:</label>
+                        <input type="text" id="recipientName" placeholder="Recipient's Name" class="tool-input">
+                    </div>
+                    <div class="input-group">
+                        <label for="recipientAddress">Recipient Address:</label>
+                        <textarea id="recipientAddress" placeholder="Recipient's Address" class="tool-input"></textarea>
+                    </div>
+
+                    <!-- Items List -->
+                    <h3 style="margin-top:1rem;">Items List</h3>
+                    <table class="item-list-table">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th style="width: 25%;">Quantity</th>
+                                <th style="width: 25%;">Unit Price</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsBody">
+                            <!-- Items will be generated here -->
+                        </tbody>
+                    </table>
+                    <button class="btn" id="addItemBtn" style="margin-top: 0.5rem;">Add Item</button>
+
+                    <!-- Notes and Totals -->
+                    <h3 style="margin-top:1rem;">Notes & Other Info</h3>
+                    <div class="input-group">
+                        <label for="notes">Notes:</label>
+                        <textarea id="notes" class="tool-input"></textarea>
+                    </div>
+                </div>
+
+                <div class="generator-preview">
+                    <h3 style="text-align: center;">Document Preview</h3>
+                    <div class="document-preview" id="previewContainer">
+                        <!-- Preview content will be rendered here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="export-controls">
+                <button class="btn" id="exportPdfBtn">Export as PDF</button>
+                <button class="btn" id="exportImageBtn">Export as Image (PNG)</button>
+            </div>
+        </section>
+
+        <section class="how-to">
+            <h3>How to Use</h3>
+            <ol>
+                <li>Fill out the sender and recipient details in the left form.</li>
+                <li>Add items to the list by clicking "Add Item". Enter description, quantity, and unit price.</li>
+                <li>See a live preview of the document on the right.</li>
+                <li>Click "Export as PDF" or "Export as Image" to save the document locally.</li>
+            </ol>
+        </section>
+    </main>
+
+    <!-- PWA Install Button -->
+    <div class="pwa-install-container">
+        <button class="btn" id="installButton" style="display:none;">Install App</button>
+    </div>
+
+    <footer class="main-footer">
+        <ul class="footer-links">
+            <li><a href="../about.html">About Us</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+            <li><a href="../blog.html">Blog</a></li>
+            <li><a href="../privacy.html">Privacy Policy</a></li>
+            <li><a href="../disclaimer.html">Disclaimer</a></li>
+        </ul>
+        <p class="footer-copyright">&copy; 2025 OneTool. All Tools Run in Your Browser.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../theme.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Common Navigation and PWA Logic (keep as before) ---
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const allToolsMenu = document.getElementById('allToolsMenu');
+
+            // --- Navigation Logic ---
+            hamburgerBtn.addEventListener('click', () => { allToolsMenu.classList.toggle('show'); document.body.classList.toggle('menu-open'); });
+            document.addEventListener('click', (event) => {
+                if (window.innerWidth > 900) {
+                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && !event.target.closest('.main-nav')) { allToolsMenu.classList.remove('show'); }
+                } else {
+                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && event.target !== hamburgerBtn) { allToolsMenu.classList.remove('show'); document.body.classList.remove('menu-open'); }
+                }
+            });
+
+            // --- Delivery Note Generator Tool Specific Logic ---
+            const docTypeSelect = document.getElementById('docType');
+            const senderNameInput = document.getElementById('senderName');
+            const senderAddressTextarea = document.getElementById('senderAddress');
+            const recipientNameInput = document.getElementById('recipientName');
+            const recipientAddressTextarea = document.getElementById('recipientAddress');
+            const itemsBody = document.getElementById('itemsBody');
+            const addItemBtn = document.getElementById('addItemBtn');
+            const notesTextarea = document.getElementById('notes');
+            const previewContainer = document.getElementById('previewContainer');
+            const exportPdfBtn = document.getElementById('exportPdfBtn');
+            const exportImageBtn = document.getElementById('exportImageBtn');
+
+            // --- Item management ---
+            let items = [];
+            let itemCounter = 0;
+
+            function addItem() {
+                itemCounter++;
+                const newRow = itemsBody.insertRow();
+                newRow.innerHTML = `
+                    <td><input type="text" data-field="description" value="Item ${itemCounter}" class="tool-input"></td>
+                    <td><input type="number" data-field="quantity" value="1" min="1" class="tool-input"></td>
+                    <td><input type="number" data-field="price" value="100" min="0" class="tool-input"></td>
+                `;
+                newRow.querySelectorAll('input').forEach(input => input.addEventListener('input', updatePreview));
+            }
+
+            // --- Preview generation ---
+            function updatePreview() {
+                const docType = docTypeSelect.value;
+                const senderName = senderNameInput.value;
+                const senderAddress = senderAddressTextarea.value;
+                const recipientName = recipientNameInput.value;
+                const recipientAddress = recipientAddressTextarea.value;
+                const notes = notesTextarea.value;
+
+                // Gather item data from table inputs
+                items = Array.from(itemsBody.querySelectorAll('tr')).map(row => ({
+                    description: row.querySelector('[data-field="description"]').value,
+                    quantity: parseFloat(row.querySelector('[data-field="quantity"]').value) || 0,
+                    price: parseFloat(row.querySelector('[data-field="price"]').value) || 0,
+                }));
+
+                // Calculate total
+                const subtotal = items.reduce((sum, item) => sum + item.quantity * item.price, 0);
+
+                // --- HTML structure for preview ---
+                let itemsHtml = items.map(item => `
+                    <tr>
+                        <td>${item.description}</td>
+                        <td style="text-align: right;">${item.quantity}</td>
+                        <td style="text-align: right;">${item.price.toFixed(2)}</td>
+                        <td style="text-align: right;">${(item.quantity * item.price).toFixed(2)}</td>
+                    </tr>
+                `).join('');
+
+                previewContainer.innerHTML = `
+                    <div class="preview-document-type">${docType}</div>
+                    <div class="preview-header">
+                        <div class="preview-sender-info">
+                            <strong>From:</strong><br>
+                            ${senderName}<br>
+                            ${senderAddress.replace(/\n/g, '<br>')}
+                        </div>
+                        <div class="preview-recipient-info">
+                            <strong>To:</strong><br>
+                            ${recipientName}<br>
+                            ${recipientAddress.replace(/\n/g, '<br>')}
+                        </div>
+                    </div>
+                    <table class="preview-items-table">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th style="width: 15%;">Qty</th>
+                                <th style="width: 15%;">Price</th>
+                                <th style="width: 15%;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${itemsHtml}
+                        </tbody>
+                    </table>
+                    <div class="preview-total">
+                        <strong>Subtotal:</strong> ${subtotal.toFixed(2)}
+                    </div>
+                    ${notes ? `<div style="margin-top: 1rem; font-size: 0.9em;"><strong>Notes:</strong> ${notes.replace(/\n/g, '<br>')}</div>` : ''}
+                    <div class="preview-signature">
+                        Authorised Signature
+                    </div>
+                `;
+            }
+
+            // --- Export Functions ---
+            function exportDocument(format) {
+                const docName = `${docTypeSelect.value.toLowerCase().replace(/\s/g, '-')}-${Date.now()}`;
+                const elementToExport = previewContainer;
+
+                if (format === 'pdf') {
+                    // Generate PDF using html2canvas and jspdf
+                    html2canvas(elementToExport, { scale: 2, allowTaint: true, useCORS: true }).then(canvas => {
+                        const imgData = canvas.toDataURL('image/png');
+                        const { jsPDF } = window.jspdf;
+                        const pdf = new jsPDF('p', 'mm', 'a4'); // 'p' for portrait, 'mm' for units, 'a4' for size
+                        const imgWidth = 210; // A4 width in mm
+                        const pageHeight = 295; // A4 height in mm
+                        const imgHeight = canvas.height * imgWidth / canvas.width;
+                        let heightLeft = imgHeight;
+                        let position = 0;
+
+                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+
+                        while (heightLeft >= 0) {
+                            position = heightLeft - imgHeight;
+                            pdf.addPage();
+                            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                            heightLeft -= pageHeight;
+                        }
+
+                        pdf.save(`${docName}.pdf`);
+                    });
+                } else if (format === 'png') {
+                    // Generate PNG using html2canvas and download link
+                    html2canvas(elementToExport, { scale: 2, allowTaint: true, useCORS: true }).then(canvas => {
+                        const dataUrl = canvas.toDataURL('image/png');
+                        const a = document.createElement('a');
+                        a.href = dataUrl;
+                        a.download = `${docName}.png`;
+                        a.click();
+                    });
+                }
+            }
+
+            // --- Event Listeners ---
+            addItemBtn.addEventListener('click', addItem);
+            exportPdfBtn.addEventListener('click', () => exportDocument('pdf'));
+            exportImageBtn.addEventListener('click', () => exportDocument('png'));
+
+            // Live updates on form input changes
+            [docTypeSelect, senderNameInput, senderAddressTextarea, recipientNameInput, recipientAddressTextarea, notesTextarea].forEach(el => el.addEventListener('input', updatePreview));
+
+            // Initial setup
+            addItem(); // Add a starting item row
+            updatePreview(); // Initial preview rendering
+        });
+    </script>
+</body>
+</html>```
+
+---
+
+### File 2: `index.html` (Add New Tool Card and Mega Menu Link)
+
+**1. Add Mega Menu Link:** Add the "Delivery Note Generator" to the "Text & Writing" category in `allToolsMenu`.
+
+**2. Add Tool Card:** Add a new tool card for "Delivery Note Generator" in the main `toolGrid` and in the `popular-tools` section if desired.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO OPTIMIZATION -->
+    <title>OneTool – All-in-One Online Toolkit | Privacy-First Web Tools</title>
+    <meta name="description" content="Access a powerful collection of free, privacy-first online tools. All processing runs directly in your browser without uploading files to our servers." />
+    <!-- END SEO OPTIMIZATION -->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <!-- New style for favorites icon (can also be put in style.css) -->
+    <style>
+        .tool-card-home {
+            position: relative;
+        }
+        .favorite-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            opacity: 0.8;
+            transition: opacity 0.2s, fill 0.2s, stroke 0.2s;
+            z-index: 50; /* Ensure button is above other elements in the card */
+        }
+        .favorite-btn:hover {
+            opacity: 1;
+        }
+        .favorite-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text); /* Default outline color */
+            fill: none; /* Default fill color (empty heart) */
+        }
+        .favorite-btn.active svg {
+            fill: #f59e0b; /* Filled heart color (yellow/orange) */
+            stroke: #f59e0b; /* Filled heart stroke color */
+        }
+        /* New section style for favorites display */
+        #favoritesSection {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: none; /* Hide by default, show via JS when populated */
+        }
+        #favoritesSection h2 {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        /* Adjustments for new search bar location */
+        .mega-menu .mega-menu-search {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .mega-menu .mega-menu-search input {
+            width: 100%;
+            height: 40px;
+            padding: 0 1rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg);
+            color: var(--text);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="index.html" class="logo">OneTool</a>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#category-image">Image Tools</a></li>
+                <li><a href="#category-text">Text Tools</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
+            <button class="hamburger-btn" id="hamburgerBtn">☰</button>
+        </nav>
+    </header>
+
+    <div class="mega-menu" id="allToolsMenu">
+        <!-- New Search Input within Mega Menu -->
+        <div class="mega-menu-search" style="display: none;">
+             <input type="text" id="megaMenuSearchInput" placeholder="Search for a tool..." autocomplete="off">
+        </div>
+        <!-- Mega menu content (full menu) -->
+        <div class="mega-menu-grid">
+            <div class="mega-menu-category">
+                <h3>Image Tools</h3>
+                <ul>
+                    <li><a href="tools/image-to-pdf.html"><span class="tool-icon">📄</span> Image to PDF</a></li>
+                    <li><a href="tools/image-compressor.html"><span class="tool-icon">🗜️</span> Image Compressor</a></li>
+                    <li><a href="tools/image-resizer.html"><span class="tool-icon">📏</span> Image Resizer</a></li>
+                    <li><a href="tools/convert-png-jpg.html"><span class="tool-icon">🖼️</span> PNG <> JPG</a></li>
+                    <li><a href="tools/steganography.html"><span class="tool-icon">🕵️</span> Steganography</a></li>
+                    <!-- New Tools -->
+                    <li><a href="tools/image-palette-extractor.html"><span class="tool-icon">🎨</span> Palette Extractor</a></li>
+                    <li><a href="tools/image-placeholder-generator.html"><span class="tool-icon">🖼️</span> Placeholder Generator</a></li>
+                    <!-- End New Tools -->
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Text & Writing</h3>
+                <ul>
+                    <li><a href="tools/text-diff.html"><span class="tool-icon">🔍</span> Text Diff</a></li>
+                    <li><a href="tools/text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
+                    <li><a href="tools/text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
+                    <li><a href="tools/word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
+                    <li><a href="tools/line-operations.html"><span class="tool-icon">🔠</span> Line Operations</a></li>
+                    <li><a href="tools/text-cleaner.html"><span class="tool-icon">🧹</span> Text Cleaner</a></li>
+                    <!-- New Tools -->
+                    <li><a href="tools/delivery-note-generator.html"><span class="tool-icon">📝</span> Delivery Note Generator</a></li>
+                    <!-- End New Tools -->
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Converters</h3>
+                <ul>
+                    <li><a href="tools/unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
+                    <li><a href="tools/document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
+                    <!-- New Tools -->
+                    <li><a href="tools/csv-editor.html"><span class="tool-icon">📊</span> CSV Editor</a></li>
+                    <!-- End New Tools -->
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Encoder/Decoder</h3>
+                <ul>
+                    <li><a href="tools/url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
+                    <li><a href="tools/hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
+                    <li><a href="tools/password-manager.html"><span class="tool-icon">🔑</span> Password Manager</a></li>
+                    <li><a href="tools/password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
+                    <li><a href="tools/qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
+                    <!-- New Tools -->
+                    <li><a href="tools/pwa-manifest-generator.html"><span class="tool-icon">⚙️</span> PWA Manifest Generator</a></li>
+                    <!-- End New Tools -->
+                </ul>
+            </div>
+             <div class="mega-menu-category">
+                <h3>AI Tools</h3>
+                <ul>
+                    <li><a href="tools/image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
+                    <li><a href="tools/json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
+                    <li><a href="tools/html-viewer.html"><span class="tool-icon">💻</span> HTML Viewer</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="home-hero" id="homeHero">
+            <h1>Every tool you need, right in your browser</h1>
+            <p class="subtitle">A powerful collection of online tools for developers and everyday tasks.</p>
+            <div class="quick-search-bar">
+                <input type="text" id="heroSearchInput" placeholder="Search for a tool..." autocomplete="off">
+            </div>
+        </section>
+
+        <!-- New: Dedicated Search Results Container -->
+        <div class="search-results-container" id="searchResultsContainer" style="display: none;">
+            <!-- Search results will appear here -->
+        </div>
+
+        <section class="feature-highlights" id="featureHighlights">
+            <div class="highlight-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <span>Privacy First</span>
+                <p>No files uploaded. Everything runs in your browser.</p>
+            </div>
+            <div class="highlight-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                <span>100% Free</span>
+                <p>Full access to all tools without any hidden fees.</p>
+            </div>
+            <div class="highlight-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>Secure & Fast</span>
+                <p>Fast processing on your device without server communication.</p>
+            </div>
+        </section>
+
+        <!-- New: Favourites Section -->
+        <section id="favoritesSection" style="display: none;">
+            <h2 class="section-title">My Favourites</h2>
+            <div class="tool-grid-home" id="favoritesGrid">
+                <!-- Favourites will be injected here by JavaScript -->
+            </div>
+        </section>
+
+        <section class="popular-tools" id="popularTools">
+            <h2 class="section-title">Popular Tools</h2>
+            <div class="tool-grid-home popular-grid">
+                <!-- Popular tools list -->
+                <a href="tools/image-to-pdf.html" class="tool-card-home" data-category="image" data-keywords="image pdf jpg png convert" data-tool-id="image-to-pdf">
+                    <div class="tool-header-home">
+                        <div class="tool-logo tool-logo-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line></svg></div>
+                        <h2 class="tool-title">Image to PDF</h2>
+                    </div>
+                    <p class="tool-desc">Combine multiple images into a single PDF.</p>
+                    <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="image-to-pdf">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                    </button>
+                </a>
+                <a href="tools/image-compressor.html" class="tool-card-home" data-category="image" data-keywords="image compress reduce size quality" data-tool-id="image-compressor">
+                    <div class="tool-header-home">
+                        <div class="tool-logo tool-logo-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m14-7-5 5-5-5m5 5V3"></path></svg></div>
+                        <h2 class="tool-title">Image Compressor</h2>
+                    </div>
+                    <p class="tool-desc">Reduce image file size without losing quality.</p>
+                    <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="image-compressor">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                    </button>
+                </a>
+                <a href="tools/password-manager.html" class="tool-card-home" data-category="encode" data-keywords="password manager store security encryption" data-tool-id="password-manager">
+                    <div class="tool-header-home">
+                        <div class="tool-logo tool-logo-encode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+                        <h2 class="tool-title">Password Manager</h2>
+                    </div>
+                    <p class="tool-desc">Store and manage your passwords securely in your browser.</p>
+                    <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="password-manager">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                    </button>
+                </a>
+                <a href="tools/text-diff.html" class="tool-card-home" data-category="text" data-keywords="text diff compare difference checker" data-tool-id="text-diff">
+                    <div class="tool-header-home">
+                        <div class="tool-logo tool-logo-text"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg></div>
+                        <h2 class="tool-title">Text Diff Checker</h2>
+                    </div>
+                    <p class="tool-desc">Visually compare two texts to see the differences.</p>
+                    <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="text-diff">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                    </button>
+                </a>
+            </div>
+        </section>
+
+        <h2 class="section-title" id="allToolsTitle">All Tools by Category</h2>
+        <div class="filter-tabs" id="filterTabs">
+            <button class="tab-btn active" data-filter="all">All</button>
+            <button class="tab-btn" data-filter="image">Image</button>
+            <button class="tab-btn" data-filter="text">Text</button>
+            <button class="tab-btn" data-filter="convert">Converters</button>
+            <button class="tab-btn" data-filter="encode">Encoders</button>
+            <button class="tab-btn" data-filter="ai">AI</button>
+        </div>
+
+        <div class="tool-grid-home" id="toolGrid">
+            <!-- All tool cards list -->
+            <a href="tools/image-to-pdf.html" class="tool-card-home" data-category="image" data-keywords="image pdf jpg png convert" data-tool-id="image-to-pdf">
+                <div class="tool-header-home">
+                    <div class="tool-logo tool-logo-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line></svg></div><h2 class="tool-title">Image to PDF</h2></div><p class="tool-desc">Combine multiple images into a single PDF.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="image-to-pdf">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/image-compressor.html" class="tool-card-home" data-category="image" data-keywords="image compress reduce size quality" data-tool-id="image-compressor">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m14-7-5 5-5-5m5 5V3"></path></svg></div><h2 class="tool-title">Image Compressor</h2></div><p class="tool-desc">Reduce image file size without losing quality.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="image-compressor">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/image-resizer.html" class="tool-card-home" data-category="image" data-keywords="image resize scale dimensions" data-tool-id="image-resizer">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg></div><h2 class="tool-title">Image Resizer</h2></div><p class="tool-desc">Easily resize your images to specific dimensions.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="image-resizer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/convert-png-jpg.html" class="tool-card-home" data-category="image" data-keywords="png jpg convert image format" data-tool-id="convert-png-jpg">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="8 21 3 21 3 16"></polyline><line x1="15" y1="15" x2="3" y2="20"></line></svg></div><h2 class="tool-title">PNG <> JPG</h2></div><p class="tool-desc">Convert PNG images to JPG and vice versa.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="convert-png-jpg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/steganography.html" class="tool-card-home" data-category="image" data-keywords="steganography hide text image secret" data-tool-id="steganography">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></div><h2 class="tool-title">Steganography</h2></div><p class="tool-desc">Hide secret text inside images or extract it.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="steganography">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/text-diff.html" class="tool-card-home" data-category="text" data-keywords="text diff compare difference checker" data-tool-id="text-diff">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-text"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg></div><h2 class="tool-title">Text Diff Checker</h2></div><p class="tool-desc">Visually compare two texts to see the differences.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="text-diff">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/word-counter.html" class="tool-card-home" data-category="text" data-keywords="word character count sentences paragraphs" data-tool-id="word-counter">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-text"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg></div><h2 class="tool-title">Word Counter</h2></div><p class="tool-desc">Count words, characters, sentences, and paragraphs.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="word-counter">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/text-encryptor.html" class="tool-card-home" data-category="text" data-keywords="text encrypt decrypt password aes secure" data-tool-id="text-encryptor">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-text"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><h2 class="tool-title">Text Encryptor</h2></div><p class="tool-desc">Encrypt or decrypt text with a password.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="text-encryptor">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/text-to-pdf.html" class="tool-card-home" data-category="text" data-keywords="text pdf document convert" data-tool-id="text-to-pdf">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-text"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg></div><h2 class="tool-title">Text to PDF</h2></div><p class="tool-desc">Turn plain text into a styled PDF document.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="text-to-pdf">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/unit-converter.html" class="tool-card-home" data-category="convert" data-keywords="unit converter length weight area" data-tool-id="unit-converter">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-convert"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.49 19l-5.73-5.73a1 1 0 0 0-1.42 0l-5.73 5.73a1 1 0 0 0 0 1.42l5.73 5.73a1 1 0 0 0 1.42 0l5.73-5.73a1 1 0 0 0 0-1.42zM3.51 5l5.73 5.73a1 1 0 0 0 1.42 0l5.73-5.73a1 1 0 0 0 0-1.42L10.66.29a1 1 0 0 0-1.42 0L3.51 3.58a1 1 0 0 0 0 1.42z"></path></svg></div><h2 class="tool-title">Unit Converter</h2></div><p class="tool-desc">Convert between various units with live results.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="unit-converter">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/document-scanner.html" class="tool-card-home" data-category="convert" data-keywords="document scanner camera crop enhance" data-tool-id="document-scanner">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-convert"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="3"></circle></svg></div><h2 class="tool-title">Document Scanner</h2></div><p class="tool-desc">Scan documents with your camera or images.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="document-scanner">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/url-encoder.html" class="tool-card-home" data-category="encode" data-keywords="url encode decode query string" data-tool-id="url-encoder">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-encode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></div><h2 class="tool-title">URL Encoder</h2></div><p class="tool-desc">Encode or decode URLs and query strings.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="url-encoder">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/hash-generator.html" class="tool-card-home" data-category="encode" data-keywords="hash generator md5 sha256 secure" data-tool-id="hash-generator">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-encode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div><h2 class="tool-title">Hash Generator</h2></div><p class="tool-desc">Generate secure hashes (MD5, SHA-256).</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="hash-generator">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/password-generator.html" class="tool-card-home" data-category="encode" data-keywords="password generator strong random secure" data-tool-id="password-generator">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-encode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg></div><h2 class="tool-title">Password Generator</h2></div><p class="tool-desc">Create strong, random passwords.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="password-generator">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/qr-generator.html" class="tool-card-home" data-category="encode" data-keywords="qr code generator link url text" data-tool-id="qr-generator">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-encode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg></div><h2 class="tool-title">QR Generator</h2></div><p class="tool-desc">Make QR codes for links, text, WiFi, and more.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="qr-generator">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/image-to-prompt.html" class="tool-card-home" data-category="ai" data-keywords="ai image prompt generator" data-tool-id="image-to-prompt">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-ai"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="3" y="15" width="7" height="5"></rect><rect x="14" y="11" width="7" height="9"></rect></svg></div><h2 class="tool-title">Image to Prompt</h2></div><p class="tool-desc">AI describes any image and generates a prompt.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="image-to-prompt">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/json-formatter.html" class="tool-card-home" data-category="ai" data-keywords="json formatter beautify validate" data-tool-id="json-formatter">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-ai"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></div><h2 class="tool-title">JSON Formatter</h2></div><p class="tool-desc">Beautify, validate, and inspect any JSON.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="json-formatter">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <!-- New tools added here -->
+            <a href="tools/line-operations.html" class="tool-card-home" data-category="text" data-keywords="line operations sort shuffle duplicates" data-tool-id="line-operations">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-text"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg></div><h2 class="tool-title">Line Operations</h2></div><p class="tool-desc">Sort, shuffle, or remove duplicate lines from text.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="line-operations">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/text-cleaner.html" class="tool-card-home" data-category="text" data-keywords="text cleaner spaces line breaks html" data-tool-id="text-cleaner">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-text"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg></div><h2 class="tool-title">Text Cleaner</h2></div><p class="tool-desc">Remove extra spaces, line breaks, and HTML tags.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="text-cleaner">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+            <a href="tools/html-viewer.html" class="tool-card-home" data-category="ai" data-keywords="html viewer live code sandbox" data-tool-id="html-viewer">
+                <div class="tool-header-home"><div class="tool-logo tool-logo-ai"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div><h2 class="tool-title">HTML Viewer</h2></div><p class="tool-desc">View live preview of HTML code in your browser.</p>
+                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="html-viewer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+                </button>
+            </a>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="disclaimer.html">Disclaimer</a></li>
+        </ul>
+        <p class="footer-copyright">&copy; 2025 OneTool. All Tools Run in Your Browser.</p>
+    </footer>
+
+    <script src="theme.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Elements and Initial setup ---
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const allToolsMenu = document.getElementById('allToolsMenu');
+            const heroSearchInput = document.getElementById('heroSearchInput');
+            // Select all tool cards on the page. We use document.querySelectorAll here, as new cards will be cloned into the favorites section later.
+            const allToolCards = Array.from(document.querySelectorAll('.tool-card-home'));
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            const featureHighlights = document.getElementById('featureHighlights');
+            const popularTools = document.getElementById('popularTools');
+            const allToolsTitle = document.getElementById('allToolsTitle');
+            const filterTabs = document.getElementById('filterTabs');
+            const favoritesSection = document.getElementById('favoritesSection');
+            const favoritesGrid = document.getElementById('favoritesGrid');
+            const homeHero = document.getElementById('homeHero');
+
+            // --- Mega Menu Logic ---
+            hamburgerBtn.addEventListener('click', () => {
+                allToolsMenu.classList.toggle('show');
+                document.body.classList.toggle('menu-open');
+            });
+            document.addEventListener('click', (event) => {
+                if (window.innerWidth > 900) {
+                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && !event.target.closest('.main-nav')) {
+                        allToolsMenu.classList.remove('show');
+                    }
+                } else {
+                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && event.target !== hamburgerBtn) {
+                        allToolsMenu.classList.remove('show');
+                        document.body.classList.remove('menu-open');
+                    }
+                }
+            });
+
+            // --- Search Logic ---
+            heroSearchInput.addEventListener('input', () => {
+                const query = heroSearchInput.value.toLowerCase().trim();
+                performInPlaceSearch(query);
+            });
+
+            function performInPlaceSearch(query) {
+                const lowerCaseQuery = query.toLowerCase().trim();
+
+                if (lowerCaseQuery.length === 0) {
+                    // Show regular content when search is empty
+                    if (getFavorites().length === 0) {
+                        featureHighlights.style.display = 'flex';
+                        popularTools.style.display = 'block';
+                    }
+                    allToolsTitle.style.display = 'block';
+                    filterTabs.style.display = 'flex';
+                    favoritesSection.style.display = getFavorites().length > 0 ? 'block' : 'none';
+                    updateToolVisibility(); // Restore category filtering
+                    return;
+                }
+
+                // Hide sections during search
+                featureHighlights.style.display = 'none';
+                popularTools.style.display = 'none';
+                allToolsTitle.style.display = 'none';
+                filterTabs.style.display = 'none';
+                favoritesSection.style.display = 'none';
+
+                let resultsFound = false;
+                allToolCards.forEach(card => {
+                    const keywords = card.dataset.keywords.toLowerCase();
+                    const title = card.querySelector('.tool-title').textContent.toLowerCase();
+                    if (keywords.includes(lowerCaseQuery) || title.includes(lowerCaseQuery)) {
+                        card.style.display = 'block';
+                        resultsFound = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            // --- Filter Tabs Logic ---
+            function updateToolVisibility() {
+                const activeTab = document.querySelector('.tab-btn.active').dataset.filter;
+                allToolCards.forEach(card => {
+                    if (activeTab === 'all' || card.dataset.category === activeTab) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    updateToolVisibility();
+                });
+            });
+
+            // --- Favourites Logic ---
+            const favoritesKey = 'oneToolFavourites';
+
+            function getFavorites() {
+                try {
+                    return JSON.parse(localStorage.getItem(favoritesKey) || '[]');
+                } catch {
+                    return [];
+                }
+            }
+
+            function saveFavorites(favoritesList) {
+                localStorage.setItem(favoritesKey, JSON.stringify(favoritesList));
+                renderFavorites(); // Update UI after saving
+            }
+
+            // Function to clone and display favorite cards in the dedicated section
+            function renderFavorites() {
+                const favorites = getFavorites();
+                favoritesGrid.innerHTML = ''; // Clear existing favorites list
+
+                if (favorites.length > 0) {
+                    favoritesSection.style.display = 'block';
+                    // UI/UX Improvement: Hide feature highlights and popular tools when favorites are displayed
+                    featureHighlights.style.display = 'none';
+                    popularTools.style.display = 'none';
+                    // UI/UX Improvement: Hide main search bar when favorites are displayed
+                    homeHero.style.display = 'none';
+
+                    // Iterate over the source list (allToolCards) to create clones for the favorites section
+                    allToolCards.forEach(originalCard => {
+                        const toolId = originalCard.dataset.toolId;
+                        if (favorites.includes(toolId)) {
+                            // Clone the card for display in the favorites section
+                            const clonedCard = originalCard.cloneNode(true);
+                            
+                            // --- FIX: Ensure the cloned card's icon state is set correctly ---
+                            const clonedButton = clonedCard.querySelector('.favorite-btn');
+                            if (clonedButton) {
+                                // Apply active state to the cloned card's button
+                                clonedButton.classList.add('active');
+                                // Re-attach listener to the cloned button to avoid state issues on re-renders
+                                clonedButton.removeEventListener('click', handleFavoriteClick);
+                                clonedButton.addEventListener('click', handleFavoriteClick);
+                            }
+                            // -----------------------------------------------------------------
+                            favoritesGrid.appendChild(clonedCard);
+                        }
+                    });
+                } else {
+                    favoritesSection.style.display = 'none';
+                    featureHighlights.style.display = 'flex'; // Restore feature highlights if no favorites
+                    popularTools.style.display = 'block'; // Restore popular tools section
+                    homeHero.style.display = 'block'; // Restore main search bar
+                }
+
+                // Update icons on all original cards (for visual consistency)
+                allToolCards.forEach(card => updateFavoriteIconState(card));
+            }
+
+            function updateFavoriteIconState(card) {
+                const toolId = card.dataset.toolId;
+                const button = card.querySelector('.favorite-btn');
+                if (button) {
+                    if (getFavorites().includes(toolId)) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                }
+            }
+
+            function toggleFavorite(toolId) {
+                let favorites = getFavorites();
+                const index = favorites.indexOf(toolId);
+
+                if (index > -1) {
+                    favorites.splice(index, 1);
+                } else {
+                    favorites.push(toolId);
+                }
+                saveFavorites(favorites);
+            }
+
+            function handleFavoriteClick(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                const toolId = event.currentTarget.dataset.toolId;
+                toggleFavorite(toolId);
+            }
+
+            // --- Initial Setup ---
+            renderFavorites(); // Load and display favorites on page load
+            updateToolVisibility(); // Initial filter call
+        });
+    </script>
+</body>
+</html>```

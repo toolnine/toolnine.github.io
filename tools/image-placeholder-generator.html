@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO OPTIMIZATION -->
+    <title>Image Placeholder Generator | OneTool</title>
+    <meta name="description" content="Generate custom placeholder images instantly. Specify dimensions, text, and colors directly in your browser. Privacy-first." />
+    <!-- END SEO OPTIMIZATION -->
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Tool-specific styles based on the common layout */
+        .tool-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 2rem;
+            flex-grow: 1;
+            width: 100%;
+        }
+        .tool-page .tool-card {
+            max-width: 700px;
+            padding: 2rem;
+            width: 100%;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            background: var(--card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        .tool-header { text-align: center; margin-bottom: 1.5rem; }
+        .tool-header h1 { font-size: 2rem; color: var(--accent); font-weight: 700; }
+        .tool-header .tool-desc { font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.5; }
+        [data-theme="dark"] .tool-header .tool-desc { color: #94a3b8; }
+
+        /* --- Custom UI for Image Placeholder Generator --- */
+        .placeholder-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .placeholder-controls label { font-size: 0.9em; font-weight: 500; margin-bottom: 0.2rem; display: block; }
+        .placeholder-controls input[type="text"], .placeholder-controls input[type="number"] { font-size: 1em; }
+        .placeholder-controls input[type="color"] { width: 100%; height: 40px; }
+
+        .image-preview-area { margin-top: 2rem; text-align: center; }
+        .image-preview-area img { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border-color); }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="../index.html" class="logo">OneTool</a>
+        <button class="hamburger-btn" id="hamburgerBtn">☰</button>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="../index.html#category-image">Image Tools</a></li>
+                <li><a href="../index.html#category-text">Text Tools</a></li>
+                <li><a href="../blog.html">Blog</a></li>
+            </ul>
+            <button class="search-btn" id="searchBtn" aria-label="Search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+            <button class="all-tools-btn" id="allToolsBtn">All Tools <span class="arrow">▼</span></button>
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
+        </nav>
+    </header>
+
+    <div class="mega-menu" id="allToolsMenu">
+        <!-- Mega menu content (full menu) -->
+        <div class="mega-menu-grid">
+            <div class="mega-menu-category">
+                <h3>Image Tools</h3>
+                <ul>
+                    <li><a href="image-to-pdf.html"><span class="tool-icon">📄</span> Image to PDF</a></li>
+                    <li><a href="image-compressor.html"><span class="tool-icon">🗜️</span> Image Compressor</a></li>
+                    <li><a href="image-resizer.html"><span class="tool-icon">📏</span> Image Resizer</a></li>
+                    <li><a href="convert-png-jpg.html"><span class="tool-icon">🖼️</span> PNG <> JPG</a></li>
+                    <li><a href="steganography.html"><span class="tool-icon">🕵️</span> Steganography</a></li>
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Text & Writing</h3>
+                <ul>
+                    <li><a href="text-diff.html"><span class="tool-icon">🔍</span> Text Diff</a></li>
+                    <li><a href="text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
+                    <li><a href="text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
+                    <li><a href="word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
+                    <li><a href="line-operations.html"><span class="tool-icon">🔠</span> Line Operations</a></li>
+                    <li><a href="text-cleaner.html"><span class="tool-icon">🧹</span> Text Cleaner</a></li>
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Converters</h3>
+                <ul>
+                    <li><a href="unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
+                    <li><a href="document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Encoder/Decoder</h3>
+                <ul>
+                    <li><a href="url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
+                    <li><a href="hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
+                    <li><a href="password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
+                    <li><a href="qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
+                </ul>
+            </div>
+             <div class="mega-menu-category">
+                <h3>AI Tools</h3>
+                <ul>
+                    <li><a href="image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
+                    <li><a href="json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
+                    <li><a href="html-viewer.html"><span class="tool-icon">💻</span> HTML Viewer</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <main class="content tool-page">
+        <section class="tool-card">
+            <header class="tool-header">
+                <h1>🖼️ Image Placeholder Generator</h1>
+                <p class="tool-desc">Create custom placeholder images for web design and development, specifying dimensions and text. No server-side processing.</p>
+            </header>
+
+            <div class="placeholder-controls">
+                <div>
+                    <label for="widthInput">Width (px):</label>
+                    <input type="number" id="widthInput" value="300" class="tool-input">
+                </div>
+                <div>
+                    <label for="heightInput">Height (px):</label>
+                    <input type="number" id="heightInput" value="200" class="tool-input">
+                </div>
+                <div>
+                    <label for="textInput">Placeholder Text:</label>
+                    <input type="text" id="textInput" value="OneTool Placeholder" class="tool-input">
+                </div>
+                <div>
+                    <label for="textColor">Text Color:</label>
+                    <input type="color" id="textColor" value="#ffffff" class="tool-input">
+                </div>
+                <div>
+                    <label for="bgColor">Background Color:</label>
+                    <input type="color" id="bgColor" value="#cccccc" class="tool-input">
+                </div>
+            </div>
+
+            <button class="btn" id="generateBtn" style="margin-top: 1.5rem;">Generate Image</button>
+
+            <div class="image-preview-area" id="imagePreviewArea" style="display: none;">
+                <h3 style="margin-top: 1.5rem;">Generated Image:</h3>
+                <img id="placeholderImage" src="" alt="Placeholder Image">
+                <a class="btn" id="downloadLink" download="placeholder.png" style="margin-top: 1rem;">⬇️ Download Image</a>
+            </div>
+        </section>
+
+        <section class="how-to">
+            <h3>How to Use</h3>
+            <ol>
+                <li>Enter the desired width and height for your placeholder image.</li>
+                <li>Customize the text, text color, and background color.</li>
+                <li>Click "Generate Image" to create the placeholder.</li>
+                <li>Download the generated PNG file for use in your projects.</li>
+            </ol>
+        </section>
+    </main>
+
+    <!-- PWA Install Button -->
+    <div class="pwa-install-container">
+        <button class="btn" id="installButton" style="display:none;">Install App</button>
+    </div>
+
+    <footer class="main-footer">
+        <ul class="footer-links">
+            <li><a href="../about.html">About Us</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+            <li><a href="../blog.html">Blog</a></li>
+            <li><a href="../privacy.html">Privacy Policy</a></li>
+            <li><a href="../disclaimer.html">Disclaimer</a></li>
+        </ul>
+        <p class="footer-copyright">&copy; 2025 OneTool. All Tools Run in Your Browser.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../theme.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Common Navigation and PWA Logic (keep as before) ---
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const allToolsMenu = document.getElementById('allToolsMenu');
+            const themeToggle = document.getElementById('theme-toggle');
+
+            // --- Navigation Logic ---
+            hamburgerBtn.addEventListener('click', () => { allToolsMenu.classList.toggle('show'); document.body.classList.toggle('menu-open'); });
+            document.addEventListener('click', (event) => {
+                if (window.innerWidth > 900) {
+                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && !event.target.closest('.main-nav')) { allToolsMenu.classList.remove('show'); }
+                } else {
+                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && event.target !== hamburgerBtn) { allToolsMenu.classList.remove('show'); document.body.classList.remove('menu-open'); }
+                }
+            });
+
+            // --- Image Placeholder Generator Tool Specific Logic ---
+            const widthInput = document.getElementById('widthInput');
+            const heightInput = document.getElementById('heightInput');
+            const textInput = document.getElementById('textInput');
+            const textColorInput = document.getElementById('textColor');
+            const bgColorInput = document.getElementById('bgColor');
+            const generateBtn = document.getElementById('generateBtn');
+            const placeholderImage = document.getElementById('placeholderImage');
+            const downloadLink = document.getElementById('downloadLink');
+            const imagePreviewArea = document.getElementById('imagePreviewArea');
+
+            // --- Generate Image Function ---
+            function generatePlaceholder() {
+                const width = parseInt(widthInput.value) || 300;
+                const height = parseInt(heightInput.value) || 200;
+                const text = textInput.value || `${width} x ${height}`;
+                const textColor = textColorInput.value;
+                const bgColor = bgColorInput.value;
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+
+                // Draw background
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, width, height);
+
+                // Draw text
+                ctx.fillStyle = textColor;
+                const fontSize = Math.min(width, height) / 8;
+                ctx.font = `${fontSize}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(text, width / 2, height / 2);
+
+                const dataUrl = canvas.toDataURL('image/png');
+                placeholderImage.src = dataUrl;
+                downloadLink.href = dataUrl;
+                downloadLink.download = `placeholder-${width}x${height}.png`;
+                imagePreviewArea.style.display = 'block';
+            }
+
+            // --- Event Listeners ---
+            generateBtn.addEventListener('click', generatePlaceholder);
+            widthInput.addEventListener('input', generatePlaceholder);
+            heightInput.addEventListener('input', generatePlaceholder);
+            textInput.addEventListener('input', generatePlaceholder);
+            textColorInput.addEventListener('input', generatePlaceholder);
+            bgColorInput.addEventListener('input', generatePlaceholder);
+
+            // Initial generation on page load
+            generatePlaceholder();
+        });
+    </script>
+</body>
+</html>

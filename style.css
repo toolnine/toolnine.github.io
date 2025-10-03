@@ -31,7 +31,7 @@ body {
     line-height: 1.6;
     display: flex;
     flex-direction: column;
-    min-height: 10vh;
+    min-height: 100vh;
     transition: background 0.3s, color 0.3s;
 }
 
@@ -78,8 +78,7 @@ body.menu-open {
     color: var(--text);
     display: none; /* Hide on desktop */
 }
-
-/* MEGA MENU STYLES (Adjusted for both desktop dropdown and mobile slide-in) */
+/* Mega Menu Overlay (Mobile) */
 .mega-menu {
     position: absolute; /* Default to absolute for desktop dropdown */
     top: calc(var(--header-height) + 10px);
@@ -103,6 +102,7 @@ body.menu-open {
     pointer-events: auto;
     transform: translateY(0);
 }
+/* Mega Menu Search Bar */
 .mega-menu-search {
     padding-bottom: 1rem;
     margin-bottom: 1rem;
@@ -146,34 +146,6 @@ body.menu-open {
 [data-theme="dark"] .mega-menu-category li a:hover { background-color: #475569; }
 [data-theme="black"] .mega-menu-category li a:hover { background-color: #2a2a2a; }
 .tool-icon { font-size: 1.2rem; display: inline-flex; width: 1.2rem; height: 1.2rem; }
-
-/* ==== Mobile specific overrides (max-width: 900px) ==== */
-@media (max-width: 900px) {
-    .main-header { padding: 0 1rem; }
-    .main-nav ul { display: none; } /* Hide desktop nav links on mobile */
-    .hamburger-btn { display: block; } /* Show hamburger button on mobile */
-    .all-tools-btn { display: none; } /* Hide desktop all tools button on mobile */
-
-    /* Mega menu for smaller screens - expand full width as side drawer */
-    .mega-menu {
-        position: fixed;
-        top: var(--header-height);
-        right: 0;
-        bottom: 0;
-        max-width: 300px; /* Width for side menu */
-        border-right: none;
-        border-left: 1px solid var(--border-color);
-        border-radius: 0;
-        transform: translateX(100%);
-        opacity: 1;
-        pointer-events: auto;
-        transition: transform 0.3s ease-in-out;
-        box-shadow: none;
-    }
-    .mega-menu.show { transform: translateX(0); }
-    .mega-menu-grid { grid-template-columns: 1fr; }
-    body.menu-open { overflow: hidden; } /* Prevent scrolling when mobile menu is open */
-}
 
 /* ==== Main Content & Homepage ==== */
 main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
@@ -427,6 +399,7 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
     .main-header { padding: 0 1rem; }
     .main-nav ul { display: none; } /* Hide desktop nav links on mobile */
     .hamburger-btn { display: block; } /* Show hamburger button on mobile */
+    .all-tools-btn { display: none; } /* Hide desktop all tools button on mobile */
 
     /* Mega menu for smaller screens - expand full width */
     .mega-menu {
@@ -452,6 +425,10 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
     body.menu-open {
         overflow: hidden;
     }
+    /* Ensure proper alignment of header items on mobile */
+    .main-header > * { flex-grow: 1; }
+    .main-header .main-nav { flex-grow: 0; }
+    .main-header .logo { flex-grow: 0; }
 }
 
 /* 2. Highlight Section (feature-highlights) - Two Columns on mobile */

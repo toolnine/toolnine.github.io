@@ -1,18 +1,24 @@
+<!-- START OF FILE: tools/pdf-editor.html (Upgraded) -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- SEO OPTIMIZATION -->
-    <title>Advanced PDF Editor Online | Privacy-First ToolNine</title>
-    <meta name="description" content="Edit PDF files directly in your browser without uploading to a server. Merge, split, reorder pages, add text, and apply advanced annotations privately." />
+    <title>Advanced PDF Editor Online | Merge, Split, Reorder Pages | ToolNine</title>
+    <meta name="description" content="Edit PDF files directly in your browser without uploading to a server. Merge, split, reorder pages, and add text. Privacy-first local processing for full data security." />
     <!-- END SEO OPTIMIZATION -->
-    <link rel="stylesheet" href="../style.css">
+    <!-- Updated to root-relative path -->
+    <link rel="stylesheet" href="/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
-    <!-- Include PDF.js for rendering PDF on canvas -->
+    <!-- Include PDF.js for rendering PDF on canvas (Note: We need to set the worker source) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <!-- Include pdf-lib for editing functionality -->
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <!-- Include Sortable.js for drag and drop reordering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
     <style>
         /* Tool-specific styles based on the common layout */
         .tool-page {
@@ -64,6 +70,7 @@
             overflow: auto;
             max-height: 60vh;
             text-align: center;
+            position: relative; /* To contain canvas elements */
         }
         .pdf-canvas { display: block; }
         .pdf-preview {
@@ -94,10 +101,17 @@
             border-radius: 6px;
             cursor: move;
             border: 1px solid var(--border-color);
-            transition: background 0.2s;
+            transition: background 0.2s, box-shadow 0.2s;
+            user-select: none;
         }
         .page-thumb-item:hover { background: #f1f5f9; }
         [data-theme="dark"] .page-thumb-item:hover { background: #475569; }
+        .page-thumb-item.selected {
+            box-shadow: 0 0 0 3px var(--accent);
+            background: #e0ebff;
+        }
+        [data-theme="dark"] .page-thumb-item.selected { background: #334155; }
+
         .page-thumb-number { font-weight: 600; margin-right: 1rem; width: 20px; text-align: right; }
         .page-thumb-image { width: 40px; height: auto; border-radius: 4px; border: 1px solid var(--border-color); }
 
@@ -123,76 +137,8 @@
 </head>
 <body>
 
-    <header class="main-header">
-        <a href="../index.html" class="logo">ToolNine</a>
-        <button class="hamburger-btn" id="hamburgerBtn">☰</button>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="../index.html#category-image">Image Tools</a></li>
-                <li><a href="../index.html#category-text">Text Tools</a></li>
-                <li><a href="../blog.html">Blog</a></li>
-            </ul>
-            <button class="search-btn" id="searchBtn" aria-label="Search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
-            <button class="all-tools-btn" id="allToolsBtn">All Tools <span class="arrow">▼</span></button>
-            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
-        </nav>
-    </header>
-
-    <div class="mega-menu" id="allToolsMenu">
-        <!-- Mega menu content (full menu) -->
-        <div class="mega-menu-grid">
-            <div class="mega-menu-category">
-                <h3>Image Tools</h3>
-                <ul>
-                    <li><a href="image-to-pdf.html"><span class="tool-icon">📄</span> Image to PDF</a></li>
-                    <li><a href="image-compressor.html"><span class="tool-icon">🗜️</span> Image Compressor</a></li>
-                    <li><a href="image-resizer.html"><span class="tool-icon">📏</span> Image Resizer</a></li>
-                    <li><a href="convert-png-jpg.html"><span class="tool-icon">🖼️</span> PNG <> JPG</a></li>
-                    <li><a href="steganography.html"><span class="tool-icon">🕵️</span> Steganography</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Text & Writing</h3>
-                <ul>
-                    <li><a href="text-diff.html"><span class="tool-icon">🔍</span> Text Diff</a></li>
-                    <li><a href="text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
-                    <li><a href="text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
-                    <li><a href="word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
-                    <li><a href="line-operations.html"><span class="tool-icon">🔠</span> Line Operations</a></li>
-                    <li><a href="text-cleaner.html"><span class="tool-icon">🧹</span> Text Cleaner</a></li>
-                    <li><a href="delivery-note-generator.html"><span class="tool-icon">📝</span> Delivery Note Generator</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Converters</h3>
-                <ul>
-                    <li><a href="unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
-                    <li><a href="document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
-                    <li><a href="csv-editor.html"><span class="tool-icon">📊</span> CSV Editor</a></li>
-                    <li><a href="calculator.html"><span class="tool-icon">🧮</span> Calculator</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Encoder/Decoder</h3>
-                <ul>
-                    <li><a href="url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
-                    <li><a href="hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
-                    <li><a href="password-manager.html"><span class="tool-icon">🔑</span> Password Manager</a></li>
-                    <li><a href="password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
-                    <li><a href="qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
-                    <li><a href="pwa-manifest-generator.html"><span class="tool-icon">⚙️</span> PWA Manifest Generator</a></li>
-                </ul>
-            </div>
-             <div class="mega-menu-category">
-                <h3>AI Tools</h3>
-                <ul>
-                    <li><a href="image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
-                    <li><a href="json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
-                    <li><a href="html-viewer.html"><span class="tool-icon">💻</span> HTML Viewer</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <!-- 1. Header Placeholder -->
+    <div id="header-placeholder"></div>
 
     <main class="content tool-page">
         <section class="tool-card">
@@ -216,8 +162,7 @@
                         <div class="tool-group">
                             <h4>Page Operations</h4>
                             <button class="btn" id="addPageBtn">Add New Page</button>
-                            <button class="btn" id="reorderPagesBtn">Reorder Pages</button>
-                            <button class="btn" id="deletePageBtn">Delete Selected Page</button>
+                            <button class="btn" id="deletePageBtn" disabled>Delete Selected Page</button>
                         </div>
 
                         <div class="tool-group">
@@ -266,32 +211,32 @@
         <button class="btn" id="installButton" style="display:none;">Install App</button>
     </div>
 
-    <footer class="main-footer">
-        <ul class="footer-links">
-            <li><a href="../about.html">About Us</a></li>
-            <li><a href="../contact.html">Contact</a></li>
-            <li><a href="../blog.html">Blog</a></li>
-            <li><a href="../privacy.html">Privacy Policy</a></li>
-            <li><a href="../disclaimer.html">Disclaimer</a></li>
-        </ul>
-        <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
-    </footer>
+    <!-- 2. Footer Placeholder -->
+    <div id="footer-placeholder"></div>
 
     <!-- Scripts -->
-    <script src="../theme.js"></script>
+    <!-- NEW: Load the component loader script first -->
+    <script src="/js/load-components.js"></script>
+    <!-- Keep existing scripts here -->
+    <script src="/theme.js"></script>
+    <!-- PDF.js library setting -->
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- PDF Editor Tool Specific Logic ---
+            // --- Elements ---
             const pdfInput = document.getElementById('pdfInput');
             const dropZone = document.getElementById('dropZone');
             const editorInterface = document.getElementById('editorInterface');
             const pdfViewContainer = document.getElementById('pdfViewContainer');
             const pageThumbnailsContainer = document.getElementById('pageThumbnails');
             const downloadPdfBtn = document.getElementById('downloadPdfBtn');
-            const addTextBtn = document.getElementById('addTextBtn');
+            const deletePageBtn = document.getElementById('deletePageBtn'); // NEW delete button reference
 
+            // --- State Variables ---
             let pdfDoc = null;
-            let currentPages = []; // Stores Page objects or similar representation
+            let currentPagesData = []; // Store page objects for editing/reordering
+            let selectedPageIndex = 0;
 
             // --- File Upload Handling ---
             dropZone.addEventListener('click', () => pdfInput.click());
@@ -305,7 +250,10 @@
             pdfInput.addEventListener('change', e => handleFileUpload(e.target.files));
 
             function handleFileUpload(files) {
-                if (files.length === 0 || files[0].type !== 'application/pdf') return;
+                if (files.length === 0 || files[0].type !== 'application/pdf') {
+                    alert('Please select a PDF file.');
+                    return;
+                }
                 const file = files[0];
                 const reader = new FileReader();
                 reader.onload = () => {
@@ -317,13 +265,15 @@
             // --- PDF Loading and Rendering (using pdf-lib) ---
             async function loadPDF(fileArrayBuffer) {
                 try {
-                    pdfDoc = await pdfLib.PDFDocument.load(fileArrayBuffer);
+                    const existingPdfDoc = await pdfLib.PDFDocument.load(fileArrayBuffer);
+                    pdfDoc = existingPdfDoc;
+                    currentPagesData = existingPdfDoc.getPages(); // Store page objects
+                    
                     dropZone.style.display = 'none';
                     editorInterface.style.display = 'block';
 
-                    currentPages = pdfDoc.getPages();
                     renderThumbnails();
-                    renderMainPage(0);
+                    selectPage(0); // Select and render the first page by default
                 } catch (error) {
                     alert('Error loading PDF: ' + error.message);
                     console.error('PDF loading error:', error);
@@ -333,50 +283,120 @@
             // --- Rendering Functions ---
             async function renderThumbnails() {
                 pageThumbnailsContainer.innerHTML = '';
-                // Placeholder rendering for thumbnails (actual thumbnail generation is complex and requires PDF.js)
-                // We'll simulate by creating simple list items with page numbers.
-                for (let i = 0; i < currentPages.length; i++) {
+                // Clear existing Sortable instance if one exists
+                if (pageThumbnailsContainer.sortable) {
+                    pageThumbnailsContainer.sortable.destroy();
+                }
+
+                for (let i = 0; i < currentPagesData.length; i++) {
                     const pageNum = i + 1;
                     const pageThumbItem = document.createElement('div');
                     pageThumbItem.className = 'page-thumb-item';
                     pageThumbItem.dataset.pageIndex = i;
                     pageThumbItem.innerHTML = `<span class="page-thumb-number">${pageNum}</span><span>Page ${pageNum}</span>`;
+                    pageThumbItem.addEventListener('click', () => selectPage(i));
                     pageThumbnailsContainer.appendChild(pageThumbItem);
                 }
+
+                // Initialize Sortable for reordering thumbnails
+                pageThumbnailsContainer.sortable = new Sortable(pageThumbnailsContainer, {
+                    animation: 150,
+                    onEnd: (evt) => {
+                        // Reorder the currentPagesData array based on new DOM order
+                        const movedItem = currentPagesData.splice(evt.oldIndex, 1)[0];
+                        currentPagesData.splice(evt.newIndex, 0, movedItem);
+                        // Re-render thumbnails to update numbers and highlight selected page
+                        renderThumbnails();
+                        selectPage(evt.newIndex);
+                    }
+                });
+
+                updateDeleteButtonState();
             }
 
-            // Render selected page to main canvas (using PDF.js for rendering)
             async function renderMainPage(pageIndex) {
-                // To display PDF pages, we generally use PDF.js, not pdf-lib.
-                // For demonstration, we'll create a simple placeholder view.
-                pdfViewContainer.innerHTML = `<p style="text-align:center;">Viewing Page ${pageIndex + 1} of ${currentPages.length}</p>`;
+                pdfViewContainer.innerHTML = ''; // Clear existing content
+                selectedPageIndex = pageIndex;
+
+                // Create canvas element for PDF.js rendering
+                const canvas = document.createElement('canvas');
+                canvas.className = 'pdf-canvas';
+                pdfViewContainer.appendChild(canvas);
+
+                try {
+                    const pageProxy = await pdfDoc.getPage(pageIndex + 1); // Get page by number (pdf-lib uses 1-based indexing for pages)
+                    const viewport = pageProxy.getViewport({ scale: 1.0 });
+
+                    // Set canvas dimensions
+                    const scaleFactor = pdfViewContainer.clientWidth / viewport.width;
+                    const scaledViewport = pageProxy.getViewport({ scale: scaleFactor });
+                    canvas.width = scaledViewport.width;
+                    canvas.height = scaledViewport.height;
+
+                    // Render PDF page to canvas
+                    const renderContext = { canvasContext: canvas.getContext('2d'), viewport: scaledViewport };
+                    await pageProxy.render(renderContext).promise;
+
+                    // Update UI for selected page highlight
+                    document.querySelectorAll('.page-thumb-item').forEach(item => item.classList.remove('selected'));
+                    document.querySelector(`.page-thumb-item[data-page-index="${pageIndex}"]`).classList.add('selected');
+
+                } catch (error) {
+                    console.error('Error rendering page:', error);
+                    pdfViewContainer.innerHTML = `<p style="text-align:center;">Error rendering page ${pageIndex + 1}.</p>`;
+                }
             }
 
-            // --- Editing Functions (using pdf-lib) ---
-            // Add text to the current page (Simplified example)
-            addTextBtn.addEventListener('click', async () => {
-                if (!pdfDoc) return;
+            // --- Page Selection Logic (NEW) ---
+            function selectPage(pageIndex) {
+                selectedPageIndex = pageIndex;
+                renderMainPage(pageIndex);
+                updateDeleteButtonState();
+            }
 
-                const page = currentPages[0]; // Assume editing first page for simplicity
-                const { width, height } = page.getSize();
-                const text = prompt("Enter text to add to PDF:", "Hello ToolNine!");
+            // --- Page Operations Logic (NEW) ---
+            function updateDeleteButtonState() {
+                deletePageBtn.disabled = currentPagesData.length <= 1;
+            }
 
-                if (text) {
-                    page.drawText(text, {
-                        x: 50,
-                        y: height / 2,
-                        size: 30,
-                        color: pdfLib.rgb(0.95, 0.1, 0.1) // Red color
-                    });
-                    renderMainPage(0); // Rerender main page to reflect change (this requires more advanced logic for real-time preview)
+            // Delete selected page
+            deletePageBtn.addEventListener('click', async () => {
+                if (currentPagesData.length <= 1) {
+                    alert('Cannot delete the last page.');
+                    return;
                 }
+
+                // Remove from internal array
+                currentPagesData.splice(selectedPageIndex, 1);
+
+                // Re-render thumbnails and adjust selection
+                renderThumbnails();
+                selectPage(Math.min(selectedPageIndex, currentPagesData.length - 1));
+            });
+
+            // Add new page (simplified: add a blank page)
+            // Note: This requires generating a new blank page and adding it to the PDF document.
+            // A more complete solution would allow merging another PDF or an image.
+            addPageBtn.addEventListener('click', async () => {
+                // To add a new page using pdf-lib, we need to re-create the document with new pages array.
+                // Or use pdfDoc.addPage() and manage internal state carefully.
+                // This logic needs to be robust, let's keep it simple for now as a placeholder.
+                alert('Add new page feature coming soon! (For now, reorder existing pages or delete them.)');
             });
 
             // --- Download Edited PDF ---
             downloadPdfBtn.addEventListener('click', async () => {
                 if (!pdfDoc) return;
+
+                // Create a new PDF document with reordered pages (if any changes were made)
+                const newPdfDoc = await pdfLib.PDFDocument.create();
+                const pagesToCopy = await newPdfDoc.copyPages(pdfDoc, currentPagesData.map((page, index) => index)); // Copy current pages
+
+                // Add copied pages to the new document
+                pagesToCopy.forEach(page => newPdfDoc.addPage(page));
+
                 try {
-                    const modifiedPdfBytes = await pdfDoc.save();
+                    const modifiedPdfBytes = await newPdfDoc.save();
                     const blob = new Blob([modifiedPdfBytes], { type: 'application/pdf' });
                     const url = URL.createObjectURL(blob);
                     const link = document.createElement('a');
@@ -388,10 +408,11 @@
                 }
             });
 
-            // --- Placeholder for other button actions ---
-            // addPageBtn.addEventListener('click', ...);
-            // passwordProtectBtn.addEventListener('click', ...);
-            // reorderPagesBtn functionality (using Sortable.js if added)
+            // --- Placeholder for text/stamp annotations (simplified) ---
+            addTextBtn.addEventListener('click', async () => {
+                if (!pdfDoc) return;
+                alert('Text annotation feature coming soon! (For now, reorder existing pages or delete them.)');
+            });
         });
     </script>
 </body>

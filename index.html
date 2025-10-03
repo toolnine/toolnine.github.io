@@ -1,328 +1,470 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- SEO OPTIMIZATION -->
-    <title>ToolNine – All-in-One Online Toolkit | Privacy-First Web Tools</title>
-    <meta name="description" content="Access a powerful collection of free, privacy-first online tools. All processing runs directly in your browser without uploading files to our servers." />
-    <!-- END SEO OPTIMIZATION -->
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
-</head>
-<body>
+/* ==== Global Reset & Variables ==== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+    --bg: #f8fafc;        /* Light Mode Background */
+    --text: #0f172a;      /* Light Mode Text */
+    --card: #ffffff;      /* Light Mode Card Background */
+    --accent: #2563eb;    /* Accent Color (Blue) */
+    --border-color: #e2e8f0; /* Light Mode Border Color */
+    --header-height: 70px;
+}
+[data-theme="dark"] {
+    --bg: #1e293b;        /* Dark Mode Background (Slate Blue) */
+    --text: #f8fafc;      /* Dark Mode Text */
+    --card: #334155;      /* Dark Mode Card Background */
+    --accent: #60a5fa;    /* Dark Mode Accent Color (Lighter Blue) */
+    --border-color: #475569; /* Dark Mode Border Color */
+}
+/* New Black Mode (True Black) */
+[data-theme="black"] {
+    --bg: #000000;        /* True Black Background */
+    --text: #f8fafc;      /* Light Text on Black Background */
+    --card: #1f1f1f;      /* Dark Grey Card Background */
+    --accent: #60a5fa;    /* Accent Color (Lighter Blue) */
+    --border-color: #333333; /* Dark Border Color */
+}
 
-    <header class="main-header">
-        <a href="index.html" class="logo">ToolNine</a>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="#category-image">Image Tools</a></li>
-                <li><a href="#category-text">Text Tools</a></li>
-                <li><a href="blog.html">Blog</a></li>
-            </ul>
-            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
-            <button class="hamburger-btn" id="hamburgerBtn">☰</button>
-        </nav>
-    </header>
+body {
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+}
 
-    <div class="mega-menu" id="allToolsMenu">
-        <!-- New Search Input within Mega Menu -->
-        <div class="mega-menu-search">
-             <input type="text" id="megaMenuSearchInput" placeholder="Search for a tool..." autocomplete="off">
-        </div>
-        <!-- Mega menu content (full menu) -->
-        <div class="mega-menu-grid">
-            <div class="mega-menu-category">
-                <h3>Image Tools</h3>
-                <ul>
-                    <li><a href="tools/image-to-pdf.html"><span class="tool-icon">📄</span> Image to PDF</a></li>
-                    <li><a href="tools/image-compressor.html"><span class="tool-icon">🗜️</span> Image Compressor</a></li>
-                    <li><a href="tools/image-resizer.html"><span class="tool-icon">📏</span> Image Resizer</a></li>
-                    <li><a href="tools/convert-png-jpg.html"><span class="tool-icon">🖼️</span> PNG <> JPG</a></li>
-                    <li><a href="tools/steganography.html"><span class="tool-icon">🕵️</span> Steganography</a></li>
-                    <li><a href="tools/image-palette-extractor.html"><span class="tool-icon">🎨</span> Palette Extractor</a></li>
-                    <li><a href="tools/image-placeholder-generator.html"><span class="tool-icon">🖼️</span> Placeholder Generator</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Text & Writing</h3>
-                <ul>
-                    <li><a href="tools/text-diff.html"><span class="tool-icon">🔍</span> Text Diff</a></li>
-                    <li><a href="tools/text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
-                    <li><a href="tools/text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
-                    <li><a href="tools/word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
-                    <li><a href="tools/line-operations.html"><span class="tool-icon">🔠</span> Line Operations</a></li>
-                    <li><a href="tools/text-cleaner.html"><span class="tool-icon">🧹</span> Text Cleaner</a></li>
-                    <li><a href="tools/delivery-note-generator.html"><span class="tool-icon">📝</span> Delivery Note Generator</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Converters</h3>
-                <ul>
-                    <li><a href="tools/unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
-                    <li><a href="tools/document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
-                    <li><a href="tools/csv-editor.html"><span class="tool-icon">📊</span> CSV Editor</a></li>
-                    <li><a href="tools/calculator.html"><span class="tool-icon">🧮</span> Calculator</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Encoder/Decoder</h3>
-                <ul>
-                    <li><a href="tools/url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
-                    <li><a href="tools/hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
-                    <li><a href="tools/password-manager.html"><span class="tool-icon">🔑</span> Password Manager</a></li>
-                    <li><a href="tools/password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
-                    <li><a href="tools/qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
-                    <li><a href="tools/pwa-manifest-generator.html"><span class="tool-icon">⚙️</span> PWA Manifest Generator</a></li>
-                </ul>
-            </div>
-             <div class="mega-menu-category">
-                <h3>AI Tools</h3>
-                <ul>
-                    <li><a href="tools/image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
-                    <li><a href="tools/json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
-                    <li><a href="tools/html-viewer.html"><span class="tool-icon">💻</span> HTML Viewer</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+/* New: Prevent scrolling when mobile menu is open */
+body.menu-open {
+    overflow: hidden;
+}
 
-    <main>
-        <section class="home-hero" id="homeHero">
-            <h1>Every tool you need, right in your browser</h1>
-            <p class="subtitle">A powerful collection of online tools for developers and everyday tasks.</p>
-            <div class="quick-search-bar">
-                <input type="text" id="heroSearchInput" placeholder="Search for a tool..." autocomplete="off">
-            </div>
-        </section>
+/* ==== Header & Navigation ==== */
+.main-header {
+    height: var(--header-height);
+    width: 100%;
+    background: var(--card);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.logo { font-size: 1.6rem; font-weight: bold; color: var(--accent); text-decoration: none; }
+.main-nav { display: flex; align-items: center; gap: 0.5rem; }
+.main-nav ul { display: flex; list-style: none; gap: 0.5rem; }
+.main-nav ul a { padding: 0.5rem 1rem; text-decoration: none; color: var(--text); font-weight: 500; border-radius: 6px; transition: background-color 0.2s; }
+.main-nav ul a:hover { background-color: #f1f5f9; }
+[data-theme="dark"] .main-nav ul a:hover { background-color: #475569; }
+[data-theme="black"] .main-nav ul a:hover { background-color: #2a2a2a; }
 
-        <!-- New: Dedicated Search Results Container -->
-        <div class="search-results-container" id="searchResultsContainer" style="display: none;">
-            <!-- Search results will appear here -->
-        </div>
+.theme-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 0.5rem; border-radius: 6px; color: var(--text); transition: background-color 0.2s; }
+.theme-btn:hover { background-color: #f1f5f9; }
+[data-theme="dark"] .theme-btn:hover { background-color: #475569; }
+[data-theme="black"] .theme-btn:hover { background-color: #2a2a2a; }
 
-        <section class="feature-highlights" id="featureHighlights">
-            <div class="highlight-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                <span>Privacy First</span>
-                <p>No files uploaded. Everything runs in your browser.</p>
-            </div>
-            <div class="highlight-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                <span>100% Free</span>
-                <p>Full access to all tools without any hidden fees.</p>
-            </div>
-            <div class="highlight-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                <span>Secure & Fast</span>
-                <p>Fast processing on your device without server communication.</p>
-            </div>
-        </section>
+/* Hamburger Menu styles for mobile (start) */
+.hamburger-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: var(--text);
+    display: none; /* Hide on desktop */
+}
+/* Mega Menu Overlay (Mobile) */
+.mega-menu {
+    position: fixed;
+    top: var(--header-height);
+    right: 0; /* Changed back to right: 0; for slide-in from right */
+    bottom: 0;
+    width: 100%;
+    max-width: 300px; /* Default width for side menu */
+    background: var(--card);
+    border-left: 1px solid var(--border-color);
+    z-index: 1000;
+    transform: translateX(100%); /* Changed for slide-in from right */
+    transition: transform 0.3s ease-in-out;
+    padding: 1rem;
+    overflow-y: auto;
+}
+.mega-menu.show {
+    transform: translateX(0);
+}
+/* Mega Menu Search Bar */
+.mega-menu-search {
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.mega-menu-search input {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: var(--bg);
+    color: var(--text);
+}
+.mega-menu-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+.mega-menu-category h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+.mega-menu-category ul {
+    list-style: none;
+}
+.mega-menu-category li a {
+    display: block;
+    padding: 0.5rem;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.95rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+.mega-menu-category li a:hover { background-color: #f1f5f9; }
+[data-theme="dark"] .mega-menu-category li a:hover { background-color: #475569; }
+[data-theme="black"] .mega-menu-category li a:hover { background-color: #2a2a2a; }
 
-        <!-- New: Favourites Section (Re-added) -->
-        <section id="favoritesSection" style="display: none;">
-            <h2 class="section-title">My Favourites</h2>
-            <div class="tool-grid-home" id="favoritesGrid">
-                <!-- Favourites will be injected here by JavaScript -->
-            </div>
-        </section>
+/* ==== Main Content & Homepage ==== */
+main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+.home-hero { text-align: center; padding-top: 1rem; padding-bottom: 1rem; }
+.home-hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
+.home-hero .subtitle { font-size: 1.05rem; color: #475569; max-width: 650px; margin: 0 auto; }
+[data-theme="dark"] .home-hero .subtitle { color: #94a3b8; }
+[data-theme="black"] .home-hero .subtitle { color: #aaaaaa; }
 
-        <h2 class="section-title" id="allToolsTitle">All Tools by Category</h2>
-        <div class="filter-tabs" id="filterTabs">
-            <button class="tab-btn active" data-filter="all">All</button>
-            <button class="tab-btn" data-filter="image">Image</button>
-            <button class="tab-btn" data-filter="text">Text</button>
-            <button class="tab-btn" data-filter="convert">Converters</button>
-            <button class="tab-btn" data-filter="encode">Encoders</button>
-            <button class="tab-btn" data-filter="ai">AI</button>
-        </div>
+.quick-search-bar { width: 100%; max-width: 500px; margin: 1rem auto; position: relative; }
+.quick-search-bar input {
+    width: 100%;
+    height: 45px;
+    padding: 0 2rem;
+    font-size: 1.1rem;
+    border-radius: 99px;
+    border: 1px solid var(--border-color);
+    background: var(--card);
+    color: var(--text);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+}
+.quick-search-bar input:focus { outline: none; border-color: var(--accent); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1); }
+[data-theme="dark"] .quick-search-bar input { background: #475569; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+[data-theme="black"] .quick-search-bar input { background: #2a2a2a; box-shadow: 0 4px 12px rgba(255,255,255,0.05); }
 
-        <div class="tool-grid-home" id="toolGrid">
-            <!-- All tool cards list -->
-            <a href="tools/image-to-pdf.html" class="tool-card-home" data-category="image" data-keywords="image pdf jpg png convert" data-tool-id="image-to-pdf">
-                <div class="tool-header-home">
-                    <div class="tool-logo tool-logo-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line></svg></div><h2 class="tool-title">Image to PDF</h2></div><p class="tool-desc">Combine multiple images into a single PDF.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="image-to-pdf">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/image-compressor.html" class="tool-card-home" data-category="image" data-keywords="image compress reduce size quality" data-tool-id="image-compressor">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m14-7-5 5-5-5m5 5V3"></path></svg></div><h2 class="tool-title">Image Compressor</h2></div><p class="tool-desc">Reduce image file size without losing quality.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="image-compressor">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/image-resizer.html" class="tool-card-home" data-category="image" data-keywords="image resize scale dimensions" data-tool-id="image-resizer">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg></div><h2 class="tool-title">Image Resizer</h2></div><p class="tool-desc">Easily resize your images to specific dimensions.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="image-resizer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/convert-png-jpg.html" class="tool-card-home" data-category="image" data-keywords="png jpg convert image format" data-tool-id="convert-png-jpg">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="8 21 3 21 3 16"></polyline><line x1="15" y1="15" x2="3" y2="20"></line></svg></div><h2 class="tool-title">PNG <> JPG</h2></div><p class="tool-desc">Convert PNG images to JPG and vice versa.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="convert-png-jpg">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/image-palette-extractor.html" class="tool-card-home" data-category="image" data-keywords="palette color extract image" data-tool-id="image-palette-extractor">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-image"><span class="tool-icon">🎨</span></div><h2 class="tool-title">Palette Extractor</h2></div><p class="tool-desc">Extract color palette from images.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="image-palette-extractor">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/image-placeholder-generator.html" class="tool-card-home" data-category="image" data-keywords="placeholder generator image" data-tool-id="image-placeholder-generator">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-image"><span class="tool-icon">🖼️</span></div><h2 class="tool-title">Placeholder Generator</h2></div><p class="tool-desc">Generate custom placeholder images.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="image-placeholder-generator">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/steganography.html" class="tool-card-home" data-category="image" data-keywords="steganography hide text image secret" data-tool-id="steganography">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></div><h2 class="tool-title">Steganography</h2></div><p class="tool-desc">Hide secret text inside images or extract it.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="steganography">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/text-diff.html" class="tool-card-home" data-category="text" data-keywords="text diff compare difference checker" data-tool-id="text-diff">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-text"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg></div><h2 class="tool-title">Text Diff Checker</h2></div><p class="tool-desc">Visually compare two texts to see the differences.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="text-diff">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/word-counter.html" class="tool-card-home" data-category="text" data-keywords="word character count sentences paragraphs" data-tool-id="word-counter">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-text"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg></div><h2 class="tool-title">Word Counter</h2></div><p class="tool-desc">Count words, characters, sentences, and paragraphs.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="word-counter">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/text-encryptor.html" class="tool-card-home" data-category="text" data-keywords="text encrypt decrypt password aes secure" data-tool-id="text-encryptor">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-text"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><h2 class="tool-title">Text Encryptor</h2></div><p class="tool-desc">Encrypt or decrypt text with a password.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="text-encryptor">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/text-to-pdf.html" class="tool-card-home" data-category="text" data-keywords="text pdf document convert" data-tool-id="text-to-pdf">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-text"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg></div><h2 class="tool-title">Text to PDF</h2></div><p class="tool-desc">Turn plain text into a styled PDF document.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="text-to-pdf">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/line-operations.html" class="tool-card-home" data-category="text" data-keywords="line operations sort shuffle duplicates" data-tool-id="line-operations">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-text"><span class="tool-icon">🔠</span></div><h2 class="tool-title">Line Operations</h2></div><p class="tool-desc">Sort, shuffle, or remove duplicate lines from text.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="line-operations">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/text-cleaner.html" class="tool-card-home" data-category="text" data-keywords="text cleaner spaces line breaks html" data-tool-id="text-cleaner">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-text"><span class="tool-icon">🧹</span></div><h2 class="tool-title">Text Cleaner</h2></div><p class="tool-desc">Remove extra spaces, line breaks, and HTML tags.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="text-cleaner">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/delivery-note-generator.html" class="tool-card-home" data-category="text" data-keywords="delivery note challan generator pdf" data-tool-id="delivery-note-generator">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-text"><span class="tool-icon">📝</span></div><h2 class="tool-title">Delivery Note Generator</h2></div><p class="tool-desc">Create customizable delivery notes and challans.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="delivery-note-generator">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/unit-converter.html" class="tool-card-home" data-category="convert" data-keywords="unit converter length weight area" data-tool-id="unit-converter">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-convert"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.49 19l-5.73-5.73a1 1 0 0 0-1.42 0l-5.73 5.73a1 1 0 0 0 0 1.42l5.73 5.73a1 1 0 0 0 1.42 0l5.73-5.73a1 1 0 0 0 0-1.42zM3.51 5l5.73 5.73a1 1 0 0 0 1.42 0l5.73-5.73a1 1 0 0 0 0-1.42L10.66.29a1 1 0 0 0-1.42 0L3.51 3.58a1 1 0 0 0 0 1.42z"></path></svg></div><h2 class="tool-title">Unit Converter</h2></div><p class="tool-desc">Convert between various units with live results.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="unit-converter">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/document-scanner.html" class="tool-card-home" data-category="convert" data-keywords="document scanner camera crop enhance" data-tool-id="document-scanner">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-convert"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="3"></circle></svg></div><h2 class="tool-title">Document Scanner</h2></div><p class="tool-desc">Scan documents with your camera or images.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="document-scanner">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/csv-editor.html" class="tool-card-home" data-category="convert" data-keywords="csv editor spreadsheet data viewer" data-tool-id="csv-editor">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-convert"><span class="tool-icon">📊</span></div><h2 class="tool-title">CSV Editor</h2></div><p class="tool-desc">View, sort, and edit CSV or TSV files in a structured data grid.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="csv-editor">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/calculator.html" class="tool-card-home" data-category="convert" data-keywords="calculator math addition subtraction multiplication division" data-tool-id="calculator">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-convert"><span class="tool-icon">🧮</span></div><h2 class="tool-title">Calculator</h2></div><p class="tool-desc">Perform basic math operations quickly.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="calculator">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/url-encoder.html" class="tool-card-home" data-category="encode" data-keywords="url encode decode query string" data-tool-id="url-encoder">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-encode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></div><h2 class="tool-title">URL Encoder</h2></div><p class="tool-desc">Encode or decode URLs and query strings.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="url-encoder">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/hash-generator.html" class="tool-card-home" data-category="encode" data-keywords="hash generator md5 sha256 secure" data-tool-id="hash-generator">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-encode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div><h2 class="tool-title">Hash Generator</h2></div><p class="tool-desc">Generate secure hashes (MD5, SHA-256).</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="hash-generator">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/password-manager.html" class="tool-card-home" data-category="encode" data-keywords="password manager store security encryption" data-tool-id="password-manager">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-encode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><h2 class="tool-title">Password Manager</h2></div><p class="tool-desc">Store and manage your passwords securely in your browser.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="password-manager">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/password-generator.html" class="tool-card-home" data-category="encode" data-keywords="password generator strong random secure" data-tool-id="password-generator">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-encode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg></div><h2 class="tool-title">Password Generator</h2></div><p class="tool-desc">Create strong, random passwords.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="password-generator">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/qr-generator.html" class="tool-card-home" data-category="encode" data-keywords="qr code generator link url text" data-tool-id="qr-generator">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-encode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg></div><h2 class="tool-title">QR Generator</h2></div><p class="tool-desc">Make QR codes for links, text, WiFi, and more.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="qr-generator">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/pwa-manifest-generator.html" class="tool-card-home" data-category="encode" data-keywords="pwa manifest generator web app" data-tool-id="pwa-manifest-generator">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-encode"><span class="tool-icon">⚙️</span></div><h2 class="tool-title">PWA Manifest Generator</h2></div><p class="tool-desc">Create a manifest file for Progressive Web Apps.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="pwa-manifest-generator">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/image-to-prompt.html" class="tool-card-home" data-category="ai" data-keywords="ai image prompt generator" data-tool-id="image-to-prompt">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-ai"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="3" y="15" width="7" height="5"></rect><rect x="14" y="11" width="7" height="9"></rect></svg></div><h2 class="tool-title">Image to Prompt (AI)</h2></div><p class="tool-desc">Generate prompts from images using AI.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="image-to-prompt">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/json-formatter.html" class="tool-card-home" data-category="ai" data-keywords="json formatter beautify validate" data-tool-id="json-formatter">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-ai"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></div><h2 class="tool-title">JSON Formatter</h2></div><p class="tool-desc">Beautify and validate JSON.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="json-formatter">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-            <a href="tools/html-viewer.html" class="tool-card-home" data-category="ai" data-keywords="html viewer live code sandbox" data-tool-id="html-viewer">
-                <div class="tool-header-home"><div class="tool-logo tool-logo-ai"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div><h2 class="tool-title">HTML Viewer</h2></div><p class="tool-desc">View and edit HTML live.</p>
-                <button class="favorite-btn" aria-label="Add to Favorites" data-tool-id="html-viewer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
-                </button>
-            </a>
-        </div>
-    </main>
+/* Improvement: Feature Highlights Layout for Mobile */
+.feature-highlights {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: nowrap; /* Prevent items from wrapping to new lines */
+    text-align: center;
+    overflow-x: auto; /* Enable horizontal scrolling if items exceed screen width */
+    padding: 0 1rem; /* Add horizontal padding to prevent elements touching edges */
+}
+.highlight-item {
+    min-width: 150px; /* Ensure minimum width for each item on small screens */
+    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.highlight-item svg { width: 32px; height: 32px; stroke: var(--accent); margin-bottom: 0.5rem; }
+.highlight-item span { font-size: 1.1rem; font-weight: 600; color: var(--text); }
+.highlight-item p { font-size: 0.9rem; color: #475569; margin-top: 0.2rem; }
+[data-theme="dark"] .highlight-item p { color: #94a3b8; }
+[data-theme="black"] .highlight-item p { color: #aaaaaa; }
 
-    <!-- PWA Install Button -->
-    <div class="pwa-install-container">
-        <button class="btn" id="installButton" style="display:none;">Install App</button>
-    </div>
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+}
 
-    <footer class="main-footer">
-        <ul class="footer-links">
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="blog.html">Blog</a></li>
-            <li><a href="privacy.html">Privacy Policy</a></li>
-            <li><a href="disclaimer.html">Disclaimer</a></li>
-        </ul>
-        <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
-    </footer>
+.filter-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+.tab-btn {
+    background-color: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border-color);
+    padding: 0.6rem 1.2rem;
+    border-radius: 99px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.tab-btn:hover { background-color: #f1f5f9; }
+[data-theme="dark"] .tab-btn:hover { background-color: #475569; }
+[data-theme="black"] .tab-btn:hover { background-color: #2a2a2a; }
+.tab-btn.active { background-color: var(--accent); color: white; border-color: var(--accent); }
 
-    <!-- Scripts -->
-    <script src="theme.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+/* Improvement: Tool Card Grid Layout for Mobile */
+.tool-grid-home {
+    display: grid;
+    /* Default: desktop layout (300px min-width) */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+.tool-card-home {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s ease;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+}
+.tool-card-home:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.1);
+    border-color: var(--accent);
+}
+[data-theme="dark"] .tool-card-home { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+[data-theme="dark"] .tool-card-home:hover { box-shadow: 0 10px 25px -5px rgba(96, 165, 250, 0.2); border-color: var(--accent); }
+[data-theme="black"] .tool-card-home { box-shadow: 0 10px 25px -5px rgba(255,255,255,0.05); }
+[data-theme="black"] .tool-card-home:hover { box-shadow: 0 10px 25px -5px rgba(96, 165, 250, 0.2); border-color: var(--accent); }
+
+.tool-header-home { display: flex; align-items: center; gap: 1rem; }
+.tool-logo { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.tool-logo svg { width: 24px; height: 24px; stroke: currentColor; }
+
+/* Light mode tool logo colors */
+.tool-logo-image { background-color: #e0f2fe; } .tool-logo-image svg { color: #0ea5e9; }
+.tool-logo-text { background-color: #eef2ff; } .tool-logo-text svg { color: #6366f1; }
+.tool-logo-convert { background-color: #f0fdf4; } .tool-logo-convert svg { color: #22c55e; }
+.tool-logo-encode { background-color: #fffbeb; } .tool-logo-encode svg { color: #f59e0b; }
+.tool-logo-ai { background-color: #f3e8ff; } .tool-logo-ai svg { color: #a855f7; }
+
+/* Dark mode tool logo colors */
+[data-theme="dark"] .tool-logo-image { background-color: #0c4a6e; } [data-theme="dark"] .tool-logo-image svg { color: #93c5fd; }
+[data-theme="dark"] .tool-logo-text { background-color: #312e81; } [data-theme="dark"] .tool-logo-text svg { color: #a5b4fc; }
+[data-theme="dark"] .tool-logo-convert { background-color: #166534; } [data-theme="dark"] .tool-logo-convert svg { color: #86efac; }
+[data-theme="dark"] .tool-logo-encode { background-color: #78350f; } [data-theme="dark"] .tool-logo-encode svg { color: #fde68a; }
+[data-theme="dark"] .tool-logo-ai { background-color: #581c87; } [data-theme="dark"] .tool-logo-ai svg { color: #d8b4fe; }
+
+/* Black mode tool logo colors (using similar dark palette) */
+[data-theme="black"] .tool-logo-image { background-color: #0c4a6e; } [data-theme="black"] .tool-logo-image svg { color: #93c5fd; }
+[data-theme="black"] .tool-logo-text { background-color: #312e81; } [data-theme="black"] .tool-logo-text svg { color: #a5b4fc; }
+[data-theme="black"] .tool-logo-convert { background-color: #166534; } [data-theme="black"] .tool-logo-convert svg { color: #86efac; }
+[data-theme="black"] .tool-logo-encode { background-color: #78350f; } [data-theme="black"] .tool-logo-encode svg { color: #fde68a; }
+[data-theme="black"] .tool-logo-ai { background-color: #581c87; } [data-theme="black"] .tool-logo-ai svg { color: #d8b4fe; }
+
+.tool-title { font-size: 1.1rem; font-weight: 600; color: var(--text); transition: color 0.2s; }
+.tool-card-home:hover .tool-title { color: var(--accent); }
+.tool-desc { font-size: 0.9rem; color: #475569; margin-top: 0.5rem; }
+[data-theme="dark"] .tool-desc { color: #94a3b8; }
+[data-theme="black"] .tool-desc { color: #aaaaaa; }
+
+/* ==== Tool Page Layout (New) ==== */
+/* Update: Added padding-bottom to tool-page to ensure content spacing before footer */
+.tool-page { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 2rem 0; flex-grow: 1; width: 100%; }
+.tool-page h1, .tool-page h2 { color: var(--accent); text-align: center; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+.tool-page .small { font-size: 1rem; color: #475569; max-width: 600px; text-align: center; margin-bottom: 1.5rem; }
+[data-theme="dark"] .tool-page .small { color: #94a3b8; }
+[data-theme="black"] .tool-page .small { color: #aaaaaa; }
+
+.tool-card { background: var(--card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; max-width: 700px; width: 100%; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+.tool-controls { display: flex; gap: 1rem; margin-top: 1.5rem; align-items: center; }
+.tool-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg); color: var(--text); font-size: 1rem; resize: none; }
+.tool-output { background: var(--bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); white-space: pre-wrap; margin-top: 1.5rem; color: var(--text); }
+
+/* ==== Footer ==== */
+.main-footer { width: 100%; text-align: center; padding: 2.5rem 1rem; background: var(--card); border-top: 1px solid var(--border-color); margin-top: auto; }
+.footer-links { display: flex; justify-content: center; gap: 1.5rem; list-style: none; margin: 0 0 1rem 0; padding: 0; flex-wrap: wrap; }
+.footer-links a { color: #475569; text-decoration: none; font-weight: 500; }
+.footer-links a:hover { color: var(--accent); }
+[data-theme="dark"] .footer-links a { color: #94a3b8; }
+[data-theme="black"] .footer-links a { color: #aaaaaa; }
+.footer-copyright { font-size: 0.9em; color: #64748b; }
+[data-theme="dark"] .footer-copyright { color: #94a3b8; }
+[data-theme="black"] .footer-copyright { color: #aaaaaa; }
+
+.btn { background-color: var(--accent); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background-color 0.2s; }
+.btn:hover { background-color: #1e40af; }
+[data-theme="dark"] .btn:hover { background-color: #2563eb; }
+[data-theme="black"] .btn { background-color: var(--accent); }
+[data-theme="black"] .btn:hover { background-color: #2563eb; }
+
+/* Tool Card Specifics (Favorites Icon) */
+.tool-card-home {
+    position: relative;
+}
+.favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    opacity: 0.8;
+    transition: opacity 0.2s, fill 0.2s, stroke 0.2s;
+    z-index: 50; /* Ensure button is above other elements in the card */
+}
+.favorite-btn:hover {
+    opacity: 1;
+}
+.favorite-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--text); /* Default outline color */
+    fill: none; /* Default fill color (empty heart) */
+}
+.favorite-btn.active svg {
+    fill: #f59e0b; /* Filled heart color (yellow/orange) */
+    stroke: #f59e0b; /* Filled heart stroke color */
+}
+#favoritesSection {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    display: none; /* Hide by default, show via JS when populated */
+}
+#favoritesSection h2 {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+/* Tool Page Layouts (common styles) */
+.tool-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 2rem;
+    flex-grow: 1;
+    width: 100%;
+}
+.tool-page .tool-card {
+    max-width: 900px;
+    padding: 2rem;
+    width: 100%;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    background: var(--card);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+.tool-header { text-align: center; margin-bottom: 1.5rem; }
+.tool-header h1 { font-size: 2rem; color: var(--accent); font-weight: 700; }
+.tool-header .tool-desc { font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.5; }
+[data-theme="dark"] .tool-header .tool-desc { color: #94a3b8; }
+
+.tool-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 1rem;
+}
+.tool-controls {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* --- Mobile responsive adjustments (start) --- */
+
+/* 1. Hamburger Menu & Mega Menu (Mobile View) */
+@media (max-width: 900px) {
+    .main-header { padding: 0 1rem; }
+    .main-nav ul { display: none; } /* Hide desktop nav links on mobile */
+    .hamburger-btn { display: block; } /* Show hamburger button on mobile */
+
+    /* Mega menu for smaller screens - expand full width */
+    .mega-menu {
+        position: fixed;
+        top: var(--header-height);
+        right: 0; /* Changed back to right: 0; for slide-in from right */
+        bottom: 0;
+        width: 100%;
+        max-width: 300px; /* Default width for side menu */
+        height: auto; /* Allow content to dictate height, overflow-y is active */
+        padding: 1rem;
+        border-left: 1px solid var(--border-color);
+        transform: translateX(100%); /* Changed for slide-in from right */
+        transition: transform 0.3s ease-in-out;
+    }
+    .mega-menu.show {
+        transform: translateX(0);
+    }
+    /* Hide scroll on body when menu is open */
+    body.menu-open {
+        overflow: hidden;
+    }
+}
+
+/* 2. Highlight Section (feature-highlights) - Two Columns on mobile */
+/* Ensure highlights are displayed clearly, maybe two columns on small screens */
+@media (max-width: 600px) {
+    .home-hero h1 {
+        font-size: 1.6rem; /* Reduced font size for better fit on small screens */
+    }
+    .feature-highlights {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap; /* Re-enabled wrapping, but adjusted sizing for better fit */
+        gap: 1rem;
+        padding: 0 1rem; /* Add horizontal padding */
+    }
+    .feature-highlights .highlight-item {
+        max-width: none; /* Override desktop max-width */
+        flex-basis: calc(50% - 1rem); /* Force 2 items per row, subtracting gap */
+        padding: 1rem 0.5rem;
+        border: 1px solid var(--border-color); /* Add border for definition */
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .feature-highlights .highlight-item p { font-size: 0.85rem; }
+}
+
+/* 3. Tool Card Grid (tool-grid-home) - Two Columns on mobile */
+@media (max-width: 768px) {
+    .tool-grid-home {
+        /* Adjust grid-template-columns to fit two columns on tablets/large phones */
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+}
+@media (max-width: 480px) {
+    .tool-grid-home {
+        /* Further adjust grid-template-columns for smaller phone screens */
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 0.8rem;
+    }
+}
+
+/* Global mobile padding adjustment */
+@media (max-width: 600px) {
+    main { padding: 0 1rem; }
+    .main-footer .footer-links { gap: 1rem; font-size: 0.9em; }
+}
+
+/* --- Mobile responsive adjustments (end) --- */
+
+/* Desktop only styles to override mobile styles when necessary */
+@media (min-width: 901px) {
+    .mega-menu { width: 300px; } /* Reset mega menu width for larger screens */
+    .hamburger-btn { display: none; } /* Hide hamburger on desktop */
+    .main-nav ul { display: flex; } /* Show desktop nav links on desktop */
+}

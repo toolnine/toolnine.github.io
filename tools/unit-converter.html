@@ -1,10 +1,16 @@
+<!-- START OF FILE: tools/unit-converter.html (Upgraded) -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unit Converter | ToolNine</title>
-    <link rel="stylesheet" href="../style.css">
+    <!-- SEO OPTIMIZATION -->
+    <title>Online Unit Converter | Length, Weight, Area, Time, Data | ToolNine</title>
+    <meta name="description" content="Convert between various units of measurement for length, weight, area, time, and data size. Fast, in-browser conversion for everyday calculations." />
+    <!-- END SEO OPTIMIZATION -->
+    <!-- Updated to root-relative path -->
+    <link rel="stylesheet" href="/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <style>
         /* Tool-specific styles based on the common layout */
@@ -42,73 +48,18 @@
         .converter-input-field input { font-size: 1.1em; }
         .converter-input-field select { font-size: 1.1em; }
 
+        /* New swap button styles */
+        .swap-button-container { display: flex; align-items: center; justify-content: center; margin-top: 0.5rem; }
+        .swap-button-container button { padding: 0.5rem; background: none; border: none; font-size: 1.5em; cursor: pointer; color: var(--accent); }
+        .swap-button-container button:hover { opacity: 0.8; }
+
         .result-output { margin-top: 1.5rem; font-size: 1.2em; font-weight: 600; color: var(--text); }
     </style>
 </head>
 <body>
 
-    <header class="main-header">
-        <a href="../index.html" class="logo">ToolNine</a>
-        <button class="hamburger-btn" id="hamburgerBtn">☰</button>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="../index.html#category-image">Image Tools</a></li>
-                <li><a href="../index.html#category-text">Text Tools</a></li>
-                <li><a href="../blog.html">Blog</a></li>
-            </ul>
-            <button class="search-btn" id="searchBtn" aria-label="Search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
-            <button class="all-tools-btn" id="allToolsBtn">All Tools <span class="arrow">▼</span></button>
-            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
-        </nav>
-    </header>
-
-    <div class="mega-menu" id="allToolsMenu">
-        <!-- Mega menu content (full menu) -->
-        <div class="mega-menu-grid">
-            <div class="mega-menu-category">
-                <h3>Image Tools</h3>
-                <ul>
-                    <li><a href="image-to-pdf.html"><span class="tool-icon">📄</span> Image to PDF</a></li>
-                    <li><a href="image-compressor.html"><span class="tool-icon">🗜️</span> Image Compressor</a></li>
-                    <li><a href="image-resizer.html"><span class="tool-icon">📏</span> Image Resizer</a></li>
-                    <li><a href="convert-png-jpg.html"><span class="tool-icon">🖼️</span> PNG <> JPG</a></li>
-                    <li><a href="steganography.html"><span class="tool-icon">🕵️</span> Steganography</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Text & Writing</h3>
-                <ul>
-                    <li><a href="text-diff.html"><span class="tool-icon">🔍</span> Text Diff</a></li>
-                    <li><a href="text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
-                    <li><a href="text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
-                    <li><a href="word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Converters</h3>
-                <ul>
-                    <li><a href="unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
-                    <li><a href="document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Encoder/Decoder</h3>
-                <ul>
-                    <li><a href="url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
-                    <li><a href="hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
-                    <li><a href="password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
-                    <li><a href="qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
-                </ul>
-            </div>
-             <div class="mega-menu-category">
-                <h3>AI Tools</h3>
-                <ul>
-                    <li><a href="image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
-                    <li><a href="json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <!-- 1. Header Placeholder -->
+    <div id="header-placeholder"></div>
 
     <main class="content tool-page">
         <section class="tool-card">
@@ -125,6 +76,8 @@
                         <option value="weight">Weight</option>
                         <option value="area">Area</option>
                         <option value="time">Time</option>
+                        <option value="data">Data Size</option> <!-- NEW Category -->
+                        <option value="temperature">Temperature</option> <!-- NEW Category -->
                     </select>
                 </div>
                 
@@ -134,12 +87,20 @@
                         <input type="number" id="fromInput" value="1" class="tool-input">
                         <select id="fromUnit" class="tool-input"></select>
                     </div>
+                    <!-- New swap button placement -->
+                    <div class="swap-button-container">
+                        <button id="swapUnitsBtn">&#x21C6;</button>
+                    </div>
                     <div class="converter-input-field">
                         <label for="toInput">To:</label>
                         <input type="number" id="toInput" readonly class="tool-input">
                         <select id="toUnit" class="tool-input"></select>
                     </div>
                 </div>
+            </div>
+
+            <div class="tool-controls">
+                <button class="btn" id="clearBtn">Clear</button> <!-- NEW CLEAR BUTTON -->
             </div>
 
             <section class="how-to">
@@ -149,6 +110,7 @@
                     <li>Enter the value you want to convert in the "From" input field.</li>
                     <li>Choose the "From" and "To" units from the dropdown menus.</li>
                     <li>The result will automatically appear in the "To" input field.</li>
+                    <li>Use the swap button to quickly reverse the conversion direction.</li>
                 </ol>
             </section>
         </section>
@@ -159,21 +121,165 @@
         <button class="btn" id="installButton" style="display:none;">Install App</button>
     </div>
 
-    <footer class="main-footer">
-        <ul class="footer-links">
-            <li><a href="../about.html">About Us</a></li>
-            <li><a href="../contact.html">Contact</a></li>
-            <li><a href="../blog.html">Blog</a></li>
-            <li><a href="../privacy.html">Privacy Policy</a></li>
-            <li><a href="../disclaimer.html">Disclaimer</a></li>
-        </ul>
-        <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
-    </footer>
+    <!-- 2. Footer Placeholder -->
+    <div id="footer-placeholder"></div>
 
     <!-- Scripts -->
-    <script src="../theme.js"></script>
+    <!-- NEW: Load the component loader script first -->
+    <script src="/js/load-components.js"></script>
+    <!-- Keep existing scripts here -->
+    <script src="/theme.js"></script>
     <script>
-        /* Script remains unchanged */
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Elements ---
+            const categorySelect = document.getElementById('categorySelect');
+            const fromInput = document.getElementById('fromInput');
+            const fromUnitSelect = document.getElementById('fromUnit');
+            const toInput = document.getElementById('toInput');
+            const toUnitSelect = document.getElementById('toUnit');
+            const swapUnitsBtn = document.getElementById('swapUnitsBtn'); // NEW swap button
+            const clearBtn = document.getElementById('clearBtn'); // NEW clear button
+
+            // --- Conversion Data (Base units in brackets) ---
+            const unitData = {
+                length: [
+                    { name: 'Millimeters', abbreviation: 'mm', ratio: 1000 },
+                    { name: 'Centimeters', abbreviation: 'cm', ratio: 100 },
+                    { name: 'Meters', abbreviation: 'm', ratio: 1 }, // Base unit (1 meter)
+                    { name: 'Kilometers', abbreviation: 'km', ratio: 0.001 },
+                    { name: 'Inches', abbreviation: 'in', ratio: 39.3701 },
+                    { name: 'Feet', abbreviation: 'ft', ratio: 3.28084 },
+                    { name: 'Yards', abbreviation: 'yd', ratio: 1.09361 },
+                    { name: 'Miles', abbreviation: 'mi', ratio: 0.000621371 }
+                ],
+                weight: [
+                    { name: 'Milligrams', abbreviation: 'mg', ratio: 1000000 },
+                    { name: 'Grams', abbreviation: 'g', ratio: 1000 },
+                    { name: 'Kilograms', abbreviation: 'kg', ratio: 1 }, // Base unit (1 kg)
+                    { name: 'Pounds', abbreviation: 'lb', ratio: 2.20462 },
+                    { name: 'Ounces', abbreviation: 'oz', ratio: 35.274 }
+                ],
+                area: [
+                    { name: 'Square Meters', abbreviation: 'm²', ratio: 1 }, // Base unit (1 m²)
+                    { name: 'Square Kilometers', abbreviation: 'km²', ratio: 0.000001 },
+                    { name: 'Square Feet', abbreviation: 'ft²', ratio: 10.7639 },
+                    { name: 'Square Inches', abbreviation: 'in²', ratio: 1550 },
+                    { name: 'Acres', abbreviation: 'ac', ratio: 0.000247105 }
+                ],
+                time: [
+                    { name: 'Seconds', abbreviation: 's', ratio: 1 }, // Base unit (1 second)
+                    { name: 'Minutes', abbreviation: 'min', ratio: 1 / 60 },
+                    { name: 'Hours', abbreviation: 'hr', ratio: 1 / 3600 },
+                    { name: 'Days', abbreviation: 'day', ratio: 1 / 86400 }
+                ],
+                data: [ // NEW category
+                    { name: 'Bits', abbreviation: 'bit', ratio: 8 },
+                    { name: 'Bytes', abbreviation: 'B', ratio: 1 }, // Base unit (1 byte)
+                    { name: 'Kilobytes', abbreviation: 'KB', ratio: 1 / 1024 },
+                    { name: 'Megabytes', abbreviation: 'MB', ratio: 1 / 1048576 },
+                    { name: 'Gigabytes', abbreviation: 'GB', ratio: 1 / 1073741824 }
+                ],
+                temperature: [ // NEW category
+                    { name: 'Celsius', abbreviation: '°C', base: 'C' },
+                    { name: 'Fahrenheit', abbreviation: '°F', base: 'F' },
+                    { name: 'Kelvin', abbreviation: 'K', base: 'K' }
+                ]
+            };
+
+            // --- Conversion Functions ---
+
+            // General formula: input_value * (to_ratio / from_ratio)
+            function calculateConversion(value, fromUnit, toUnit, category) {
+                // Handle special case: temperature conversion (non-linear)
+                if (category === 'temperature') {
+                    const toCelsius = convertTemperature(value, fromUnit.abbreviation, 'C');
+                    return convertTemperature(toCelsius, 'C', toUnit.abbreviation);
+                } else {
+                    return value * (toUnit.ratio / fromUnit.ratio);
+                }
+            }
+
+            // Temperature conversion logic (NEW)
+            function convertTemperature(value, fromUnit, toUnit) {
+                if (fromUnit === toUnit) return value;
+                if (fromUnit === '°C') {
+                    if (toUnit === '°F') return (value * 9/5) + 32;
+                    if (toUnit === 'K') return value + 273.15;
+                } else if (fromUnit === '°F') {
+                    if (toUnit === '°C') return (value - 32) * 5/9;
+                    if (toUnit === 'K') return (value - 32) * 5/9 + 273.15;
+                } else if (fromUnit === 'K') {
+                    if (toUnit === '°C') return value - 273.15;
+                    if (toUnit === '°F') return (value - 273.15) * 9/5 + 32;
+                }
+                return value; // Should not reach here if logic is complete
+            }
+
+            // --- UI Update Functions ---
+
+            // Populate unit select options based on selected category
+            function populateUnits(category) {
+                fromUnitSelect.innerHTML = '';
+                toUnitSelect.innerHTML = '';
+                const units = unitData[category];
+                units.forEach(unit => {
+                    const option1 = document.createElement('option');
+                    option1.value = unit.abbreviation;
+                    option1.textContent = unit.name + ' (' + unit.abbreviation + ')';
+                    fromUnitSelect.appendChild(option1);
+
+                    const option2 = document.createElement('option');
+                    option2.value = unit.abbreviation;
+                    option2.textContent = unit.name + ' (' + unit.abbreviation + ')';
+                    toUnitSelect.appendChild(option2);
+                });
+                // Set default selections and trigger initial conversion
+                toUnitSelect.value = units.length > 1 ? units[1].abbreviation : units[0].abbreviation;
+                performConversion();
+            }
+
+            // Perform calculation and update output field
+            function performConversion() {
+                const value = parseFloat(fromInput.value) || 0;
+                const fromUnitAbbreviation = fromUnitSelect.value;
+                const toUnitAbbreviation = toUnitSelect.value;
+                const category = categorySelect.value;
+
+                const units = unitData[category];
+                const fromUnit = units.find(unit => unit.abbreviation === fromUnitAbbreviation);
+                const toUnit = units.find(unit => unit.abbreviation === toUnitAbbreviation);
+
+                if (fromUnit && toUnit) {
+                    const result = calculateConversion(value, fromUnit, toUnit, category);
+                    toInput.value = result.toFixed(6); // Display result with 6 decimal places for precision
+                } else {
+                    toInput.value = 'Error';
+                }
+            }
+
+            // --- Event Listeners ---
+            categorySelect.addEventListener('change', () => populateUnits(categorySelect.value));
+            fromInput.addEventListener('input', performConversion);
+            fromUnitSelect.addEventListener('change', performConversion);
+            toUnitSelect.addEventListener('change', performConversion);
+
+            // Swap button logic (NEW)
+            swapUnitsBtn.addEventListener('click', () => {
+                const tempUnit = fromUnitSelect.value;
+                fromUnitSelect.value = toUnitSelect.value;
+                toUnitSelect.value = tempUnit;
+                performConversion();
+            });
+
+            // Clear button logic (NEW)
+            clearBtn.addEventListener('click', () => {
+                fromInput.value = 1; // Reset to default value
+                performConversion();
+            });
+
+            // Initial setup on load
+            populateUnits(categorySelect.value);
+        });
     </script>
 </body>
 </html>

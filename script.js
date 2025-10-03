@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const allToolsTitle = document.getElementById('allToolsTitle');
     const filterTabs = document.getElementById('filterTabs');
     const homeHero = document.getElementById('homeHero');
-    const headerSearchInput = document.getElementById('headerSearchInput'); // NEW element reference
     const toolGrid = document.getElementById('toolGrid');
 
     const favoritesSection = document.getElementById('favoritesSection');
@@ -16,8 +15,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const favoritesKey = 'ToolNineFavourites';
 
     // --- Search Logic ---
+    // Get the new header search input from the loaded header component
+    const headerSearchInput = document.getElementById('headerSearchInput');
+
     function performInPlaceSearch(query) {
         const lowerCaseQuery = query.toLowerCase().trim();
+        const isOnHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
+
+        if (!isOnHomePage) {
+            // If not on homepage, redirect to homepage with the search query as a parameter
+            if (lowerCaseQuery.length > 0) {
+                window.location.href = `index.html?search=${encodeURIComponent(lowerCaseQuery)}`;
+            } else {
+                // If query is empty, simply return to prevent unnecessary actions.
+            }
+            return;
+        }
 
         if (lowerCaseQuery.length === 0) {
             // Show regular content when search is empty
@@ -50,11 +63,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // NEW event listener for the header search input
+    // --- Search Input Event Listener ---
+    // Note: This needs to run *after* header.html content is loaded.
     if (headerSearchInput) {
         headerSearchInput.addEventListener('input', () => {
             performInPlaceSearch(headerSearchInput.value);
         });
+    }
+
+    // --- Handle search query from URL on page load ---
+    function checkURLForSearchQuery() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialQuery = urlParams.get('search');
+        if (initialQuery) {
+            // Set the search input value to match the query in the URL
+            if (headerSearchInput) {
+                headerSearchInput.value = initialQuery;
+            }
+            performInPlaceSearch(initialQuery);
+        }
     }
 
     // --- Filter Tabs Logic ---
@@ -169,4 +196,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initial Setup ---
     renderFavorites(); // Load and display favorites on page load
     updateToolVisibility(); // Initial filter call
+    checkURLForSearchQuery(); // Check URL for search query on page load
 });

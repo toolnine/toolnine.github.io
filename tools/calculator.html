@@ -1,67 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Advanced Calculator | ToolNine</title>
-  <meta name="description" content="Advanced scientific calculator with memory and history. All in-browser.">
+  <meta name="description" content="A user-friendly, feature-rich calculator for basic, scientific, and programmer calculations. Fast, in-browser processing." />
   <link rel="stylesheet" href="../style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
   <style>
-    /* Calculator Specific Styles */
-    .calculator-layout { margin-top: 1rem; }
-    #calculatorDisplay {
-      background: var(--bg);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 16px;
-      font-size: 1.6rem;
-      text-align: right;
-      color: var(--text);
-      min-height: 70px;
-      margin-bottom: 1rem;
-      overflow-x: auto;
+    /* ---------- Calculator specific styles (keeps site look intact) ---------- */
+    .tool-page { display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:2rem; flex-grow:1; width:100%; }
+    .tool-card { max-width:980px; padding:1.5rem; width:100%; box-shadow:0 10px 25px -5px rgba(0,0,0,0.05); background:var(--card); border-radius:12px; border:1px solid var(--border-color); }
+    .tool-header { text-align:center; margin-bottom:1rem; }
+    .tool-header h1 { font-size:1.8rem; color:var(--accent); font-weight:700; }
+    .mode-tabs { display:flex; gap:0.5rem; justify-content:center; margin-bottom:1rem; }
+    .mode-tab { padding:0.5rem 0.9rem; border-radius:8px; cursor:pointer; font-weight:600; border:1px solid transparent; background:transparent; }
+    .mode-tab.active { background:var(--card); border-color:var(--border-color); box-shadow:0 4px 12px rgba(16,24,40,0.04); }
+    .calc-top { display:flex; gap:1rem; align-items:flex-start; flex-wrap:wrap; }
+    .calc-left { flex:1 1 420px; min-width:320px; }
+    .calc-right { width:280px; min-width:240px; max-height:420px; overflow:auto; }
+    #calculatorDisplay { background:var(--bg); border:1px solid var(--border-color); border-radius:10px; padding:18px; font-size:1.6rem; text-align:right; color:var(--text); min-height:72px; word-wrap:break-word; display:flex; flex-direction:column; justify-content:center; }
+    #calcExpression { font-size:0.9rem; color:var(--muted); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    #calcResult { font-size:1.4rem; font-weight:700; margin-top:6px; word-break:break-all; }
+
+    .keypad { margin-top:12px; display:grid; gap:8px; grid-template-columns: repeat(6, 1fr); }
+    .btn { padding:12px; border-radius:8px; border:1px solid var(--border-color); background:var(--card); color:var(--text); font-weight:600; cursor:pointer; transition:0.12s; }
+    .btn:hover { transform:translateY(-1px); }
+    .btn-operator { background:var(--accent); color:white; }
+    .btn-equal { grid-column: span 2; background:#16a34a; color:white; }
+    .btn-clear { background:#ef4444; color:white; }
+    .btn-wide { grid-column: span 2; }
+
+    .history { padding:12px; border-radius:10px; border:1px solid var(--border-color); background:var(--bg); }
+    .history h3 { margin:0 0 8px 0; font-size:1rem; }
+    .history-list { max-height:320px; overflow:auto; display:flex; flex-direction:column; gap:8px; }
+    .history-entry { font-size:0.95rem; padding:6px 8px; border-radius:6px; background:transparent; border:1px dashed var(--border-color); cursor:pointer; }
+    .mem-display { font-size:0.9rem; color:var(--muted); margin-bottom:8px; }
+    .small { font-size:0.9rem; padding:6px 8px; border-radius:6px; }
+
+    /* Responsive */
+    @media (max-width:860px) {
+      .calc-top { flex-direction:column-reverse; }
+      .calc-right { width:100%; }
+      .keypad { grid-template-columns: repeat(4, 1fr); }
+      .btn-equal { grid-column: span 2; }
     }
-    .calculator-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 8px;
-    }
-    .calculator-btn {
-      padding: 1rem;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      background: var(--card);
-      color: var(--text);
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .calculator-btn:hover { background: #f1f5f9; }
-    [data-theme="dark"] .calculator-btn { background: #334155; }
-    [data-theme="dark"] .calculator-btn:hover { background: #475569; }
-    .btn-clear { background: #ef4444; color: #fff; }
-    .btn-clear:hover { background: #dc2626; }
-    .btn-operator { background: var(--accent); color: #fff; }
-    .btn-operator:hover { background: #1e40af; }
-    .btn-equal { grid-column: span 2; background: #16a34a; color: white; }
-    .btn-equal:hover { background: #15803d; }
-    .history {
-      margin-top: 1rem;
-      padding: 0.8rem;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background: var(--bg);
-      max-height: 150px;
-      overflow-y: auto;
-      font-size: 0.9rem;
-    }
-    .history-entry { border-bottom: 1px dashed var(--border-color); padding: 2px 0; }
   </style>
 </head>
 <body>
 
-  <!-- ====== HEADER (same as your site) ====== -->
+  <!-- ===== HEADER (unchanged) ===== -->
   <header class="main-header">
     <a href="../index.html" class="logo">ToolNine</a>
     <button class="hamburger-btn" id="hamburgerBtn">☰</button>
@@ -77,196 +65,591 @@
     </nav>
   </header>
 
-  <!-- ====== MEGA MENU (same as your site) ====== -->
+  <!-- ===== MEGA MENU (unchanged) ===== -->
   <div class="mega-menu" id="allToolsMenu">
     <div class="mega-menu-grid">
-      <!-- same menu categories as before -->
       <div class="mega-menu-category">
         <h3>Image Tools</h3>
         <ul>
           <li><a href="image-to-pdf.html">📄 Image to PDF</a></li>
           <li><a href="image-compressor.html">🗜️ Image Compressor</a></li>
+          <li><a href="image-resizer.html">📏 Image Resizer</a></li>
         </ul>
       </div>
       <div class="mega-menu-category">
         <h3>Text & Writing</h3>
         <ul>
-          <li><a href="word-counter.html">✏️ Word Counter</a></li>
+          <li><a href="text-diff.html">🔍 Text Diff</a></li>
+          <li><a href="text-to-pdf.html">📄 Text to PDF</a></li>
         </ul>
+      </div>
+      <div class="mega-menu-category">
+        <h3>Converters</h3>
+        <ul><li><a href="unit-converter.html">⚖️ Unit Converter</a></li></ul>
+      </div>
+      <div class="mega-menu-category">
+        <h3>AI Tools</h3>
+        <ul><li><a href="json-formatter.html">🧩 JSON Formatter</a></li></ul>
       </div>
     </div>
   </div>
 
-  <!-- ====== MAIN CALCULATOR ====== -->
+  <!-- ===== MAIN (Calculator) ===== -->
   <main class="content tool-page">
     <section class="tool-card">
       <header class="tool-header">
-        <h1>🧮 Advanced Calculator</h1>
-        <p class="tool-desc">A complete calculator with scientific, memory, and history features.</p>
+        <h1>🧮 Calculator</h1>
+        <p class="tool-desc">Choose mode and calculate — Basic, Scientific, or Programmer. Memory & History included.</p>
       </header>
 
-      <div class="calculator-layout">
-        <div id="calculatorDisplay">0</div>
-        <div class="calculator-grid">
-          <!-- Row 1 -->
-          <button class="calculator-btn btn-clear">C</button>
-          <button class="calculator-btn btn-operator" data-op="backspace">⌫</button>
-          <button class="calculator-btn btn-operator" data-op="(">(</button>
-          <button class="calculator-btn btn-operator" data-op=")">)</button>
-          <button class="calculator-btn btn-operator" data-op="%">%</button>
-          <button class="calculator-btn btn-operator" data-op="/">÷</button>
+      <!-- Mode Tabs -->
+      <div class="mode-tabs" role="tablist" aria-label="Calculator modes">
+        <button class="mode-tab active" data-mode="basic">Basic</button>
+        <button class="mode-tab" data-mode="scientific">Scientific</button>
+        <button class="mode-tab" data-mode="programmer">Programmer</button>
+      </div>
 
-          <!-- Row 2 -->
-          <button class="calculator-btn btn-operator" data-op="sin">sin</button>
-          <button class="calculator-btn btn-operator" data-op="cos">cos</button>
-          <button class="calculator-btn btn-operator" data-op="tan">tan</button>
-          <button class="calculator-btn btn-operator" data-op="sqrt">√</button>
-          <button class="calculator-btn btn-operator" data-op="^">xʸ</button>
-          <button class="calculator-btn btn-operator" data-op="*">×</button>
+      <div class="calc-top">
+        <!-- Left: Display + keypad -->
+        <div class="calc-left">
+          <div id="calculatorDisplay" aria-live="polite">
+            <div id="calcExpression"> </div>
+            <div id="calcResult">0</div>
+          </div>
 
-          <!-- Row 3 -->
-          <button class="calculator-btn" data-value="7">7</button>
-          <button class="calculator-btn" data-value="8">8</button>
-          <button class="calculator-btn" data-value="9">9</button>
-          <button class="calculator-btn btn-operator" data-op="log">log</button>
-          <button class="calculator-btn btn-operator" data-op="ln">ln</button>
-          <button class="calculator-btn btn-operator" data-op="-">−</button>
+          <!-- Keypads: one container, inside multiple grids hidden/shown by JS -->
+          <div id="keypadContainer">
+            <!-- BASIC KEYPAD -->
+            <div class="keypad keypad-basic" data-mode="basic">
+              <button class="btn btn-clear">C</button>
+              <button class="btn" data-op="backspace">⌫</button>
+              <button class="btn" data-op="(">(</button>
+              <button class="btn" data-op=")">)</button>
+              <button class="btn" data-op="%">%</button>
+              <button class="btn btn-operator" data-op="/">÷</button>
 
-          <!-- Row 4 -->
-          <button class="calculator-btn" data-value="4">4</button>
-          <button class="calculator-btn" data-value="5">5</button>
-          <button class="calculator-btn" data-value="6">6</button>
-          <button class="calculator-btn btn-operator" data-op="x2">x²</button>
-          <button class="calculator-btn btn-operator" data-op="x3">x³</button>
-          <button class="calculator-btn btn-operator" data-op="+">+</button>
+              <button class="btn" data-value="7">7</button>
+              <button class="btn" data-value="8">8</button>
+              <button class="btn" data-value="9">9</button>
+              <button class="btn btn-operator" data-op="*">×</button>
+              <button class="btn" data-op="toggle_sign">±</button>
+              <button class="btn" data-op="sqrt">√</button>
 
-          <!-- Row 5 -->
-          <button class="calculator-btn" data-value="1">1</button>
-          <button class="calculator-btn" data-value="2">2</button>
-          <button class="calculator-btn" data-value="3">3</button>
-          <button class="calculator-btn btn-operator" data-op="pi">π</button>
-          <button class="calculator-btn btn-operator" data-op="e">e</button>
-          <button class="calculator-btn btn-equal" data-op="=">=</button>
+              <button class="btn" data-value="4">4</button>
+              <button class="btn" data-value="5">5</button>
+              <button class="btn" data-value="6">6</button>
+              <button class="btn btn-operator" data-op="-">−</button>
+              <button class="btn" data-op="M+">M+</button>
+              <button class="btn" data-op="M-">M-</button>
 
-          <!-- Row 6 -->
-          <button class="calculator-btn" data-value="0">0</button>
-          <button class="calculator-btn" data-value=".">.</button>
-          <button class="calculator-btn btn-operator" data-op="toggle_sign">±</button>
-          <button class="calculator-btn btn-operator" data-op="MC">MC</button>
-          <button class="calculator-btn btn-operator" data-op="MR">MR</button>
-          <button class="calculator-btn btn-operator" data-op="M+">M+</button>
+              <button class="btn" data-value="1">1</button>
+              <button class="btn" data-value="2">2</button>
+              <button class="btn" data-value="3">3</button>
+              <button class="btn btn-operator" data-op="+">+</button>
+              <button class="btn" data-op="MR">MR</button>
+              <button class="btn" data-op="MC">MC</button>
+
+              <button class="btn" data-value="0">0</button>
+              <button class="btn" data-value=".">.</button>
+              <button class="btn btn-equal" data-op="=">=</button>
+              <button class="btn btn-wide" data-op="ans">Ans</button>
+            </div>
+
+            <!-- SCIENTIFIC KEYPAD -->
+            <div class="keypad keypad-scientific" data-mode="scientific" style="display:none;">
+              <button class="btn btn-clear">C</button>
+              <button class="btn" data-op="backspace">⌫</button>
+              <button class="btn" data-op="(">(</button>
+              <button class="btn" data-op=")">)</button>
+              <button class="btn" data-op="%">%</button>
+              <button class="btn btn-operator" data-op="/">÷</button>
+
+              <button class="btn" data-op="sin">sin</button>
+              <button class="btn" data-op="cos">cos</button>
+              <button class="btn" data-op="tan">tan</button>
+              <button class="btn" data-op="sqrt">√</button>
+              <button class="btn" data-op="^">xʸ</button>
+              <button class="btn btn-operator" data-op="*">×</button>
+
+              <button class="btn" data-value="7">7</button>
+              <button class="btn" data-value="8">8</button>
+              <button class="btn" data-value="9">9</button>
+              <button class="btn" data-op="log">log</button>
+              <button class="btn" data-op="ln">ln</button>
+              <button class="btn btn-operator" data-op="-">−</button>
+
+              <button class="btn" data-value="4">4</button>
+              <button class="btn" data-value="5">5</button>
+              <button class="btn" data-value="6">6</button>
+              <button class="btn" data-op="x2">x²</button>
+              <button class="btn" data-op="x3">x³</button>
+              <button class="btn" data-op="M+">M+</button>
+
+              <button class="btn" data-value="1">1</button>
+              <button class="btn" data-value="2">2</button>
+              <button class="btn" data-value="3">3</button>
+              <button class="btn" data-op="pi">π</button>
+              <button class="btn" data-op="e">e</button>
+              <button class="btn" data-op="M-">M-</button>
+
+              <button class="btn" data-value="0">0</button>
+              <button class="btn" data-value=".">.</button>
+              <button class="btn btn-equal" data-op="=">=</button>
+              <button class="btn btn-wide" data-op="ans">Ans</button>
+            </div>
+
+            <!-- PROGRAMMER KEYPAD -->
+            <div class="keypad keypad-programmer" data-mode="programmer" style="display:none;">
+              <button class="btn btn-clear">C</button>
+              <button class="btn" data-op="backspace">⌫</button>
+              <button class="btn" data-op="(">(</button>
+              <button class="btn" data-op=")">)</button>
+              <button class="btn" data-op="%">%</button>
+              <button class="btn btn-operator" data-op="/">÷</button>
+
+              <button class="btn" data-op="AND">AND</button>
+              <button class="btn" data-op="OR">OR</button>
+              <button class="btn" data-op="XOR">XOR</button>
+              <button class="btn" data-op="NOT">NOT</button>
+              <button class="btn" data-op="<<"><<</button>
+              <button class="btn" data-op=">>">>></button>
+
+              <button class="btn" data-value="7">7</button>
+              <button class="btn" data-value="8">8</button>
+              <button class="btn" data-value="9">9</button>
+              <button class="btn" data-op="HEX">HEX</button>
+              <button class="btn" data-op="BIN">BIN</button>
+              <button class="btn" data-op="DEC">DEC</button>
+
+              <button class="btn" data-value="4">4</button>
+              <button class="btn" data-value="5">5</button>
+              <button class="btn" data-value="6">6</button>
+              <button class="btn" data-op="A">A</button>
+              <button class="btn" data-op="B">B</button>
+              <button class="btn" data-op="C">C</button>
+
+              <button class="btn" data-value="1">1</button>
+              <button class="btn" data-value="2">2</button>
+              <button class="btn" data-value="3">3</button>
+              <button class="btn" data-op="D">D</button>
+              <button class="btn" data-op="E">E</button>
+              <button class="btn" data-op="F">F</button>
+
+              <button class="btn" data-value="0">0</button>
+              <button class="btn" data-value=".">.</button>
+              <button class="btn btn-equal" data-op="=">=</button>
+              <button class="btn btn-wide" data-op="ans">Ans</button>
+            </div>
+          </div>
         </div>
 
-        <div class="history">
-          <strong>History</strong>
-          <div id="historyList"></div>
-        </div>
+        <!-- Right: Memory + History -->
+        <aside class="calc-right">
+          <div class="history">
+            <div class="mem-display">Memory: <span id="memValue">0</span></div>
+            <div style="display:flex; gap:6px; margin-bottom:8px;">
+              <button class="small" id="memMC">MC</button>
+              <button class="small" id="memMR">MR</button>
+              <button class="small" id="memMplus">M+</button>
+              <button class="small" id="memMminus">M-</button>
+            </div>
+
+            <h3>History</h3>
+            <div class="history-list" id="historyList" aria-live="polite"></div>
+            <div style="margin-top:8px; display:flex; gap:8px;">
+              <button class="small" id="clearHistory">Clear</button>
+              <button class="small" id="exportHistory">Export</button>
+            </div>
+          </div>
+        </aside>
       </div>
     </section>
   </main>
 
-  <!-- ====== PWA Install ====== -->
+  <!-- PWA Install (unchanged) -->
   <div class="pwa-install-container">
     <button class="btn" id="installButton" style="display:none;">Install App</button>
   </div>
 
-  <!-- ====== FOOTER (same as your site) ====== -->
+  <!-- FOOTER (unchanged) -->
   <footer class="main-footer">
     <ul class="footer-links">
       <li><a href="../about.html">About Us</a></li>
       <li><a href="../contact.html">Contact</a></li>
+      <li><a href="../blog.html">Blog</a></li>
       <li><a href="../privacy.html">Privacy Policy</a></li>
     </ul>
-    <p>&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
+    <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
   </footer>
 
-  <!-- ====== SCRIPTS ====== -->
+  <!-- External theme script kept same -->
   <script src="../theme.js"></script>
+
+  <!-- Calculator Script -->
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const display = document.getElementById("calculatorDisplay");
-      const historyList = document.getElementById("historyList");
-      let currentInput = "0";
-      let memoryValue = 0;
+    document.addEventListener('DOMContentLoaded', () => {
+      // Elements
+      const tabs = document.querySelectorAll('.mode-tab');
+      const keypads = document.querySelectorAll('[data-mode]');
+      const expressionEl = document.getElementById('calcExpression');
+      const resultEl = document.getElementById('calcResult');
+      const historyListEl = document.getElementById('historyList');
+      const memValueEl = document.getElementById('memValue');
 
-      function updateDisplay() { display.textContent = currentInput; }
-      function addHistory(entry) {
-        const div = document.createElement("div");
-        div.className = "history-entry";
-        div.textContent = entry;
-        historyList.prepend(div);
-      }
-      function resetCalculator() { currentInput = "0"; updateDisplay(); }
+      // State
+      let mode = 'basic';                 // basic | scientific | programmer
+      let expr = '';                      // expression shown
+      let ans = null;                     // last answer
+      let memory = 0;                     // memory slot (number)
+      let history = [];                   // {expr, result, mode}
+      let programmerBase = 'DEC';         // active base for programmer mode display
 
-      function handleNumber(num) {
-        if (currentInput === "0") currentInput = num;
-        else currentInput += num;
-        updateDisplay();
-      }
-
-      function handleOperator(op) {
-        if (op === "backspace") {
-          currentInput = currentInput.slice(0, -1) || "0";
-        } else if (op === "toggle_sign") {
-          currentInput = (parseFloat(currentInput) * -1).toString();
-        } else if (op === "pi") {
-          currentInput += Math.PI.toString();
-        } else if (op === "e") {
-          currentInput += Math.E.toString();
-        } else if (op === "sqrt") {
-          currentInput = Math.sqrt(parseFloat(currentInput)).toString();
-        } else if (op === "x2") {
-          currentInput = Math.pow(parseFloat(currentInput), 2).toString();
-        } else if (op === "x3") {
-          currentInput = Math.pow(parseFloat(currentInput), 3).toString();
-        } else if (op === "sin") {
-          currentInput = Math.sin(parseFloat(currentInput)).toString();
-        } else if (op === "cos") {
-          currentInput = Math.cos(parseFloat(currentInput)).toString();
-        } else if (op === "tan") {
-          currentInput = Math.tan(parseFloat(currentInput)).toString();
-        } else if (op === "log") {
-          currentInput = Math.log10(parseFloat(currentInput)).toString();
-        } else if (op === "ln") {
-          currentInput = Math.log(parseFloat(currentInput)).toString();
-        } else if (op === "MC") {
-          memoryValue = 0;
-        } else if (op === "MR") {
-          currentInput += memoryValue.toString();
-        } else if (op === "M+") {
-          memoryValue += parseFloat(currentInput) || 0;
-        } else {
-          currentInput += " " + op + " ";
-        }
-        updateDisplay();
+      // Helpers
+      function setMode(m) {
+        mode = m;
+        tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === m));
+        keypads.forEach(k => {
+          if (k.dataset.mode === m) k.style.display = '';
+          else k.style.display = 'none';
+        });
+        clearTempDisplay();
+        render();
       }
 
-      function handleEqual() {
+      function clearTempDisplay() {
+        expr = '';
+        render();
+      }
+
+      function render() {
+        expressionEl.textContent = expr || ' ';
+        resultEl.textContent = (ans === null ? '0' : String(ans));
+        memValueEl.textContent = String(memory);
+      }
+
+      function pushHistory(entry) {
+        history.unshift(entry);
+        // keep recent 100
+        if (history.length > 200) history.pop();
+        renderHistory();
+      }
+
+      function renderHistory() {
+        historyListEl.innerHTML = '';
+        history.forEach((h, idx) => {
+          const div = document.createElement('div');
+          div.className = 'history-entry';
+          div.textContent = `${h.mode.toUpperCase()}: ${h.expr} = ${h.result}`;
+          div.title = 'Click to reuse';
+          div.addEventListener('click', () => {
+            expr = h.expr;
+            ans = h.result;
+            render();
+          });
+          historyListEl.appendChild(div);
+        });
+      }
+
+      // Evaluate expression safely-ish:
+      // - replace xʸ or ^ with **
+      // - replace '÷' and '×' with / and *
+      // - replace number% with (number/100)
+      // - replace functions with Math.* equivalents
+      function safeEval(input, modeForEval) {
+        if (!input) return 0;
         try {
-          let result = eval(
-            currentInput.replace(/÷/g, "/").replace(/×/g, "*").replace(/\^/g, "**")
-          );
-          addHistory(currentInput + " = " + result);
-          currentInput = result.toString();
-          updateDisplay();
-        } catch {
-          currentInput = "Error";
-          updateDisplay();
+          // Preprocess percentage: turn '50%' -> '(50/100)'
+          input = input.replace(/(\d+(\.\d+)?)%/g, '($1/100)');
+
+          // Replace unicode operator chars
+          input = input.replace(/×/g, '*').replace(/÷/g, '/');
+
+          // ^ to **
+          input = input.replace(/\^/g, '**');
+
+          // Replace trig/log functions to Math.
+          // allow sin cos tan log ln sqrt, pi, e, abs, floor, ceil
+          input = input.replace(/\bsin\(/g, 'Math.sin(');
+          input = input.replace(/\bcos\(/g, 'Math.cos(');
+          input = input.replace(/\btan\(/g, 'Math.tan(');
+          input = input.replace(/\blog\(/g, 'Math.log10(');
+          input = input.replace(/\bln\(/g, 'Math.log(');
+          input = input.replace(/\bsqrt\(/g, 'Math.sqrt(');
+          input = input.replace(/\babs\(/g, 'Math.abs(');
+          input = input.replace(/\bpi\b/g, String(Math.PI));
+          input = input.replace(/\be\b/g, String(Math.E));
+
+          // Replace x² and x³ patterns like "5 x2" or "5 x²"
+          input = input.replace(/\b(\d+(\.\d+)?)\s*x2\b/g, '($1**2)');
+          input = input.replace(/\b(\d+(\.\d+)?)\s*x3\b/g, '($1**3)');
+
+          // Final safety: block characters other than numbers, operators, ., parentheses, Math, letters in known functions, spaces
+          // (we assume no user will inject code with other constructs in typical calculator input)
+          // Evaluate using Function to sandbox a bit:
+          const allowed = /^[0-9+\-*/%.() ,*eEMathsinctaglnrboPIx^]+$/i; // loose allowlist; still cautious
+          // We won't strictly enforce allowed because it may conflict; instead we attempt compute and catch errors.
+
+          // Use Function to evaluate
+          const fn = new Function('return (' + input + ')');
+          let res = fn();
+
+          // Normalize - handle Infinity / NaN
+          if (!isFinite(res) || Number.isNaN(res)) throw new Error('Math Error');
+
+          // Round small floating precision issues
+          if (Math.abs(res) < 1e-12) res = 0;
+          // limit to reasonable decimals
+          if (typeof res === 'number') {
+            res = Math.round((res + Number.EPSILON) * 1e12) / 1e12;
+          }
+          return res;
+        } catch (e) {
+          throw new Error('Error');
         }
       }
 
-      document.querySelectorAll(".calculator-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const value = btn.dataset.value;
-          const op = btn.dataset.op;
-          if (btn.classList.contains("btn-clear")) resetCalculator();
-          else if (btn.classList.contains("btn-equal")) handleEqual();
-          else if (value) handleNumber(value);
-          else if (op) handleOperator(op);
+      // Programmer mode evaluate: interpret as integers and support AND/OR/XOR/NOT and shifts
+      function evalProgrammer(input) {
+        try {
+          // Normalize spaces
+          input = input.replace(/\s+/g, ' ').trim();
+          // Replace HEX letters A-F given as buttons to actual hex digits if user taps (we support direct)
+          // We'll parse tokens and build JS expression using bitwise operators.
+          // Replace AND, OR, XOR, NOT with JS operators & | ^ ~ and shifts << >>
+          let s = input.replace(/\bAND\b/gi, '&');
+          s = s.replace(/\bOR\b/gi, '|');
+          s = s.replace(/\bXOR\b/gi, '^');
+          s = s.replace(/\bNOT\b/gi, '~');
+          s = s.replace(/<<+/g, '<<');
+          s = s.replace(/>>+/g, '>>');
+          // Convert BIN(xb) or 0b prefix? Not necessary here. We'll accept hex letters as part of number (like 0xFF)
+          // If user enters HEX mode, we will convert displayed ans accordingly (see below).
+          // Evaluate using Function
+          const fn = new Function('return (' + s + ')');
+          let res = fn();
+          if (!Number.isFinite(res) || Number.isNaN(res)) throw new Error('Math Error');
+          // Ensure integer result
+          res = Math.trunc(res);
+          return res;
+        } catch (e) {
+          throw new Error('Error');
+        }
+      }
+
+      // Button handlers
+      function onBtnClick(btn) {
+        const value = btn.dataset.value;
+        const op = btn.dataset.op;
+
+        if (value !== undefined) {
+          // Append number or hex letter (in programmer)
+          // prevent multiple dots in a single number
+          if (value === '.') {
+            // check last token doesn't already have a dot
+            const tokens = expr.split(/[\s+\-*/%^()]+/).filter(Boolean);
+            const last = tokens[tokens.length - 1] || '';
+            if (last.includes('.')) return;
+          }
+          expr += value;
+          render();
+          return;
+        }
+
+        if (!op) return;
+
+        switch (op) {
+          case 'backspace':
+            expr = expr.slice(0, -1);
+            if (expr === '') expr = '';
+            render();
+            break;
+          case 'C':
+            expr = '';
+            ans = null;
+            render();
+            break;
+          case 'toggle_sign':
+            // apply to last number: naive approach - find last number and multiply by -1
+            expr = expr.replace(/(-?\d+(\.\d+)?)(?!.*(-?\d+(\.\d+)?))/,'(' + '(-1*' + '$1' + '))');
+            render();
+            break;
+          case 'pi':
+          case 'e':
+            expr += (op === 'pi' ? 'pi' : 'e');
+            render();
+            break;
+          case 'x2':
+          case 'x3':
+            expr += (op === 'x2' ? ' x2' : ' x3');
+            render();
+            break;
+          case 'sin':
+          case 'cos':
+          case 'tan':
+          case 'log':
+          case 'ln':
+          case 'sqrt':
+            expr += op + '(';
+            render();
+            break;
+          case '%':
+            expr += '%';
+            render();
+            break;
+          case 'M+':
+            try {
+              const val = computeCurrent();
+              memory = (Number(memory) || 0) + Number(val || 0);
+              memValueEl.textContent = String(memory);
+            } catch(e) { /* ignore on error */ }
+            break;
+          case 'M-':
+            try {
+              const val = computeCurrent();
+              memory = (Number(memory) || 0) - Number(val || 0);
+              memValueEl.textContent = String(memory);
+            } catch(e) { /* ignore on error */ }
+            break;
+          case 'MR':
+            expr += String(memory);
+            render();
+            break;
+          case 'MC':
+            memory = 0;
+            memValueEl.textContent = String(memory);
+            break;
+          case 'ans':
+            if (ans !== null) expr += String(ans);
+            render();
+            break;
+          case 'HEX':
+            programmerBase = 'HEX'; render(); break;
+          case 'BIN':
+            programmerBase = 'BIN'; render(); break;
+          case 'DEC':
+            programmerBase = 'DEC'; render(); break;
+          // bitwise
+          case 'AND':
+          case 'OR':
+          case 'XOR':
+          case 'NOT':
+          case '<<':
+          case '>>':
+            expr += ' ' + op + ' ';
+            render();
+            break;
+          case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
+            expr += op;
+            render();
+            break;
+          case '=':
+            try {
+              const res = computeAndRecord();
+              ans = res;
+              render();
+            } catch (e) {
+              ans = 'Error';
+              render();
+            }
+            break;
+          case '+': case '-': case '*': case '/': case '^':
+            expr += ' ' + op + ' ';
+            render();
+            break;
+          default:
+            // fallback append
+            expr += op;
+            render();
+        }
+      }
+
+      // computeCurrent: quick try to evaluate current expr, used for memory ops
+      function computeCurrent() {
+        if (!expr) return 0;
+        if (mode === 'programmer') {
+          return evalProgrammer(expr);
+        } else {
+          return safeEval(expr, mode);
+        }
+      }
+
+      // computeAndRecord: evaluate, push to history, return result
+      function computeAndRecord() {
+        if (!expr) throw new Error('Empty');
+        let res;
+        if (mode === 'programmer') {
+          res = evalProgrammer(expr);
+        } else {
+          res = safeEval(expr, mode);
+        }
+        // record
+        pushHistory({ expr: expr, result: res, mode });
+        // clear expr or set to result? common calculators set result as new expr
+        expr = String(res);
+        return res;
+      }
+
+      // Attach event listeners to keypad buttons
+      document.querySelectorAll('.keypad .btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          // get visible keypad mode - if button is invisible due to display none it won't be clicked
+          onBtnClick(btn);
         });
       });
 
-      updateDisplay();
+      // Tabs
+      tabs.forEach(t => {
+        t.addEventListener('click', () => setMode(t.dataset.mode));
+      });
+
+      // Memory buttons on right
+      document.getElementById('memMC').addEventListener('click', () => { memory = 0; memValueEl.textContent = memory; });
+      document.getElementById('memMR').addEventListener('click', () => { expr += String(memory); render(); });
+      document.getElementById('memMplus').addEventListener('click', () => { try { memory += computeCurrent(); memValueEl.textContent = memory; } catch{} });
+      document.getElementById('memMminus').addEventListener('click', () => { try { memory -= computeCurrent(); memValueEl.textContent = memory; } catch{} });
+
+      // History controls
+      document.getElementById('clearHistory').addEventListener('click', () => { history = []; renderHistory(); });
+      document.getElementById('exportHistory').addEventListener('click', () => {
+        if (!history.length) return alert('No history to export');
+        const text = history.map(h => `${h.mode.toUpperCase()}: ${h.expr} = ${h.result}`).join('\\n');
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'calculator_history.txt';
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      // Keyboard support
+      document.addEventListener('keydown', (e) => {
+        // don't interfere if focus is on input-like elements (none here), still safe
+        const key = e.key;
+        if ((key >= '0' && key <= '9') || key === '.') {
+          expr += key; render(); return;
+        }
+        if (key === '+' || key === '-' || key === '*' || key === '/') {
+          expr += ' ' + key + ' '; render(); return;
+        }
+        if (key === 'Enter' || key === '=') {
+          try { ans = computeAndRecord(); render(); } catch { ans = 'Error'; render(); }
+          return;
+        }
+        if (key === 'Backspace') {
+          expr = expr.slice(0, -1); render(); return;
+        }
+        if (key === 'Escape') {
+          expr = ''; ans = null; render(); return;
+        }
+        // switch tabs by 1/2/3
+        if (key === '1') { setMode('basic'); return; }
+        if (key === '2') { setMode('scientific'); return; }
+        if (key === '3') { setMode('programmer'); return; }
+      });
+
+      // initial render
+      setMode('basic');
+      render();
     });
   </script>
 </body>

@@ -8,10 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const allToolsTitle = document.getElementById('allToolsTitle');
     const filterTabs = document.getElementById('filterTabs');
     const homeHero = document.getElementById('homeHero');
-    const heroSearchInput = document.getElementById('heroSearchInput');
+    const headerSearchInput = document.getElementById('headerSearchInput'); // NEW element reference
     const toolGrid = document.getElementById('toolGrid');
-    const megaMenuSearchInput = document.getElementById('megaMenuSearchInput'); // New search input
-    const allToolsMenu = document.getElementById('allToolsMenu'); // Reference to mega menu
 
     const favoritesSection = document.getElementById('favoritesSection');
     const favoritesGrid = document.getElementById('favoritesGrid');
@@ -52,23 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    heroSearchInput.addEventListener('input', () => {
-        performInPlaceSearch(heroSearchInput.value);
-    });
-
-    if (megaMenuSearchInput) {
-        megaMenuSearchInput.addEventListener('input', () => {
-            // --- NEW: Close mega menu when search starts from within it ---
-            if (allToolsMenu) {
-                allToolsMenu.classList.remove('show');
-                document.body.classList.remove('menu-open');
-                const allToolsBtn = document.getElementById('allToolsBtn');
-                if(allToolsBtn) allToolsBtn.classList.remove('open');
-            }
-            // --- End NEW logic ---
-            performInPlaceSearch(megaMenuSearchInput.value);
-            // Copy search term to hero input for consistent state
-            heroSearchInput.value = megaMenuSearchInput.value;
+    // NEW event listener for the header search input
+    if (headerSearchInput) {
+        headerSearchInput.addEventListener('input', () => {
+            performInPlaceSearch(headerSearchInput.value);
         });
     }
 
@@ -113,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
             favoritesSection.style.display = 'block';
             // UI/UX Improvement: Hide feature highlights when favorites are displayed
             featureHighlights.style.display = 'none';
-            homeHero.style.display = 'block'; // Keep search bar visible
+            homeHero.style.display = 'block'; // Keep search bar visible (now in header)
 
             // Iterate over the source list (allToolCards) to create clones for the favorites section
             allToolCards.forEach(originalCard => {
@@ -138,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             favoritesSection.style.display = 'none';
             featureHighlights.style.display = 'flex'; // Restore feature highlights if no favorites
-            homeHero.style.display = 'block'; // Restore main search bar
+            homeHero.style.display = 'block'; // Restore main hero section
         }
 
         // Update icons on all original cards (for visual consistency)

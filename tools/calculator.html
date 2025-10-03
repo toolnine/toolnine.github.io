@@ -1,11 +1,17 @@
+<!-- START OF FILE: tools/calculator.html (Upgraded) -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Advanced Calculator | ToolNine</title>
-  <meta name="description" content="A user-friendly, feature-rich calculator for basic, scientific, and programmer calculations. Fast, in-browser processing." />
-  <link rel="stylesheet" href="../style.css">
+  <!-- SEO OPTIMIZATION -->
+  <title>Advanced Calculator | Basic, Scientific & Programmer Modes | ToolNine</title>
+  <meta name="description" content="A user-friendly, feature-rich calculator for basic, scientific, and programmer calculations. Memory and calculation history included. Fast, in-browser processing." />
+  <!-- END SEO OPTIMIZATION -->
+
+  <!-- Updated to root-relative path -->
+  <link rel="stylesheet" href="/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
   <style>
     /* ---------- Calculator specific styles (keeps site look intact) ---------- */
@@ -13,86 +19,79 @@
     .tool-card { max-width:980px; padding:1.5rem; width:100%; box-shadow:0 10px 25px -5px rgba(0,0,0,0.05); background:var(--card); border-radius:12px; border:1px solid var(--border-color); }
     .tool-header { text-align:center; margin-bottom:1rem; }
     .tool-header h1 { font-size:1.8rem; color:var(--accent); font-weight:700; }
+    .tool-desc { color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.5; font-size: 1rem; }
+    [data-theme="dark"] .tool-desc { color: #94a3b8; }
+
     .mode-tabs { display:flex; gap:0.5rem; justify-content:center; margin-bottom:1rem; }
-    .mode-tab { padding:0.5rem 0.9rem; border-radius:8px; cursor:pointer; font-weight:600; border:1px solid transparent; background:transparent; }
-    .mode-tab.active { background:var(--card); border-color:var(--border-color); box-shadow:0 4px 12px rgba(16,24,40,0.04); }
+    .mode-tab { padding:0.5rem 0.9rem; border-radius:8px; cursor:pointer; font-weight:600; border:1px solid transparent; background:var(--card); }
+    .mode-tab:hover { background: var(--border-color); }
+    .mode-tab.active { background:var(--accent); color:white; border-color:var(--accent); }
+    [data-theme="dark"] .mode-tab.active { background:var(--accent); border-color:var(--accent); }
+
     .calc-top { display:flex; gap:1rem; align-items:flex-start; flex-wrap:wrap; }
     .calc-left { flex:1 1 420px; min-width:320px; }
     .calc-right { width:280px; min-width:240px; max-height:420px; overflow:auto; }
-    #calculatorDisplay { background:var(--bg); border:1px solid var(--border-color); border-radius:10px; padding:18px; font-size:1.6rem; text-align:right; color:var(--text); min-height:72px; word-wrap:break-word; display:flex; flex-direction:column; justify-content:center; }
-    #calcExpression { font-size:0.9rem; color:var(--muted); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    #calcResult { font-size:1.4rem; font-weight:700; margin-top:6px; word-break:break-all; }
 
-    .keypad { margin-top:12px; display:grid; gap:8px; grid-template-columns: repeat(6, 1fr); }
+    #calculatorDisplay { background:var(--bg); border:1px solid var(--border-color); border-radius:10px; padding:18px; font-size:1.6rem; text-align:right; color:var(--text); min-height:72px; word-wrap:break-word; display:flex; flex-direction:column; justify-content:center; position: relative; }
+    #calcExpression { font-size:0.9rem; color:#64748b; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    #calcResult { font-size:1.4rem; font-weight:700; margin-top:6px; word-break:break-all; }
+    [data-theme="dark"] #calcExpression { color: #94a3b8; }
+
+    /* Keypad Layout */
+    .keypad { margin-top:12px; display:grid; gap:8px; }
     .btn { padding:12px; border-radius:8px; border:1px solid var(--border-color); background:var(--card); color:var(--text); font-weight:600; cursor:pointer; transition:0.12s; }
-    .btn:hover { transform:translateY(-1px); }
-    .btn-operator { background:var(--accent); color:white; }
-    .btn-equal { grid-column: span 2; background:#16a34a; color:white; }
-    .btn-clear { background:#ef4444; color:white; }
+    .btn:hover { background-color: #f1f5f9; }
+    [data-theme="dark"] .btn:hover { background-color: #475569; }
+
+    .keypad-basic { grid-template-columns: repeat(6, 1fr); }
+    .keypad-scientific { grid-template-columns: repeat(6, 1fr); }
+    .keypad-programmer { grid-template-columns: repeat(6, 1fr); }
+
+    /* Button specific colors/styles */
+    .btn-operator { background:var(--accent); color:white; border-color:var(--accent); }
+    .btn-operator:hover { background-color: #1e40af; }
+    [data-theme="dark"] .btn-operator:hover { background-color: #2563eb; }
+
+    .btn-equal { grid-column: span 2; background:#16a34a; color:white; border-color:#16a34a; }
+    .btn-equal:hover { background-color:#15803d; }
+    [data-theme="dark"] .btn-equal { background:#15803d; border-color:#15803d; }
+    [data-theme="dark"] .btn-equal:hover { background-color:#16a34a; }
+
+    .btn-clear { background:#ef4444; color:white; border-color:#ef4444; }
+    .btn-clear:hover { background-color:#dc2626; }
+    [data-theme="dark"] .btn-clear { background:#dc2626; border-color:#dc2626; }
+    [data-theme="dark"] .btn-clear:hover { background-color:#ef4444; }
+
     .btn-wide { grid-column: span 2; }
 
+    /* History and Memory Styles */
     .history { padding:12px; border-radius:10px; border:1px solid var(--border-color); background:var(--bg); }
-    .history h3 { margin:0 0 8px 0; font-size:1rem; }
+    .history h3 { margin:0 0 8px 0; font-size:1rem; color: var(--text); }
     .history-list { max-height:320px; overflow:auto; display:flex; flex-direction:column; gap:8px; }
     .history-entry { font-size:0.95rem; padding:6px 8px; border-radius:6px; background:transparent; border:1px dashed var(--border-color); cursor:pointer; }
-    .mem-display { font-size:0.9rem; color:var(--muted); margin-bottom:8px; }
-    .small { font-size:0.9rem; padding:6px 8px; border-radius:6px; }
+    .history-entry:hover { background: #f1f5f9; }
+    [data-theme="dark"] .history-entry:hover { background: #475569; }
 
-    /* Responsive */
+    .mem-display { font-size:0.9rem; color:#64748b; margin-bottom:8px; }
+    [data-theme="dark"] .mem-display { color: #94a3b8; }
+    .mem-controls { display:flex; gap:6px; margin-bottom:8px;}
+    .mem-btn { font-size:0.9rem; padding:6px 8px; border-radius:6px; }
+
+    /* Responsive adjustments */
     @media (max-width:860px) {
       .calc-top { flex-direction:column-reverse; }
       .calc-right { width:100%; }
-      .keypad { grid-template-columns: repeat(4, 1fr); }
+      .keypad-basic { grid-template-columns: repeat(4, 1fr); }
+      .keypad-scientific { grid-template-columns: repeat(4, 1fr); }
+      .keypad-programmer { grid-template-columns: repeat(4, 1fr); }
       .btn-equal { grid-column: span 2; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ===== HEADER (unchanged) ===== -->
-  <header class="main-header">
-    <a href="../index.html" class="logo">ToolNine</a>
-    <button class="hamburger-btn" id="hamburgerBtn">☰</button>
-    <nav class="main-nav">
-      <ul>
-        <li><a href="../index.html#category-image">Image Tools</a></li>
-        <li><a href="../index.html#category-text">Text Tools</a></li>
-        <li><a href="../blog.html">Blog</a></li>
-      </ul>
-      <button class="search-btn" id="searchBtn" aria-label="Search">🔍</button>
-      <button class="all-tools-btn" id="allToolsBtn">All Tools <span class="arrow">▼</span></button>
-      <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
-    </nav>
-  </header>
-
-  <!-- ===== MEGA MENU (unchanged) ===== -->
-  <div class="mega-menu" id="allToolsMenu">
-    <div class="mega-menu-grid">
-      <div class="mega-menu-category">
-        <h3>Image Tools</h3>
-        <ul>
-          <li><a href="image-to-pdf.html">📄 Image to PDF</a></li>
-          <li><a href="image-compressor.html">🗜️ Image Compressor</a></li>
-          <li><a href="image-resizer.html">📏 Image Resizer</a></li>
-        </ul>
-      </div>
-      <div class="mega-menu-category">
-        <h3>Text & Writing</h3>
-        <ul>
-          <li><a href="text-diff.html">🔍 Text Diff</a></li>
-          <li><a href="text-to-pdf.html">📄 Text to PDF</a></li>
-        </ul>
-      </div>
-      <div class="mega-menu-category">
-        <h3>Converters</h3>
-        <ul><li><a href="unit-converter.html">⚖️ Unit Converter</a></li></ul>
-      </div>
-      <div class="mega-menu-category">
-        <h3>AI Tools</h3>
-        <ul><li><a href="json-formatter.html">🧩 JSON Formatter</a></li></ul>
-      </div>
-    </div>
-  </div>
+    <!-- 1. Header Placeholder -->
+    <div id="header-placeholder"></div>
 
   <!-- ===== MAIN (Calculator) ===== -->
   <main class="content tool-page">
@@ -198,7 +197,7 @@
               <button class="btn btn-wide" data-op="ans">Ans</button>
             </div>
 
-            <!-- PROGRAMMER KEYPAD -->
+            <!-- PROGRAMMER KEYPAD (UI Improvement) -->
             <div class="keypad keypad-programmer" data-mode="programmer" style="display:none;">
               <button class="btn btn-clear">C</button>
               <button class="btn" data-op="backspace">⌫</button>
@@ -214,26 +213,27 @@
               <button class="btn" data-op="<<"><<</button>
               <button class="btn" data-op=">>">>></button>
 
+              <!-- Number/Hex inputs -->
               <button class="btn" data-value="7">7</button>
               <button class="btn" data-value="8">8</button>
               <button class="btn" data-value="9">9</button>
-              <button class="btn" data-op="HEX">HEX</button>
-              <button class="btn" data-op="BIN">BIN</button>
-              <button class="btn" data-op="DEC">DEC</button>
-
-              <button class="btn" data-value="4">4</button>
-              <button class="btn" data-value="5">5</button>
-              <button class="btn" data-value="6">6</button>
               <button class="btn" data-op="A">A</button>
               <button class="btn" data-op="B">B</button>
               <button class="btn" data-op="C">C</button>
 
-              <button class="btn" data-value="1">1</button>
-              <button class="btn" data-value="2">2</button>
-              <button class="btn" data-value="3">3</button>
+              <button class="btn" data-value="4">4</button>
+              <button class="btn" data-value="5">5</button>
+              <button class="btn" data-value="6">6</button>
               <button class="btn" data-op="D">D</button>
               <button class="btn" data-op="E">E</button>
               <button class="btn" data-op="F">F</button>
+
+              <button class="btn" data-value="1">1</button>
+              <button class="btn" data-value="2">2</button>
+              <button class="btn" data-value="3">3</button>
+              <button class="btn btn-operator" data-op="+">+</button>
+              <button class="btn btn-operator" data-op="-">−</button>
+              <button class="btn btn-operator" data-op="*">×</button>
 
               <button class="btn" data-value="0">0</button>
               <button class="btn" data-value=".">.</button>
@@ -247,18 +247,18 @@
         <aside class="calc-right">
           <div class="history">
             <div class="mem-display">Memory: <span id="memValue">0</span></div>
-            <div style="display:flex; gap:6px; margin-bottom:8px;">
-              <button class="small" id="memMC">MC</button>
-              <button class="small" id="memMR">MR</button>
-              <button class="small" id="memMplus">M+</button>
-              <button class="small" id="memMminus">M-</button>
+            <div class="mem-controls">
+              <button class="btn small mem-btn" id="memMC">MC</button>
+              <button class="btn small mem-btn" id="memMR">MR</button>
+              <button class="btn small mem-btn" id="memMplus">M+</button>
+              <button class="btn small mem-btn" id="memMminus">M-</button>
             </div>
 
             <h3>History</h3>
             <div class="history-list" id="historyList" aria-live="polite"></div>
             <div style="margin-top:8px; display:flex; gap:8px;">
-              <button class="small" id="clearHistory">Clear</button>
-              <button class="small" id="exportHistory">Export</button>
+              <button class="btn small" id="clearHistory">Clear History</button>
+              <button class="btn small" id="exportHistory">Export History</button>
             </div>
           </div>
         </aside>
@@ -266,26 +266,19 @@
     </section>
   </main>
 
-  <!-- PWA Install (unchanged) -->
+  <!-- PWA Install Button (unchanged) -->
   <div class="pwa-install-container">
     <button class="btn" id="installButton" style="display:none;">Install App</button>
   </div>
 
-  <!-- FOOTER (unchanged) -->
-  <footer class="main-footer">
-    <ul class="footer-links">
-      <li><a href="../about.html">About Us</a></li>
-      <li><a href="../contact.html">Contact</a></li>
-      <li><a href="../blog.html">Blog</a></li>
-      <li><a href="../privacy.html">Privacy Policy</a></li>
-    </ul>
-    <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
-  </footer>
+    <!-- 2. Footer Placeholder -->
+    <div id="footer-placeholder"></div>
 
-  <!-- External theme script kept same -->
-  <script src="../theme.js"></script>
-
-  <!-- Calculator Script -->
+    <!-- Scripts -->
+    <!-- NEW: Load the component loader script first -->
+    <script src="/js/load-components.js"></script>
+    <!-- Keep existing scripts here -->
+    <script src="/theme.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // Elements
@@ -309,7 +302,7 @@
         mode = m;
         tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === m));
         keypads.forEach(k => {
-          if (k.dataset.mode === m) k.style.display = '';
+          if (k.dataset.mode === m) k.style.display = 'grid'; // Use 'grid' here
           else k.style.display = 'none';
         });
         clearTempDisplay();
@@ -323,20 +316,41 @@
 
       function render() {
         expressionEl.textContent = expr || ' ';
-        resultEl.textContent = (ans === null ? '0' : String(ans));
+        // Render result according to programmer base if in programmer mode
+        if (mode === 'programmer') {
+          try {
+            const resultValue = evalProgrammer(expr || '0');
+            resultEl.textContent = formatProgrammerResult(resultValue, programmerBase);
+          } catch {
+            resultEl.textContent = 'Error';
+          }
+        } else {
+          resultEl.textContent = (ans === null ? '0' : String(ans));
+        }
         memValueEl.textContent = String(memory);
+      }
+
+      // Format programmer mode result for display
+      function formatProgrammerResult(value, base) {
+        if (isNaN(value)) return 'Error';
+        const intValue = Math.trunc(value);
+        switch (base) {
+          case 'HEX': return '0x' + intValue.toString(16).toUpperCase();
+          case 'BIN': return '0b' + intValue.toString(2);
+          case 'DEC': return String(intValue);
+          default: return String(intValue);
+        }
       }
 
       function pushHistory(entry) {
         history.unshift(entry);
-        // keep recent 100
         if (history.length > 200) history.pop();
         renderHistory();
       }
 
       function renderHistory() {
         historyListEl.innerHTML = '';
-        history.forEach((h, idx) => {
+        history.forEach((h) => {
           const div = document.createElement('div');
           div.className = 'history-entry';
           div.textContent = `${h.mode.toUpperCase()}: ${h.expr} = ${h.result}`;
@@ -351,24 +365,16 @@
       }
 
       // Evaluate expression safely-ish:
-      // - replace xʸ or ^ with **
-      // - replace '÷' and '×' with / and *
-      // - replace number% with (number/100)
-      // - replace functions with Math.* equivalents
       function safeEval(input, modeForEval) {
         if (!input) return 0;
         try {
           // Preprocess percentage: turn '50%' -> '(50/100)'
           input = input.replace(/(\d+(\.\d+)?)%/g, '($1/100)');
-
           // Replace unicode operator chars
           input = input.replace(/×/g, '*').replace(/÷/g, '/');
-
           // ^ to **
           input = input.replace(/\^/g, '**');
-
           // Replace trig/log functions to Math.
-          // allow sin cos tan log ln sqrt, pi, e, abs, floor, ceil
           input = input.replace(/\bsin\(/g, 'Math.sin(');
           input = input.replace(/\bcos\(/g, 'Math.cos(');
           input = input.replace(/\btan\(/g, 'Math.tan(');
@@ -378,27 +384,16 @@
           input = input.replace(/\babs\(/g, 'Math.abs(');
           input = input.replace(/\bpi\b/g, String(Math.PI));
           input = input.replace(/\be\b/g, String(Math.E));
-
           // Replace x² and x³ patterns like "5 x2" or "5 x²"
           input = input.replace(/\b(\d+(\.\d+)?)\s*x2\b/g, '($1**2)');
           input = input.replace(/\b(\d+(\.\d+)?)\s*x3\b/g, '($1**3)');
 
-          // Final safety: block characters other than numbers, operators, ., parentheses, Math, letters in known functions, spaces
-          // (we assume no user will inject code with other constructs in typical calculator input)
           // Evaluate using Function to sandbox a bit:
-          const allowed = /^[0-9+\-*/%.() ,*eEMathsinctaglnrboPIx^]+$/i; // loose allowlist; still cautious
-          // We won't strictly enforce allowed because it may conflict; instead we attempt compute and catch errors.
-
-          // Use Function to evaluate
           const fn = new Function('return (' + input + ')');
           let res = fn();
 
-          // Normalize - handle Infinity / NaN
           if (!isFinite(res) || Number.isNaN(res)) throw new Error('Math Error');
-
-          // Round small floating precision issues
           if (Math.abs(res) < 1e-12) res = 0;
-          // limit to reasonable decimals
           if (typeof res === 'number') {
             res = Math.round((res + Number.EPSILON) * 1e12) / 1e12;
           }
@@ -408,28 +403,27 @@
         }
       }
 
-      // Programmer mode evaluate: interpret as integers and support AND/OR/XOR/NOT and shifts
+      // Programmer mode evaluate (Fixed Logic)
       function evalProgrammer(input) {
         try {
-          // Normalize spaces
+          // 1. Convert HEX to decimal for evaluation
+          input = input.replace(/0x([0-9a-fA-F]+)/g, (match, hex) => parseInt(hex, 16));
+          // 2. Normalize spaces
           input = input.replace(/\s+/g, ' ').trim();
-          // Replace HEX letters A-F given as buttons to actual hex digits if user taps (we support direct)
-          // We'll parse tokens and build JS expression using bitwise operators.
-          // Replace AND, OR, XOR, NOT with JS operators & | ^ ~ and shifts << >>
+
+          // 3. Replace text operators with bitwise JS operators
           let s = input.replace(/\bAND\b/gi, '&');
           s = s.replace(/\bOR\b/gi, '|');
           s = s.replace(/\bXOR\b/gi, '^');
           s = s.replace(/\bNOT\b/gi, '~');
-          s = s.replace(/<<+/g, '<<');
-          s = s.replace(/>>+/g, '>>');
-          // Convert BIN(xb) or 0b prefix? Not necessary here. We'll accept hex letters as part of number (like 0xFF)
-          // If user enters HEX mode, we will convert displayed ans accordingly (see below).
-          // Evaluate using Function
+
+          // 4. Evaluate using Function (safer sandbox approach)
           const fn = new Function('return (' + s + ')');
           let res = fn();
+
           if (!Number.isFinite(res) || Number.isNaN(res)) throw new Error('Math Error');
-          // Ensure integer result
-          res = Math.trunc(res);
+          res = Math.trunc(res); // Ensure integer result for programmer logic
+
           return res;
         } catch (e) {
           throw new Error('Error');
@@ -442,10 +436,7 @@
         const op = btn.dataset.op;
 
         if (value !== undefined) {
-          // Append number or hex letter (in programmer)
-          // prevent multiple dots in a single number
           if (value === '.') {
-            // check last token doesn't already have a dot
             const tokens = expr.split(/[\s+\-*/%^()]+/).filter(Boolean);
             const last = tokens[tokens.length - 1] || '';
             if (last.includes('.')) return;
@@ -469,8 +460,15 @@
             render();
             break;
           case 'toggle_sign':
-            // apply to last number: naive approach - find last number and multiply by -1
-            expr = expr.replace(/(-?\d+(\.\d+)?)(?!.*(-?\d+(\.\d+)?))/,'(' + '(-1*' + '$1' + '))');
+            // Naive approach for sign toggle, can be improved for scientific mode.
+            // expr = expr.replace(/(-?\d+(\.\d+)?)(?!.*(-?\d+(\.\d+)?))/,'(' + '(-1*' + '$1' + '))');
+            // A safer method for Basic mode: if result is displayed, toggle sign of result.
+            // If text in input, toggle sign of last number.
+            if (expr === '') {
+                ans = ans !== null ? ans * -1 : 0;
+            } else {
+                expr = expr.replace(/(\d+(\.\d+)?)(?!.*[\d\.])/, (match) => `(-${match})`);
+            }
             render();
             break;
           case 'pi':
@@ -480,7 +478,7 @@
             break;
           case 'x2':
           case 'x3':
-            expr += (op === 'x2' ? ' x2' : ' x3');
+            expr += (op === 'x2' ? 'x²' : 'x³');
             render();
             break;
           case 'sin':
@@ -523,12 +521,12 @@
             render();
             break;
           case 'HEX':
-            programmerBase = 'HEX'; render(); break;
           case 'BIN':
-            programmerBase = 'BIN'; render(); break;
           case 'DEC':
-            programmerBase = 'DEC'; render(); break;
-          // bitwise
+            programmerBase = op;
+            // Re-render display according to base change
+            if (mode === 'programmer') render();
+            break;
           case 'AND':
           case 'OR':
           case 'XOR':
@@ -557,7 +555,6 @@
             render();
             break;
           default:
-            // fallback append
             expr += op;
             render();
         }
@@ -582,9 +579,7 @@
         } else {
           res = safeEval(expr, mode);
         }
-        // record
         pushHistory({ expr: expr, result: res, mode });
-        // clear expr or set to result? common calculators set result as new expr
         expr = String(res);
         return res;
       }
@@ -592,7 +587,6 @@
       // Attach event listeners to keypad buttons
       document.querySelectorAll('.keypad .btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
-          // get visible keypad mode - if button is invisible due to display none it won't be clicked
           onBtnClick(btn);
         });
       });
@@ -612,7 +606,7 @@
       document.getElementById('clearHistory').addEventListener('click', () => { history = []; renderHistory(); });
       document.getElementById('exportHistory').addEventListener('click', () => {
         if (!history.length) return alert('No history to export');
-        const text = history.map(h => `${h.mode.toUpperCase()}: ${h.expr} = ${h.result}`).join('\\n');
+        const text = history.map(h => `${h.mode.toUpperCase()}: ${h.expr} = ${h.result}`).join('\n');
         const blob = new Blob([text], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -623,8 +617,13 @@
 
       // Keyboard support
       document.addEventListener('keydown', (e) => {
-        // don't interfere if focus is on input-like elements (none here), still safe
         const key = e.key;
+        const targetElement = e.target.tagName; // Prevents interference if user is typing elsewhere
+
+        if (targetElement === 'INPUT' || targetElement === 'TEXTAREA') {
+            return;
+        }
+
         if ((key >= '0' && key <= '9') || key === '.') {
           expr += key; render(); return;
         }
@@ -636,12 +635,14 @@
           return;
         }
         if (key === 'Backspace') {
+          e.preventDefault(); // Prevent navigating back in browser history
           expr = expr.slice(0, -1); render(); return;
         }
         if (key === 'Escape') {
+          e.preventDefault(); // Prevent browser close/exit
           expr = ''; ans = null; render(); return;
         }
-        // switch tabs by 1/2/3
+        // switch tabs by 1/2/3 (using number keys on keyboard)
         if (key === '1') { setMode('basic'); return; }
         if (key === '2') { setMode('scientific'); return; }
         if (key === '3') { setMode('programmer'); return; }

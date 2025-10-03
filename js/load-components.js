@@ -9,7 +9,6 @@ async function loadDynamicContent() {
             const headerHtml = await response.text();
             headerPlaceholder.innerHTML = headerHtml;
             // Re-initialize scripts after content insertion (Theme Toggle, Navigation)
-            // Call initialization functions for elements inside header here.
             setupNavigationListeners();
         } catch (error) {
             console.error('Failed to load header content:', error);
@@ -41,8 +40,17 @@ function setupNavigationListeners() {
     // Toggle logic for hamburger menu (mobile) and all tools button (desktop)
     const toggleMenu = (event) => {
         event.stopPropagation();
-        allToolsMenu.classList.toggle('show');
-        document.body.classList.toggle('menu-open');
+        const isDesktopView = window.innerWidth > 900;
+
+        if (isDesktopView) {
+            // Desktop logic (dropdown toggle)
+            allToolsMenu.classList.toggle('show');
+            allToolsBtn.classList.toggle('open');
+        } else {
+            // Mobile logic (side drawer toggle)
+            allToolsMenu.classList.toggle('show');
+            document.body.classList.toggle('menu-open');
+        }
     };
 
     if (hamburgerBtn) {
@@ -52,7 +60,7 @@ function setupNavigationListeners() {
         allToolsBtn.addEventListener('click', toggleMenu);
     }
 
-    // Close menu when clicking outside (on desktop view only)
+    // Close menu when clicking outside
     document.addEventListener('click', (event) => {
         const isDesktopView = window.innerWidth > 900;
         const clickedOutsideMenu = !allToolsMenu.contains(event.target) && !event.target.closest('.main-nav');
@@ -60,7 +68,7 @@ function setupNavigationListeners() {
         if (isDesktopView) {
             if (allToolsMenu.classList.contains('show') && clickedOutsideMenu) {
                 allToolsMenu.classList.remove('show');
-                allToolsBtn.classList.remove('open'); // Also close the desktop button state
+                allToolsBtn.classList.remove('open');
             }
         } else {
             if (allToolsMenu.classList.contains('show') && clickedOutsideMenu && event.target !== hamburgerBtn) {
@@ -69,6 +77,21 @@ function setupNavigationListeners() {
             }
         }
     });
+
+    // Handle initial state based on screen size (e.g., ensure correct display on resize)
+    function checkScreenSize() {
+        if (window.innerWidth > 900) {
+            // On desktop, ensure mobile menu state is cleared on resize
+            document.body.classList.remove('menu-open');
+        } else {
+            // On mobile, if menu is open, apply body overflow hidden
+            if (allToolsMenu.classList.contains('show')) {
+                document.body.classList.add('menu-open');
+            }
+        }
+    }
+    window.addEventListener('resize', checkScreenSize);
+    checkScreenSize(); // Initial check on load
 }
 
 function setupThemeToggle() {
@@ -113,5 +136,3 @@ function setupThemeToggle() {
 
 // Ensure loadDynamicContent runs after the page has finished loading
 document.addEventListener('DOMContentLoaded', loadDynamicContent);
-
-// END OF FILE: js/load-components.js

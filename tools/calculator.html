@@ -1,361 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- SEO OPTIMIZATION -->
-    <title>Advanced Calculator | ToolNine</title>
-    <meta name="description" content="A user-friendly, feature-rich calculator for basic, scientific, and specialized calculations. Fast, in-browser processing." />
-    <!-- END SEO OPTIMIZATION -->
-    <link rel="stylesheet" href="../style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
-    <style>
-        /* Tool-specific styles based on the common layout */
-        .tool-page {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding-top: 2rem;
-            flex-grow: 1;
-            width: 100%;
-        }
-        .tool-page .tool-card {
-            max-width: 450px; /* Smaller card size for calculator layout */
-            padding: 2rem;
-            width: 100%;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
-            background: var(--card);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-        }
-        .tool-header { text-align: center; margin-bottom: 1.5rem; }
-        .tool-header h1 { font-size: 2rem; color: var(--accent); font-weight: 700; }
-        .tool-header .tool-desc { font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.5; }
-        [data-theme="dark"] .tool-header .tool-desc { color: #94a3b8; }
-
-        /* --- Custom UI for Calculator --- */
-        .calculator-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
-        #calculatorDisplay {
-            grid-column: span 4;
-            background: var(--bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            font-size: 2em;
-            text-align: right;
-            color: var(--text);
-            min-height: 80px;
-            overflow: hidden;
-            word-wrap: break-word;
-        }
-        .calculator-btn {
-            background-color: var(--card);
-            color: var(--text);
-            border: 1px solid var(--border-color);
-            padding: 1.2rem;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: background-color 0.2s;
-        }
-        .calculator-btn:hover { background-color: #f1f5f9; }
-        [data-theme="dark"] .calculator-btn { background-color: #334155; }
-        [data-theme="dark"] .calculator-btn:hover { background-color: #475569; }
-        
-        /* Specific button styles */
-        .btn-clear { background-color: #fef2f2; color: #ef4444; } /* Red clear button */
-        .btn-clear:hover { background-color: #fee2e2; }
-        [data-theme="dark"] .btn-clear { background-color: #440000; color: #fca5a5; }
-        [data-theme="dark"] .btn-clear:hover { background-color: #550000; }
-        
-        .btn-operator { background-color: var(--accent); color: white; } /* Blue operator buttons */
-        .btn-operator:hover { background-color: #1e40af; }
-        [data-theme="dark"] .btn-operator { background-color: #60a5fa; color: white; }
-        [data-theme="dark"] .btn-operator:hover { background-color: #2563eb; }
-
-        .btn-equal { grid-column: span 2; } /* Make equal button span two columns */
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Calculator | ToolNine</title>
+  <meta name="description" content="Advanced calculator with scientific, memory, and history features. Fast and user-friendly.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; margin: 0; background: #f8fafc; color: #111; }
+    .tool-page { display: flex; flex-direction: column; align-items: center; padding: 2rem; }
+    .tool-card {
+      max-width: 600px;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      width: 100%;
+    }
+    .tool-header { text-align: center; margin-bottom: 1.5rem; }
+    .tool-header h1 { font-size: 2rem; color: #2563eb; font-weight: 700; }
+    #calculatorDisplay {
+      grid-column: span 6;
+      background: #f1f5f9;
+      padding: 20px;
+      font-size: 1.8rem;
+      border-radius: 10px;
+      text-align: right;
+      min-height: 60px;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+    }
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+    .calculator-btn {
+      padding: 1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #e2e8f0;
+      transition: 0.2s;
+    }
+    .calculator-btn:hover { background: #cbd5e1; }
+    .btn-operator { background: #2563eb; color: white; }
+    .btn-operator:hover { background: #1d4ed8; }
+    .btn-clear { background: #ef4444; color: white; }
+    .btn-clear:hover { background: #dc2626; }
+    .btn-equal { grid-column: span 2; background: #16a34a; color: white; }
+    .btn-equal:hover { background: #15803d; }
+    .history {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: #f8fafc;
+      border-radius: 12px;
+      max-height: 150px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+    }
+    .history h3 { margin: 0 0 0.5rem; font-size: 1rem; }
+    .history-entry { padding: 2px 0; border-bottom: 1px dashed #cbd5e1; }
+  </style>
 </head>
 <body>
+  <main class="tool-page">
+    <section class="tool-card">
+      <header class="tool-header">
+        <h1>🧮 Advanced Calculator</h1>
+        <p>A fast and powerful calculator with scientific, memory, and history support.</p>
+      </header>
 
-    <header class="main-header">
-        <a href="../index.html" class="logo">ToolNine</a>
-        <button class="hamburger-btn" id="hamburgerBtn">☰</button>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="../index.html#category-image">Image Tools</a></li>
-                <li><a href="../index.html#category-text">Text Tools</a></li>
-                <li><a href="../blog.html">Blog</a></li>
-            </ul>
-            <button class="search-btn" id="searchBtn" aria-label="Search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
-            <button class="all-tools-btn" id="allToolsBtn">All Tools <span class="arrow">▼</span></button>
-            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
-        </nav>
-    </header>
+      <div id="calculatorDisplay">0</div>
+      <div class="calculator-grid">
+        <!-- Row 1 -->
+        <button class="calculator-btn btn-clear">C</button>
+        <button class="calculator-btn btn-operator" data-op="backspace">⌫</button>
+        <button class="calculator-btn btn-operator" data-op="(">(</button>
+        <button class="calculator-btn btn-operator" data-op=")">)</button>
+        <button class="calculator-btn btn-operator" data-op="%">%</button>
+        <button class="calculator-btn btn-operator" data-op="/">÷</button>
 
-    <div class="mega-menu" id="allToolsMenu">
-        <!-- Mega menu content (full menu) -->
-        <div class="mega-menu-grid">
-            <div class="mega-menu-category">
-                <h3>Image Tools</h3>
-                <ul>
-                    <li><a href="image-to-pdf.html"><span class="tool-icon">📄</span> Image to PDF</a></li>
-                    <li><a href="image-compressor.html"><span class="tool-icon">🗜️</span> Image Compressor</a></li>
-                    <li><a href="image-resizer.html"><span class="tool-icon">📏</span> Image Resizer</a></li>
-                    <li><a href="convert-png-jpg.html"><span class="tool-icon">🖼️</span> PNG <> JPG</a></li>
-                    <li><a href="steganography.html"><span class="tool-icon">🕵️</span> Steganography</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Text & Writing</h3>
-                <ul>
-                    <li><a href="text-diff.html"><span class="tool-icon">🔍</span> Text Diff</a></li>
-                    <li><a href="text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
-                    <li><a href="text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
-                    <li><a href="word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
-                    <li><a href="line-operations.html"><span class="tool-icon">🔠</span> Line Operations</a></li>
-                    <li><a href="text-cleaner.html"><span class="tool-icon">🧹</span> Text Cleaner</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Converters</h3>
-                <ul>
-                    <li><a href="unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
-                    <li><a href="document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Encoder/Decoder</h3>
-                <ul>
-                    <li><a href="url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
-                    <li><a href="hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
-                    <li><a href="password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
-                    <li><a href="qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
-                </ul>
-            </div>
-             <div class="mega-menu-category">
-                <h3>AI Tools</h3>
-                <ul>
-                    <li><a href="image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
-                    <li><a href="json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
-                    <li><a href="html-viewer.html"><span class="tool-icon">💻</span> HTML Viewer</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+        <!-- Row 2 -->
+        <button class="calculator-btn btn-operator" data-op="sin">sin</button>
+        <button class="calculator-btn btn-operator" data-op="cos">cos</button>
+        <button class="calculator-btn btn-operator" data-op="tan">tan</button>
+        <button class="calculator-btn btn-operator" data-op="sqrt">√</button>
+        <button class="calculator-btn btn-operator" data-op="^">xʸ</button>
+        <button class="calculator-btn btn-operator" data-op="*">×</button>
 
-    <main class="content tool-page">
-        <section class="tool-card">
-            <header class="tool-header">
-                <h1>🧮 Calculator</h1>
-                <p class="tool-desc">A fast and user-friendly calculator for all your everyday calculations.</p>
-            </header>
+        <!-- Row 3 -->
+        <button class="calculator-btn" data-value="7">7</button>
+        <button class="calculator-btn" data-value="8">8</button>
+        <button class="calculator-btn" data-value="9">9</button>
+        <button class="calculator-btn btn-operator" data-op="log">log</button>
+        <button class="calculator-btn btn-operator" data-op="ln">ln</button>
+        <button class="calculator-btn btn-operator" data-op="-">−</button>
 
-            <div class="calculator-layout">
-                <div id="calculatorDisplay">0</div>
-                <div class="calculator-grid">
-                    <button class="calculator-btn btn-clear">C</button>
-                    <button class="calculator-btn btn-operator" data-op="/">÷</button>
-                    <button class="calculator-btn btn-operator" data-op="*">×</button>
-                    <button class="calculator-btn btn-operator" data-op="backspace">⌫</button>
+        <!-- Row 4 -->
+        <button class="calculator-btn" data-value="4">4</button>
+        <button class="calculator-btn" data-value="5">5</button>
+        <button class="calculator-btn" data-value="6">6</button>
+        <button class="calculator-btn btn-operator" data-op="x2">x²</button>
+        <button class="calculator-btn btn-operator" data-op="x3">x³</button>
+        <button class="calculator-btn btn-operator" data-op="+">+</button>
 
-                    <button class="calculator-btn" data-value="7">7</button>
-                    <button class="calculator-btn" data-value="8">8</button>
-                    <button class="calculator-btn" data-value="9">9</button>
-                    <button class="calculator-btn btn-operator" data-op="-">−</button>
+        <!-- Row 5 -->
+        <button class="calculator-btn" data-value="1">1</button>
+        <button class="calculator-btn" data-value="2">2</button>
+        <button class="calculator-btn" data-value="3">3</button>
+        <button class="calculator-btn btn-operator" data-op="pi">π</button>
+        <button class="calculator-btn btn-operator" data-op="e">e</button>
+        <button class="calculator-btn btn-equal" data-op="=">=</button>
 
-                    <button class="calculator-btn" data-value="4">4</button>
-                    <button class="calculator-btn" data-value="5">5</button>
-                    <button class="calculator-btn" data-value="6">6</button>
-                    <button class="calculator-btn btn-operator" data-op="+">+</button>
+        <!-- Row 6 -->
+        <button class="calculator-btn" data-value="0">0</button>
+        <button class="calculator-btn" data-value=".">.</button>
+        <button class="calculator-btn btn-operator" data-op="toggle_sign">±</button>
+        <button class="calculator-btn btn-operator" data-op="MC">MC</button>
+        <button class="calculator-btn btn-operator" data-op="MR">MR</button>
+        <button class="calculator-btn btn-operator" data-op="M+">M+</button>
+      </div>
 
-                    <button class="calculator-btn" data-value="1">1</button>
-                    <button class="calculator-btn" data-value="2">2</button>
-                    <button class="calculator-btn" data-value="3">3</button>
-                    <button class="calculator-btn btn-operator" data-op="toggle_sign">±</button>
+      <div class="history" id="history">
+        <h3>History</h3>
+        <div id="historyList"></div>
+      </div>
+    </section>
+  </main>
 
-                    <button class="calculator-btn" data-value="0">0</button>
-                    <button class="calculator-btn" data-value=".">.</button>
-                    <button class="calculator-btn btn-equal" data-op="=">=</button>
-                </div>
-            </div>
-        </section>
+  <script>
+    const display = document.getElementById("calculatorDisplay");
+    const historyList = document.getElementById("historyList");
+    let currentInput = "0";
+    let memoryValue = 0;
 
-        <section class="how-to">
-            <h3>How to Use</h3>
-            <ol>
-                <li>Enter numbers using the number buttons or your keyboard.</li>
-                <li>Use the operator buttons (÷, ×, −, +) for calculations.</li>
-                <li>Press "=" to calculate the final result.</li>
-                <li>Use "C" to clear the entire calculation.</li>
-            </ol>
-        </section>
-    </main>
+    function updateDisplay() {
+      display.textContent = currentInput;
+    }
 
-    <!-- PWA Install Button -->
-    <div class="pwa-install-container">
-        <button class="btn" id="installButton" style="display:none;">Install App</button>
-    </div>
+    function addHistory(entry) {
+      const div = document.createElement("div");
+      div.className = "history-entry";
+      div.textContent = entry;
+      historyList.prepend(div);
+    }
 
-    <footer class="main-footer">
-        <ul class="footer-links">
-            <li><a href="../about.html">About Us</a></li>
-            <li><a href="../contact.html">Contact</a></li>
-            <li><a href="../blog.html">Blog</a></li>
-            <li><a href="../privacy.html">Privacy Policy</a></li>
-            <li><a href="../disclaimer.html">Disclaimer</a></li>
-        </ul>
-        <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
-    </footer>
+    function resetCalculator() {
+      currentInput = "0";
+      updateDisplay();
+    }
 
-    <!-- Scripts -->
-    <script src="../theme.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Common Navigation and PWA Logic (keep as before) ---
-            const hamburgerBtn = document.getElementById('hamburgerBtn');
-            const allToolsMenu = document.getElementById('allToolsMenu');
-            const themeToggle = document.getElementById('theme-toggle');
+    function handleNumber(num) {
+      if (currentInput === "0") currentInput = num;
+      else currentInput += num;
+      updateDisplay();
+    }
 
-            // --- Navigation Logic ---
-            hamburgerBtn.addEventListener('click', () => { allToolsMenu.classList.toggle('show'); document.body.classList.toggle('menu-open'); });
-            document.addEventListener('click', (event) => {
-                if (window.innerWidth > 900) {
-                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && !event.target.closest('.main-nav')) { allToolsMenu.classList.remove('show'); }
-                } else {
-                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && event.target !== hamburgerBtn) { allToolsMenu.classList.remove('show'); document.body.classList.remove('menu-open'); }
-                }
-            });
+    function handleOperator(op) {
+      if (op === "backspace") {
+        currentInput = currentInput.slice(0, -1) || "0";
+      } else if (op === "toggle_sign") {
+        currentInput = (parseFloat(currentInput) * -1).toString();
+      } else if (op === "pi") {
+        currentInput += Math.PI.toString();
+      } else if (op === "e") {
+        currentInput += Math.E.toString();
+      } else if (op === "sqrt") {
+        currentInput = Math.sqrt(parseFloat(currentInput)).toString();
+      } else if (op === "x2") {
+        currentInput = Math.pow(parseFloat(currentInput), 2).toString();
+      } else if (op === "x3") {
+        currentInput = Math.pow(parseFloat(currentInput), 3).toString();
+      } else if (op === "sin") {
+        currentInput = Math.sin(parseFloat(currentInput)).toString();
+      } else if (op === "cos") {
+        currentInput = Math.cos(parseFloat(currentInput)).toString();
+      } else if (op === "tan") {
+        currentInput = Math.tan(parseFloat(currentInput)).toString();
+      } else if (op === "log") {
+        currentInput = Math.log10(parseFloat(currentInput)).toString();
+      } else if (op === "ln") {
+        currentInput = Math.log(parseFloat(currentInput)).toString();
+      } else if (op === "MC") {
+        memoryValue = 0;
+      } else if (op === "MR") {
+        currentInput += memoryValue.toString();
+      } else if (op === "M+") {
+        memoryValue += parseFloat(currentInput) || 0;
+      } else {
+        currentInput += " " + op + " ";
+      }
+      updateDisplay();
+    }
 
-            // --- Calculator Tool Specific Logic ---
-            const display = document.getElementById('calculatorDisplay');
-            let currentInput = '0';
-            let storedValue = null;
-            let currentOperator = null;
-            let waitingForNewValue = false;
+    function handleEqual() {
+      try {
+        let result = eval(
+          currentInput.replace(/÷/g, "/").replace(/×/g, "*").replace(/\^/g, "**")
+        );
+        addHistory(currentInput + " = " + result);
+        currentInput = result.toString();
+        updateDisplay();
+      } catch {
+        currentInput = "Error";
+        updateDisplay();
+      }
+    }
 
-            function updateDisplay() {
-                display.textContent = currentInput;
-            }
+    document.querySelectorAll(".calculator-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const value = btn.dataset.value;
+        const op = btn.dataset.op;
+        if (btn.classList.contains("btn-clear")) resetCalculator();
+        else if (btn.classList.contains("btn-equal")) handleEqual();
+        else if (value) handleNumber(value);
+        else if (op) handleOperator(op);
+      });
+    });
 
-            function resetCalculator() {
-                currentInput = '0';
-                storedValue = null;
-                currentOperator = null;
-                waitingForNewValue = false;
-                updateDisplay();
-            }
-
-            function handleNumber(number) {
-                if (waitingForNewValue) {
-                    currentInput = number;
-                    waitingForNewValue = false;
-                } else {
-                    if (currentInput === '0') {
-                        currentInput = number;
-                    } else {
-                        currentInput += number;
-                    }
-                }
-                updateDisplay();
-            }
-
-            function handleOperator(op) {
-                const inputValue = parseFloat(currentInput);
-
-                if (op === 'toggle_sign') {
-                    currentInput = (parseFloat(currentInput) * -1).toString();
-                    updateDisplay();
-                    return;
-                }
-                
-                if (op === 'backspace') {
-                    currentInput = currentInput.slice(0, -1);
-                    if (currentInput === '') currentInput = '0';
-                    updateDisplay();
-                    return;
-                }
-
-                if (storedValue === null) {
-                    storedValue = inputValue;
-                } else if (currentOperator) {
-                    const result = calculate(storedValue, inputValue, currentOperator);
-                    currentInput = result.toString();
-                    storedValue = result;
-                    updateDisplay();
-                }
-
-                currentOperator = op;
-                waitingForNewValue = true;
-            }
-
-            function handleEqual() {
-                const inputValue = parseFloat(currentInput);
-                if (currentOperator) {
-                    const result = calculate(storedValue, inputValue, currentOperator);
-                    currentInput = result.toString();
-                    storedValue = result;
-                    currentOperator = null;
-                    waitingForNewValue = true;
-                    updateDisplay();
-                }
-            }
-
-            function calculate(num1, num2, operator) {
-                switch (operator) {
-                    case '+': return num1 + num2;
-                    case '-': return num1 - num2;
-                    case '*': return num1 * num2;
-                    case '/': return num1 / num2;
-                    default: return num2;
-                }
-            }
-
-            // --- Event Listeners ---
-            document.querySelectorAll('.calculator-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    const value = button.dataset.value;
-                    const op = button.dataset.op;
-
-                    if (value) {
-                        handleNumber(value);
-                    } else if (op) {
-                        handleOperator(op);
-                    } else if (button.classList.contains('btn-clear')) {
-                        resetCalculator();
-                    } else if (button.classList.contains('btn-equal')) {
-                        handleEqual();
-                    }
-                });
-            });
-
-            // Keyboard support
-            document.addEventListener('keydown', (event) => {
-                if (event.key >= '0' && event.key <= '9') {
-                    handleNumber(event.key);
-                } else if (event.key === '.') {
-                    handleNumber('.');
-                } else if (event.key === '+' || event.key === '-' || event.key === '*' || event.key === '/') {
-                    handleOperator(event.key);
-                } else if (event.key === 'Enter' || event.key === '=') {
-                    handleEqual();
-                } else if (event.key === 'Backspace') {
-                    handleOperator('backspace');
-                } else if (event.key === 'Escape') {
-                    resetCalculator();
-                }
-            });
-
-            // Initial setup on load
-            resetCalculator();
-        });
-    </script>
+    updateDisplay();
+  </script>
 </body>
 </html>

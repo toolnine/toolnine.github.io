@@ -4,224 +4,270 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Advanced Calculator | ToolNine</title>
-  <meta name="description" content="Advanced calculator with scientific, memory, and history features. Fast and user-friendly.">
+  <meta name="description" content="Advanced scientific calculator with memory and history. All in-browser.">
+  <link rel="stylesheet" href="../style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; margin: 0; background: #f8fafc; color: #111; }
-    .tool-page { display: flex; flex-direction: column; align-items: center; padding: 2rem; }
-    .tool-card {
-      max-width: 600px;
-      padding: 1.5rem;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-      width: 100%;
-    }
-    .tool-header { text-align: center; margin-bottom: 1.5rem; }
-    .tool-header h1 { font-size: 2rem; color: #2563eb; font-weight: 700; }
+    /* Calculator Specific Styles */
+    .calculator-layout { margin-top: 1rem; }
     #calculatorDisplay {
-      grid-column: span 6;
-      background: #f1f5f9;
-      padding: 20px;
-      font-size: 1.8rem;
-      border-radius: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 1.6rem;
       text-align: right;
-      min-height: 60px;
+      color: var(--text);
+      min-height: 70px;
       margin-bottom: 1rem;
       overflow-x: auto;
     }
     .calculator-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
+      gap: 8px;
     }
     .calculator-btn {
       padding: 1rem;
-      border: none;
       border-radius: 8px;
-      font-size: 1rem;
+      border: 1px solid var(--border-color);
+      background: var(--card);
+      color: var(--text);
       font-weight: 600;
       cursor: pointer;
-      background: #e2e8f0;
       transition: 0.2s;
     }
-    .calculator-btn:hover { background: #cbd5e1; }
-    .btn-operator { background: #2563eb; color: white; }
-    .btn-operator:hover { background: #1d4ed8; }
-    .btn-clear { background: #ef4444; color: white; }
+    .calculator-btn:hover { background: #f1f5f9; }
+    [data-theme="dark"] .calculator-btn { background: #334155; }
+    [data-theme="dark"] .calculator-btn:hover { background: #475569; }
+    .btn-clear { background: #ef4444; color: #fff; }
     .btn-clear:hover { background: #dc2626; }
+    .btn-operator { background: var(--accent); color: #fff; }
+    .btn-operator:hover { background: #1e40af; }
     .btn-equal { grid-column: span 2; background: #16a34a; color: white; }
     .btn-equal:hover { background: #15803d; }
     .history {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      background: #f8fafc;
-      border-radius: 12px;
+      margin-top: 1rem;
+      padding: 0.8rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg);
       max-height: 150px;
       overflow-y: auto;
       font-size: 0.9rem;
     }
-    .history h3 { margin: 0 0 0.5rem; font-size: 1rem; }
-    .history-entry { padding: 2px 0; border-bottom: 1px dashed #cbd5e1; }
+    .history-entry { border-bottom: 1px dashed var(--border-color); padding: 2px 0; }
   </style>
 </head>
 <body>
-  <main class="tool-page">
+
+  <!-- ====== HEADER (same as your site) ====== -->
+  <header class="main-header">
+    <a href="../index.html" class="logo">ToolNine</a>
+    <button class="hamburger-btn" id="hamburgerBtn">☰</button>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="../index.html#category-image">Image Tools</a></li>
+        <li><a href="../index.html#category-text">Text Tools</a></li>
+        <li><a href="../blog.html">Blog</a></li>
+      </ul>
+      <button class="search-btn" id="searchBtn" aria-label="Search">🔍</button>
+      <button class="all-tools-btn" id="allToolsBtn">All Tools <span class="arrow">▼</span></button>
+      <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
+    </nav>
+  </header>
+
+  <!-- ====== MEGA MENU (same as your site) ====== -->
+  <div class="mega-menu" id="allToolsMenu">
+    <div class="mega-menu-grid">
+      <!-- same menu categories as before -->
+      <div class="mega-menu-category">
+        <h3>Image Tools</h3>
+        <ul>
+          <li><a href="image-to-pdf.html">📄 Image to PDF</a></li>
+          <li><a href="image-compressor.html">🗜️ Image Compressor</a></li>
+        </ul>
+      </div>
+      <div class="mega-menu-category">
+        <h3>Text & Writing</h3>
+        <ul>
+          <li><a href="word-counter.html">✏️ Word Counter</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== MAIN CALCULATOR ====== -->
+  <main class="content tool-page">
     <section class="tool-card">
       <header class="tool-header">
         <h1>🧮 Advanced Calculator</h1>
-        <p>A fast and powerful calculator with scientific, memory, and history support.</p>
+        <p class="tool-desc">A complete calculator with scientific, memory, and history features.</p>
       </header>
 
-      <div id="calculatorDisplay">0</div>
-      <div class="calculator-grid">
-        <!-- Row 1 -->
-        <button class="calculator-btn btn-clear">C</button>
-        <button class="calculator-btn btn-operator" data-op="backspace">⌫</button>
-        <button class="calculator-btn btn-operator" data-op="(">(</button>
-        <button class="calculator-btn btn-operator" data-op=")">)</button>
-        <button class="calculator-btn btn-operator" data-op="%">%</button>
-        <button class="calculator-btn btn-operator" data-op="/">÷</button>
+      <div class="calculator-layout">
+        <div id="calculatorDisplay">0</div>
+        <div class="calculator-grid">
+          <!-- Row 1 -->
+          <button class="calculator-btn btn-clear">C</button>
+          <button class="calculator-btn btn-operator" data-op="backspace">⌫</button>
+          <button class="calculator-btn btn-operator" data-op="(">(</button>
+          <button class="calculator-btn btn-operator" data-op=")">)</button>
+          <button class="calculator-btn btn-operator" data-op="%">%</button>
+          <button class="calculator-btn btn-operator" data-op="/">÷</button>
 
-        <!-- Row 2 -->
-        <button class="calculator-btn btn-operator" data-op="sin">sin</button>
-        <button class="calculator-btn btn-operator" data-op="cos">cos</button>
-        <button class="calculator-btn btn-operator" data-op="tan">tan</button>
-        <button class="calculator-btn btn-operator" data-op="sqrt">√</button>
-        <button class="calculator-btn btn-operator" data-op="^">xʸ</button>
-        <button class="calculator-btn btn-operator" data-op="*">×</button>
+          <!-- Row 2 -->
+          <button class="calculator-btn btn-operator" data-op="sin">sin</button>
+          <button class="calculator-btn btn-operator" data-op="cos">cos</button>
+          <button class="calculator-btn btn-operator" data-op="tan">tan</button>
+          <button class="calculator-btn btn-operator" data-op="sqrt">√</button>
+          <button class="calculator-btn btn-operator" data-op="^">xʸ</button>
+          <button class="calculator-btn btn-operator" data-op="*">×</button>
 
-        <!-- Row 3 -->
-        <button class="calculator-btn" data-value="7">7</button>
-        <button class="calculator-btn" data-value="8">8</button>
-        <button class="calculator-btn" data-value="9">9</button>
-        <button class="calculator-btn btn-operator" data-op="log">log</button>
-        <button class="calculator-btn btn-operator" data-op="ln">ln</button>
-        <button class="calculator-btn btn-operator" data-op="-">−</button>
+          <!-- Row 3 -->
+          <button class="calculator-btn" data-value="7">7</button>
+          <button class="calculator-btn" data-value="8">8</button>
+          <button class="calculator-btn" data-value="9">9</button>
+          <button class="calculator-btn btn-operator" data-op="log">log</button>
+          <button class="calculator-btn btn-operator" data-op="ln">ln</button>
+          <button class="calculator-btn btn-operator" data-op="-">−</button>
 
-        <!-- Row 4 -->
-        <button class="calculator-btn" data-value="4">4</button>
-        <button class="calculator-btn" data-value="5">5</button>
-        <button class="calculator-btn" data-value="6">6</button>
-        <button class="calculator-btn btn-operator" data-op="x2">x²</button>
-        <button class="calculator-btn btn-operator" data-op="x3">x³</button>
-        <button class="calculator-btn btn-operator" data-op="+">+</button>
+          <!-- Row 4 -->
+          <button class="calculator-btn" data-value="4">4</button>
+          <button class="calculator-btn" data-value="5">5</button>
+          <button class="calculator-btn" data-value="6">6</button>
+          <button class="calculator-btn btn-operator" data-op="x2">x²</button>
+          <button class="calculator-btn btn-operator" data-op="x3">x³</button>
+          <button class="calculator-btn btn-operator" data-op="+">+</button>
 
-        <!-- Row 5 -->
-        <button class="calculator-btn" data-value="1">1</button>
-        <button class="calculator-btn" data-value="2">2</button>
-        <button class="calculator-btn" data-value="3">3</button>
-        <button class="calculator-btn btn-operator" data-op="pi">π</button>
-        <button class="calculator-btn btn-operator" data-op="e">e</button>
-        <button class="calculator-btn btn-equal" data-op="=">=</button>
+          <!-- Row 5 -->
+          <button class="calculator-btn" data-value="1">1</button>
+          <button class="calculator-btn" data-value="2">2</button>
+          <button class="calculator-btn" data-value="3">3</button>
+          <button class="calculator-btn btn-operator" data-op="pi">π</button>
+          <button class="calculator-btn btn-operator" data-op="e">e</button>
+          <button class="calculator-btn btn-equal" data-op="=">=</button>
 
-        <!-- Row 6 -->
-        <button class="calculator-btn" data-value="0">0</button>
-        <button class="calculator-btn" data-value=".">.</button>
-        <button class="calculator-btn btn-operator" data-op="toggle_sign">±</button>
-        <button class="calculator-btn btn-operator" data-op="MC">MC</button>
-        <button class="calculator-btn btn-operator" data-op="MR">MR</button>
-        <button class="calculator-btn btn-operator" data-op="M+">M+</button>
-      </div>
+          <!-- Row 6 -->
+          <button class="calculator-btn" data-value="0">0</button>
+          <button class="calculator-btn" data-value=".">.</button>
+          <button class="calculator-btn btn-operator" data-op="toggle_sign">±</button>
+          <button class="calculator-btn btn-operator" data-op="MC">MC</button>
+          <button class="calculator-btn btn-operator" data-op="MR">MR</button>
+          <button class="calculator-btn btn-operator" data-op="M+">M+</button>
+        </div>
 
-      <div class="history" id="history">
-        <h3>History</h3>
-        <div id="historyList"></div>
+        <div class="history">
+          <strong>History</strong>
+          <div id="historyList"></div>
+        </div>
       </div>
     </section>
   </main>
 
+  <!-- ====== PWA Install ====== -->
+  <div class="pwa-install-container">
+    <button class="btn" id="installButton" style="display:none;">Install App</button>
+  </div>
+
+  <!-- ====== FOOTER (same as your site) ====== -->
+  <footer class="main-footer">
+    <ul class="footer-links">
+      <li><a href="../about.html">About Us</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+      <li><a href="../privacy.html">Privacy Policy</a></li>
+    </ul>
+    <p>&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
+  </footer>
+
+  <!-- ====== SCRIPTS ====== -->
+  <script src="../theme.js"></script>
   <script>
-    const display = document.getElementById("calculatorDisplay");
-    const historyList = document.getElementById("historyList");
-    let currentInput = "0";
-    let memoryValue = 0;
+    document.addEventListener("DOMContentLoaded", () => {
+      const display = document.getElementById("calculatorDisplay");
+      const historyList = document.getElementById("historyList");
+      let currentInput = "0";
+      let memoryValue = 0;
 
-    function updateDisplay() {
-      display.textContent = currentInput;
-    }
-
-    function addHistory(entry) {
-      const div = document.createElement("div");
-      div.className = "history-entry";
-      div.textContent = entry;
-      historyList.prepend(div);
-    }
-
-    function resetCalculator() {
-      currentInput = "0";
-      updateDisplay();
-    }
-
-    function handleNumber(num) {
-      if (currentInput === "0") currentInput = num;
-      else currentInput += num;
-      updateDisplay();
-    }
-
-    function handleOperator(op) {
-      if (op === "backspace") {
-        currentInput = currentInput.slice(0, -1) || "0";
-      } else if (op === "toggle_sign") {
-        currentInput = (parseFloat(currentInput) * -1).toString();
-      } else if (op === "pi") {
-        currentInput += Math.PI.toString();
-      } else if (op === "e") {
-        currentInput += Math.E.toString();
-      } else if (op === "sqrt") {
-        currentInput = Math.sqrt(parseFloat(currentInput)).toString();
-      } else if (op === "x2") {
-        currentInput = Math.pow(parseFloat(currentInput), 2).toString();
-      } else if (op === "x3") {
-        currentInput = Math.pow(parseFloat(currentInput), 3).toString();
-      } else if (op === "sin") {
-        currentInput = Math.sin(parseFloat(currentInput)).toString();
-      } else if (op === "cos") {
-        currentInput = Math.cos(parseFloat(currentInput)).toString();
-      } else if (op === "tan") {
-        currentInput = Math.tan(parseFloat(currentInput)).toString();
-      } else if (op === "log") {
-        currentInput = Math.log10(parseFloat(currentInput)).toString();
-      } else if (op === "ln") {
-        currentInput = Math.log(parseFloat(currentInput)).toString();
-      } else if (op === "MC") {
-        memoryValue = 0;
-      } else if (op === "MR") {
-        currentInput += memoryValue.toString();
-      } else if (op === "M+") {
-        memoryValue += parseFloat(currentInput) || 0;
-      } else {
-        currentInput += " " + op + " ";
+      function updateDisplay() { display.textContent = currentInput; }
+      function addHistory(entry) {
+        const div = document.createElement("div");
+        div.className = "history-entry";
+        div.textContent = entry;
+        historyList.prepend(div);
       }
-      updateDisplay();
-    }
+      function resetCalculator() { currentInput = "0"; updateDisplay(); }
 
-    function handleEqual() {
-      try {
-        let result = eval(
-          currentInput.replace(/÷/g, "/").replace(/×/g, "*").replace(/\^/g, "**")
-        );
-        addHistory(currentInput + " = " + result);
-        currentInput = result.toString();
-        updateDisplay();
-      } catch {
-        currentInput = "Error";
+      function handleNumber(num) {
+        if (currentInput === "0") currentInput = num;
+        else currentInput += num;
         updateDisplay();
       }
-    }
 
-    document.querySelectorAll(".calculator-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const value = btn.dataset.value;
-        const op = btn.dataset.op;
-        if (btn.classList.contains("btn-clear")) resetCalculator();
-        else if (btn.classList.contains("btn-equal")) handleEqual();
-        else if (value) handleNumber(value);
-        else if (op) handleOperator(op);
+      function handleOperator(op) {
+        if (op === "backspace") {
+          currentInput = currentInput.slice(0, -1) || "0";
+        } else if (op === "toggle_sign") {
+          currentInput = (parseFloat(currentInput) * -1).toString();
+        } else if (op === "pi") {
+          currentInput += Math.PI.toString();
+        } else if (op === "e") {
+          currentInput += Math.E.toString();
+        } else if (op === "sqrt") {
+          currentInput = Math.sqrt(parseFloat(currentInput)).toString();
+        } else if (op === "x2") {
+          currentInput = Math.pow(parseFloat(currentInput), 2).toString();
+        } else if (op === "x3") {
+          currentInput = Math.pow(parseFloat(currentInput), 3).toString();
+        } else if (op === "sin") {
+          currentInput = Math.sin(parseFloat(currentInput)).toString();
+        } else if (op === "cos") {
+          currentInput = Math.cos(parseFloat(currentInput)).toString();
+        } else if (op === "tan") {
+          currentInput = Math.tan(parseFloat(currentInput)).toString();
+        } else if (op === "log") {
+          currentInput = Math.log10(parseFloat(currentInput)).toString();
+        } else if (op === "ln") {
+          currentInput = Math.log(parseFloat(currentInput)).toString();
+        } else if (op === "MC") {
+          memoryValue = 0;
+        } else if (op === "MR") {
+          currentInput += memoryValue.toString();
+        } else if (op === "M+") {
+          memoryValue += parseFloat(currentInput) || 0;
+        } else {
+          currentInput += " " + op + " ";
+        }
+        updateDisplay();
+      }
+
+      function handleEqual() {
+        try {
+          let result = eval(
+            currentInput.replace(/÷/g, "/").replace(/×/g, "*").replace(/\^/g, "**")
+          );
+          addHistory(currentInput + " = " + result);
+          currentInput = result.toString();
+          updateDisplay();
+        } catch {
+          currentInput = "Error";
+          updateDisplay();
+        }
+      }
+
+      document.querySelectorAll(".calculator-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const value = btn.dataset.value;
+          const op = btn.dataset.op;
+          if (btn.classList.contains("btn-clear")) resetCalculator();
+          else if (btn.classList.contains("btn-equal")) handleEqual();
+          else if (value) handleNumber(value);
+          else if (op) handleOperator(op);
+        });
       });
-    });
 
-    updateDisplay();
+      updateDisplay();
+    });
   </script>
 </body>
 </html>

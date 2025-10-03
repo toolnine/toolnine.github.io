@@ -10,6 +10,11 @@ async function loadDynamicContent() {
             headerPlaceholder.innerHTML = headerHtml;
             // Re-initialize scripts after content insertion (Theme Toggle, Navigation)
             setupNavigationListeners();
+            setupThemeToggle(); // Initialize theme toggle for new header content
+            // NEW: Initialize privacy gadget state
+            window.updatePrivacyGadget = setupPrivacyGadget();
+            window.updatePrivacyGadget('secure'); // Set default state on load
+
         } catch (error) {
             console.error('Failed to load header content:', error);
         }
@@ -26,9 +31,33 @@ async function loadDynamicContent() {
             console.error('Failed to load footer content:', error);
         }
     }
+}
 
-    // Call theme toggle initialization (assuming theme.js is loaded)
-    setupThemeToggle();
+// --- Privacy Gadget Management Function (NEW) ---
+function setupPrivacyGadget() {
+    const gadget = document.getElementById('privacyStatusGadget');
+    const statusText = document.getElementById('privacyStatusText');
+
+    if (!gadget || !statusText) {
+        // console.warn('Privacy Status Gadget elements not found in header.');
+        return () => {}; // Return a dummy function if elements don't exist
+    }
+
+    /**
+     * Updates the visual state of the privacy status gadget.
+     * @param {string} status - 'processing' or 'secure'.
+     */
+    return function updateGadget(status) {
+        if (status === 'processing') {
+            gadget.classList.remove('secure');
+            gadget.classList.add('processing');
+            statusText.textContent = 'Processing locally...';
+        } else if (status === 'secure') {
+            gadget.classList.remove('processing');
+            gadget.classList.add('secure');
+            statusText.textContent = 'Secure';
+        }
+    };
 }
 
 // --- Initialization functions for new injected content ---

@@ -55,7 +55,60 @@ body.menu-open {
     z-index: 1001;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
-.logo { font-size: 1.6rem; font-weight: bold; color: var(--accent); text-decoration: none; }
+.logo {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.3s ease; /* Smooth color transition */
+    /* NEW: Add animation */
+    animation: breathing-logo 3s ease-in-out infinite alternate;
+}
+
+/* NEW: Logo breathing animation */
+@keyframes breathing-logo {
+    0% {
+        transform: scale(1);
+        text-shadow: 0 0 5px rgba(37, 99, 235, 0.2); /* Subtle glow effect */
+        color: var(--accent);
+    }
+    50% {
+        transform: scale(1.03); /* Slight scale up */
+        text-shadow: 0 0 10px rgba(37, 99, 235, 0.6); /* Brighter glow */
+        color: #60a5fa; /* Lighter accent color at peak animation */
+    }
+    100% {
+        transform: scale(1);
+        text-shadow: 0 0 5px rgba(37, 99, 235, 0.2);
+        color: var(--accent);
+    }
+}
+
+/* Adjust animation colors for dark mode */
+[data-theme="dark"] .logo {
+    color: var(--accent); /* Default dark mode accent color */
+    /* Override keyframe colors for dark mode */
+    animation: breathing-logo-dark 3s ease-in-out infinite alternate;
+}
+@keyframes breathing-logo-dark {
+    0% {
+        transform: scale(1);
+        text-shadow: 0 0 5px rgba(96, 165, 250, 0.2);
+        color: var(--accent);
+    }
+    50% {
+        transform: scale(1.03);
+        text-shadow: 0 0 10px rgba(96, 165, 250, 0.6);
+        color: #fff; /* White color at peak animation for dark mode contrast */
+    }
+    100% {
+        transform: scale(1);
+        text-shadow: 0 0 5px rgba(96, 165, 250, 0.2);
+        color: var(--accent);
+    }
+}
+
+
 .main-nav { display: flex; align-items: center; gap: 0.5rem; }
 .main-nav ul { display: flex; list-style: none; gap: 0.5rem; }
 .main-nav ul a { padding: 0.5rem 1rem; text-decoration: none; color: var(--text); font-weight: 500; border-radius: 6px; transition: background-color 0.2s; }
@@ -104,38 +157,6 @@ body.menu-open {
 }
 [data-theme="dark"] .header-search-container input { background: #475569; }
 [data-theme="black"] .header-search-container input { background: #2a2a2a; }
-
-/* --- New Live Usage Gadget Styles --- */
-.live-status-gadget {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--card);
-    border: 1px solid var(--border-color);
-    border-radius: 99px;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    color: var(--text);
-    transition: all 0.3s ease;
-    cursor: help; /* Change cursor to indicate information */
-    user-select: none; /* Prevent selection */
-    flex-shrink: 0; /* Prevent shrinking on smaller screens */
-}
-.live-status-gadget svg {
-    width: 18px;
-    height: 18px;
-    stroke: var(--accent);
-    transition: stroke 0.3s ease;
-}
-.live-status-gadget[data-status="active"] {
-    border-color: #10b981; /* Green border */
-}
-.live-status-gadget[data-status="active"] svg {
-    stroke: #10b981; /* Green icon */
-}
-.live-status-gadget[data-status="active"] span {
-    color: #10b981;
-}
 
 /* Mega Menu Overlay (Mobile) */
 .mega-menu {
@@ -452,6 +473,7 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
     .main-header .main-nav { flex-grow: 1; justify-content: flex-end; }
     .main-header .logo { flex-shrink: 0; order: 0; }
     .main-header .hamburger-btn { order: 3; }
+    .main-nav .header-search-container { order: 1; } /* Ensure search input is before other elements in nav */
 
     /* Mega menu for smaller screens - expand full width */
     .mega-menu {

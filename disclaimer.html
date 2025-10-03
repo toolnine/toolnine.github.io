@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <style>
-        /* Tool-specific styles based on the common layout */
         .tool-page {
             display: flex;
             flex-direction: column;
@@ -30,8 +29,6 @@
         .tool-header h1 { font-size: 2rem; color: var(--accent); font-weight: 700; }
         .tool-header .tool-desc { font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.5; }
         [data-theme="dark"] .tool-header .tool-desc { color: #94a3b8; }
-
-        /* --- Custom UI for Disclaimer Page --- */
         .disclaimer-content h2 {
             font-size: 1.5rem;
             color: var(--text);
@@ -45,7 +42,6 @@
 </head>
 <body>
 
-    <!-- 1. Header Placeholder -->
     <div id="header-placeholder"></div>
 
     <main class="content tool-page">
@@ -54,22 +50,29 @@
                 <h1>Disclaimer</h1>
                 <p class="tool-desc">Important information regarding the use of our online tools.</p>
             </header>
-
             <div class="disclaimer-content">
-                <!-- ... rest of your disclaimer ... -->
+                <h2>1. General Information</h2>
+                <p>All content and tools provided on this website are for general information and educational purposes only. The information and functionality provided are not intended as professional advice.</p>
+                <h2>2. No Warranty</h2>
+                <p>While we strive to ensure that the tools and information on ToolNine are accurate and reliable, we make no guarantees regarding their accuracy, completeness, or suitability for any purpose.</p>
+                <h2>3. Privacy and Data Security</h2>
+                <p>All processing in our tools (such as file conversions and calculations) happens locally on your device in your web browser. We do not transmit or store your data on our servers.</p>
+                <h2>4. Third-Party Links</h2>
+                <p>Our website may contain links to third-party websites or services. We do not endorse or take responsibility for the content, accuracy, or privacy policies of these external sites.</p>
+                <h2>5. Limitation of Liability</h2>
+                <p>ToolNine and its creators will not be held liable for any damages, losses, or data corruption that may result from the use or inability to use the tools provided on this website.</p>
+                <h2>6. Changes to This Disclaimer</h2>
+                <p>We reserve the right to modify this disclaimer at any time. We recommend reviewing this page periodically for updates.</p>
             </div>
         </section>
     </main>
 
-    <!-- PWA Install Button -->
     <div class="pwa-install-container">
         <button class="btn" id="installButton" style="display:none;">Install App</button>
     </div>
 
-    <!-- 2. Footer Placeholder -->
     <div id="footer-placeholder"></div>
 
-    <!-- Scripts -->
     <script src="/js/load-components.js"></script>
     <script src="/theme.js"></script>
 </body>

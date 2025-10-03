@@ -105,8 +105,8 @@ body.menu-open {
 [data-theme="dark"] .header-search-container input { background: #475569; }
 [data-theme="black"] .header-search-container input { background: #2a2a2a; }
 
-/* --- New Privacy Gadget Styles --- */
-.privacy-status-gadget {
+/* --- New Live Usage Gadget Styles --- */
+.live-status-gadget {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -119,41 +119,22 @@ body.menu-open {
     transition: all 0.3s ease;
     cursor: help; /* Change cursor to indicate information */
     user-select: none; /* Prevent selection */
+    flex-shrink: 0; /* Prevent shrinking on smaller screens */
 }
-.privacy-status-gadget svg {
+.live-status-gadget svg {
     width: 18px;
     height: 18px;
     stroke: var(--accent);
     transition: stroke 0.3s ease;
 }
-
-/* Secure State (Default green color) */
-.privacy-status-gadget[data-status="secure"] {
+.live-status-gadget[data-status="active"] {
     border-color: #10b981; /* Green border */
 }
-.privacy-status-gadget[data-status="secure"] svg {
+.live-status-gadget[data-status="active"] svg {
     stroke: #10b981; /* Green icon */
 }
-.privacy-status-gadget[data-status="secure"] span {
+.live-status-gadget[data-status="active"] span {
     color: #10b981;
-}
-
-/* Processing State (Yellow/Blue animation) */
-@keyframes pulse-ring {
-    0% { transform: scale(0.9); opacity: 0.9; }
-    50% { transform: scale(1.05); opacity: 1; }
-    100% { transform: scale(0.9); opacity: 0.9; }
-}
-.privacy-status-gadget[data-status="processing"] {
-    animation: pulse-ring 1s ease-out infinite;
-    background: #fffbe0; /* Light yellow background */
-    border-color: #fceb9a;
-}
-.privacy-status-gadget[data-status="processing"] svg {
-    stroke: #eab308; /* Dark yellow icon color */
-}
-.privacy-status-gadget[data-status="processing"] span {
-    color: #eab308;
 }
 
 /* Mega Menu Overlay (Mobile) */

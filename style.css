@@ -105,6 +105,57 @@ body.menu-open {
 [data-theme="dark"] .header-search-container input { background: #475569; }
 [data-theme="black"] .header-search-container input { background: #2a2a2a; }
 
+/* --- New Privacy Gadget Styles --- */
+.privacy-status-gadget {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--card);
+    border: 1px solid var(--border-color);
+    border-radius: 99px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: var(--text);
+    transition: all 0.3s ease;
+    cursor: help; /* Change cursor to indicate information */
+    user-select: none; /* Prevent selection */
+}
+.privacy-status-gadget svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--accent);
+    transition: stroke 0.3s ease;
+}
+
+/* Secure State (Default green color) */
+.privacy-status-gadget[data-status="secure"] {
+    border-color: #10b981; /* Green border */
+}
+.privacy-status-gadget[data-status="secure"] svg {
+    stroke: #10b981; /* Green icon */
+}
+.privacy-status-gadget[data-status="secure"] span {
+    color: #10b981;
+}
+
+/* Processing State (Yellow/Blue animation) */
+@keyframes pulse-ring {
+    0% { transform: scale(0.9); opacity: 0.9; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.9; }
+}
+.privacy-status-gadget[data-status="processing"] {
+    animation: pulse-ring 1s ease-out infinite;
+    background: #fffbe0; /* Light yellow background */
+    border-color: #fceb9a;
+}
+.privacy-status-gadget[data-status="processing"] svg {
+    stroke: #eab308; /* Dark yellow icon color */
+}
+.privacy-status-gadget[data-status="processing"] span {
+    color: #eab308;
+}
+
 /* Mega Menu Overlay (Mobile) */
 .mega-menu {
     position: absolute; /* Default to absolute for desktop dropdown */
@@ -405,18 +456,21 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
         display: block; /* Show search bar on mobile */
         flex-grow: 1;
         margin-left: 0.5rem;
-        max-width: 250px; /* Limit search bar width */
+        max-width: none; /* Remove desktop max width */
+        order: 1; /* Place search bar after logo on mobile */
     }
     .main-nav {
         /* Align items in main-nav to the right side on mobile */
         justify-content: flex-end;
         align-items: center;
         width: auto;
+        flex-grow: 1;
+        order: 2; /* Place nav items after search bar */
     }
     .main-header > * { flex-grow: 0; } /* Reset flex-grow to avoid centering */
     .main-header .main-nav { flex-grow: 1; justify-content: flex-end; }
-    .main-header .logo { flex-shrink: 0; }
-    .main-nav .header-search-container { order: -1; margin-right: auto; }
+    .main-header .logo { flex-shrink: 0; order: 0; }
+    .main-header .hamburger-btn { order: 3; }
 
     /* Mega menu for smaller screens - expand full width */
     .mega-menu {

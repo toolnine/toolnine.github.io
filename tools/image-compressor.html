@@ -1,4 +1,4 @@
-<!-- START OF FILE: tools/image-compressor.html (Upgraded) -->
+<!-- START OF FILE: tools/image-compressor.html (Upgraded with Privacy Gadget) -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -202,7 +202,6 @@
             const downloadLink = document.getElementById('downloadLink');
             const shareBtn = document.getElementById('shareBtn');
             const originalSizeSpan = document.getElementById('originalSize');
-            const compressedSizeSpan = document.getElementById('compressedSize'); // Old element
             const estimatedSizeSpan = document.getElementById('estimatedSize'); // New element for live update
             const clearBtn = document.getElementById('clearBtn');
             const loadingIndicator = document.getElementById('loadingIndicator'); // New loading indicator
@@ -224,6 +223,7 @@
                 estimatedSizeSpan.textContent = '0 KB';
                 qualitySlider.value = 0.8; // Reset slider value
                 qualityValue.textContent = '80%';
+                if(window.updatePrivacyGadget) window.updatePrivacyGadget('secure'); // Reset gadget state
             }
             clearBtn.addEventListener('click', resetUI);
 
@@ -268,22 +268,6 @@
 
                 const outputQuality = parseFloat(qualitySlider.value);
                 // Simple estimation based on file size ratio (not perfectly accurate but close enough for UX)
-                // We assume a base compression ratio for a standard JPG (e.g., 0.8 quality).
-                // A better approach would be to calculate a scaling factor relative to the original size.
-                // For a true live preview, we would compress the image on every slider change.
-                // Let's implement a simplified live estimation for now for better UX.
-
-                // A more accurate, but computationally intensive approach:
-                // if (currentFile.type === 'image/jpeg') {
-                //     // If we are compressing JPG to JPG, we can't accurately estimate new size without actually compressing.
-                //     // For now, let's just use a simplified model.
-                // } else { // PNG to JPG
-                //     // Perform a quick compression to get a rough estimate of the compressed size.
-                //     // This might be too slow on large images for a real-time slider.
-                // }
-
-                // Simplified live size estimation logic (based on quality percentage)
-                // This formula is a heuristic and may not be perfectly accurate.
                 // New size = Original Size * Quality.
                 const newSize = currentFile.size * outputQuality;
                 estimatedSizeSpan.textContent = formatBytes(newSize);
@@ -303,8 +287,9 @@
                 goBtn.disabled = true;
                 goBtn.textContent = 'Compressing...';
                 loadingIndicator.style.display = 'block';
+                if(window.updatePrivacyGadget) window.updatePrivacyGadget('processing'); // UPDATE GADGET
 
-                // Read file data for compression via canvas
+                // Read file data for resizing via canvas
                 const dataUrl = await new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(currentFile); });
                 const img = new Image();
                 img.src = dataUrl;
@@ -331,6 +316,7 @@
                     goBtn.disabled = false;
                     goBtn.textContent = 'Compress Image';
                     loadingIndicator.style.display = 'none';
+                    if(window.updatePrivacyGadget) window.updatePrivacyGadget('secure'); // UPDATE GADGET
                 }, outputMimeType, outputQuality);
             }
 

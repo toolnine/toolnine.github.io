@@ -197,4 +197,4 @@ document.addEventListener('DOMContentLoaded', () => {
     renderFavorites(); // Load and display favorites on page load
     updateToolVisibility(); // Initial filter call
     checkURLForSearchQuery(); // Check URL for search query on page load
-});
+});```

@@ -1,10 +1,16 @@
+<!-- START OF FILE: tools/html-viewer.html (Upgraded) -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Viewer | ToolNine</title>
-    <link rel="stylesheet" href="../style.css">
+    <!-- SEO OPTIMIZATION -->
+    <title>HTML Viewer and Code Sandbox | Live Preview Online | ToolNine</title>
+    <meta name="description" content="Paste HTML code to instantly view a live preview in a safe sandbox environment. Test and debug HTML, CSS, and JavaScript directly in your browser. Privacy-first local processing." />
+    <!-- END SEO OPTIMIZATION -->
+    <!-- Updated to root-relative path -->
+    <link rel="stylesheet" href="/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <style>
         /* Tool-specific styles based on the common layout */
@@ -47,12 +53,14 @@
             min-height: 300px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
+            background: white; /* Ensure iframe background is white by default for better rendering */
         }
         .tool-controls {
             display: flex;
             justify-content: flex-start;
             gap: 1rem;
         }
+
         /* Mobile adjustment for code area */
         @media (max-width: 600px) {
             .viewer-layout iframe { min-height: 200px; }
@@ -61,76 +69,8 @@
 </head>
 <body>
 
-    <header class="main-header">
-        <a href="../index.html" class="logo">ToolNine</a>
-        <button class="hamburger-btn" id="hamburgerBtn">☰</button>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="../index.html#category-image">Image Tools</a></li>
-                <li><a href="../index.html#category-text">Text Tools</a></li>
-                <li><a href="../blog.html">Blog</a></li>
-            </ul>
-            <button class="search-btn" id="searchBtn" aria-label="Search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
-            <button class="all-tools-btn" id="allToolsBtn">All Tools <span class="arrow">▼</span></button>
-            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
-        </nav>
-    </header>
-
-    <div class="mega-menu" id="allToolsMenu">
-        <!-- Mega menu content (full menu) -->
-        <div class="mega-menu-grid">
-            <div class="mega-menu-category">
-                <h3>Image Tools</h3>
-                <ul>
-                    <li><a href="image-to-pdf.html"><span class="tool-icon">📄</span> Image to PDF</a></li>
-                    <li><a href="image-compressor.html"><span class="tool-icon">🗜️</span> Image Compressor</a></li>
-                    <li><a href="image-resizer.html"><span class="tool-icon">📏</span> Image Resizer</a></li>
-                    <li><a href="convert-png-jpg.html"><span class="tool-icon">🖼️</span> PNG <> JPG</a></li>
-                    <li><a href="steganography.html"><span class="tool-icon">🕵️</span> Steganography</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Text & Writing</h3>
-                <ul>
-                    <li><a href="text-diff.html"><span class="tool-icon">🔍</span> Text Diff</a></li>
-                    <li><a href="text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
-                    <li><a href="text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
-                    <li><a href="word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
-                    <li><a href="line-operations.html"><span class="tool-icon">🔠</span> Line Operations</a></li>
-                    <li><a href="text-cleaner.html"><span class="tool-icon">🧹</span> Text Cleaner</a></li>
-                    <li><a href="delivery-note-generator.html"><span class="tool-icon">📝</span> Delivery Note Generator</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Converters</h3>
-                <ul>
-                    <li><a href="unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
-                    <li><a href="document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
-                    <li><a href="csv-editor.html"><span class="tool-icon">📊</span> CSV Editor</a></li>
-                    <li><a href="calculator.html"><span class="tool-icon">🧮</span> Calculator</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Encoder/Decoder</h3>
-                <ul>
-                    <li><a href="url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
-                    <li><a href="hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
-                    <li><a href="password-manager.html"><span class="tool-icon">🔑</span> Password Manager</a></li>
-                    <li><a href="password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
-                    <li><a href="qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
-                    <li><a href="pwa-manifest-generator.html"><span class="tool-icon">⚙️</span> PWA Manifest Generator</a></li>
-                </ul>
-            </div>
-             <div class="mega-menu-category">
-                <h3>AI Tools</h3>
-                <ul>
-                    <li><a href="image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
-                    <li><a href="json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
-                    <li><a href="html-viewer.html"><span class="tool-icon">💻</span> HTML Viewer</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <!-- 1. Header Placeholder -->
+    <div id="header-placeholder"></div>
 
     <main class="content tool-page">
         <section class="tool-card">
@@ -143,6 +83,7 @@
                 <textarea id="code" placeholder="Write HTML/CSS/JS code here..."></textarea>
                 <div class="tool-controls">
                     <button class="btn" id="clearBtn">Clear Code</button>
+                    <button class="btn" id="copyBtn">Copy Code</button> <!-- NEW Copy button -->
                 </div>
                 <h3>Live Preview:</h3>
                 <iframe id="out"></iframe>
@@ -155,6 +96,7 @@
                 <li>Paste your HTML, CSS, or JavaScript code into the text area above.</li>
                 <li>The live preview will update automatically as you type.</li>
                 <li>Click "Clear Code" to clear both the input and output areas.</li>
+                <li>Click "Copy Code" to copy the text from the input area.</li>
             </ol>
         </section>
     </main>
@@ -164,25 +106,21 @@
         <button class="btn" id="installButton" style="display:none;">Install App</button>
     </div>
 
-    <footer class="main-footer">
-        <ul class="footer-links">
-            <li><a href="../about.html">About Us</a></li>
-            <li><a href="../contact.html">Contact</a></li>
-            <li><a href="../blog.html">Blog</a></li>
-            <li><a href="../privacy.html">Privacy Policy</a></li>
-            <li><a href="../disclaimer.html">Disclaimer</a></li>
-        </ul>
-        <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
-    </footer>
+    <!-- 2. Footer Placeholder -->
+    <div id="footer-placeholder"></div>
 
     <!-- Scripts -->
-    <script src="../theme.js"></script>
+    <!-- NEW: Load the component loader script first -->
+    <script src="/js/load-components.js"></script>
+    <!-- Keep existing scripts here -->
+    <script src="/theme.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- HTML Viewer Tool Specific Logic ---
             const codeInput = document.getElementById('code');
             const outputIframe = document.getElementById('out');
             const clearBtn = document.getElementById('clearBtn');
+            const copyBtn = document.getElementById('copyBtn');
 
             // Function to render code in iframe
             function renderCode() {
@@ -196,6 +134,19 @@
             clearBtn.addEventListener('click', () => {
                 codeInput.value = '';
                 outputIframe.srcdoc = '';
+            });
+
+            // Copy button functionality (NEW)
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(codeInput.value)
+                    .then(() => {
+                        copyBtn.textContent = 'Copied!';
+                        setTimeout(() => copyBtn.textContent = 'Copy Code', 1500);
+                    })
+                    .catch(err => {
+                        console.error('Copy failed:', err);
+                        alert('Failed to copy text.');
+                    });
             });
 
             // Initial render on load

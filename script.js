@@ -1,3 +1,5 @@
+// START OF FILE script.js
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- Elements and Initial setup ---
     const allToolCards = Array.from(document.querySelectorAll('.tool-card-home'));
@@ -22,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show regular content when search is empty
             if (getFavorites().length === 0) {
                 featureHighlights.style.display = 'flex';
-                // popularTools.style.display = 'block'; // If popular tools section exists
             }
             allToolsTitle.style.display = 'block';
             filterTabs.style.display = 'flex';
@@ -99,9 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (favorites.length > 0) {
             favoritesSection.style.display = 'block';
-            // UI/UX Improvement: Hide feature highlights and popular tools when favorites are displayed
+            // UI/UX Improvement: Hide feature highlights when favorites are displayed
             featureHighlights.style.display = 'none';
-            // popularTools.style.display = 'none'; // If popular tools section exists
             homeHero.style.display = 'block'; // Keep search bar visible
 
             // Iterate over the source list (allToolCards) to create clones for the favorites section
@@ -127,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             favoritesSection.style.display = 'none';
             featureHighlights.style.display = 'flex'; // Restore feature highlights if no favorites
-            // popularTools.style.display = 'block'; // Restore popular tools section
             homeHero.style.display = 'block'; // Restore main search bar
         }
 

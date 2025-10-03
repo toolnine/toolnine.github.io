@@ -1,10 +1,16 @@
+<!-- START OF FILE: tools/image-compressor.html (Upgraded) -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Compressor | ToolNine</title>
-    <link rel="stylesheet" href="../style.css">
+    <!-- SEO OPTIMIZATION -->
+    <title>Free Online Image Compressor | Reduce JPG/PNG File Size | ToolNine</title>
+    <meta name="description" content="Reduce the file size of your images (JPG/PNG) instantly without losing quality. Our privacy-first compressor runs directly in your browser without uploading files." />
+    <!-- END SEO OPTIMIZATION -->
+    <!-- Updated to root-relative path -->
+    <link rel="stylesheet" href="/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <style>
         /* Tool-specific styles based on the common layout */
@@ -63,10 +69,19 @@
             flex-direction: column;
             align-items: center;
             margin-top: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
         }
-        .compressor-options input[type="range"] { width: 100%; max-width: 300px; }
-        .compressor-options label { margin-bottom: 0.5rem; font-weight: 500; }
-        .compressor-options button { margin-top: 1rem; }
+        .quality-slider-group {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-direction: column; /* Stack elements vertically on mobile */
+        }
+        .quality-slider-group label { margin-bottom: 0.5rem; font-weight: 500; }
+        .quality-slider-group input { width: 100%; max-width: 300px; }
 
         .image-preview-container {
             margin-top: 1.5rem;
@@ -83,86 +98,33 @@
 
         /* How To Section styles (inherited from style.css) */
         .how-to { max-width: 700px; margin-top: 2rem; }
+
+        /* Loading Spinner */
+        .loading-indicator {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
 
-    <header class="main-header">
-        <a href="../index.html" class="logo">ToolNine</a>
-        <button class="hamburger-btn" id="hamburgerBtn">☰</button>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="../index.html#category-image">Image Tools</a></li>
-                <li><a href="../index.html#category-text">Text Tools</a></li>
-                <li><a href="../blog.html">Blog</a></li>
-            </ul>
-            <button class="search-btn" id="searchBtn" aria-label="Search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
-            <button class="all-tools-btn" id="allToolsBtn">All Tools <span class="arrow">▼</span></button>
-            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
-        </nav>
-    </header>
-
-    <div class="mega-menu" id="allToolsMenu">
-        <!-- Mega menu content (full menu) -->
-        <div class="mega-menu-grid">
-            <div class="mega-menu-category">
-                <h3>Image Tools</h3>
-                <ul>
-                    <li><a href="image-to-pdf.html"><span class="tool-icon">📄</span> Image to PDF</a></li>
-                    <li><a href="image-compressor.html"><span class="tool-icon">🗜️</span> Image Compressor</a></li>
-                    <li><a href="image-resizer.html"><span class="tool-icon">📏</span> Image Resizer</a></li>
-                    <li><a href="convert-png-jpg.html"><span class="tool-icon">🖼️</span> PNG <> JPG</a></li>
-                    <li><a href="steganography.html"><span class="tool-icon">🕵️</span> Steganography</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Text & Writing</h3>
-                <ul>
-                    <li><a href="text-diff.html"><span class="tool-icon">🔍</span> Text Diff</a></li>
-                    <li><a href="text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
-                    <li><a href="text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
-                    <li><a href="word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
-                    <li><a href="line-operations.html"><span class="tool-icon">🔠</span> Line Operations</a></li>
-                    <li><a href="text-cleaner.html"><span class="tool-icon">🧹</span> Text Cleaner</a></li>
-                    <li><a href="delivery-note-generator.html"><span class="tool-icon">📝</span> Delivery Note Generator</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Converters</h3>
-                <ul>
-                    <li><a href="unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
-                    <li><a href="document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
-                    <li><a href="csv-editor.html"><span class="tool-icon">📊</span> CSV Editor</a></li>
-                    <li><a href="calculator.html"><span class="tool-icon">🧮</span> Calculator</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Encoder/Decoder</h3>
-                <ul>
-                    <li><a href="url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
-                    <li><a href="hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
-                    <li><a href="password-manager.html"><span class="tool-icon">🔑</span> Password Manager</a></li>
-                    <li><a href="password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
-                    <li><a href="qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
-                    <li><a href="pwa-manifest-generator.html"><span class="tool-icon">⚙️</span> PWA Manifest Generator</a></li>
-                </ul>
-            </div>
-             <div class="mega-menu-category">
-                <h3>AI Tools</h3>
-                <ul>
-                    <li><a href="image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
-                    <li><a href="json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
-                    <li><a href="html-viewer.html"><span class="tool-icon">💻</span> HTML Viewer</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <!-- 1. Header Placeholder -->
+    <div id="header-placeholder"></div>
 
     <main class="content tool-page">
         <section class="tool-card">
             <header class="tool-header">
                 <h1>🗜️ Image Compressor</h1>
-                <p class="tool-desc">Reduce the file size of your images by adjusting the quality.</p>
+                <p class="tool-desc">Reduce the file size of your images by adjusting the quality. All processing is private and happens on your device.</p>
             </header>
 
             <div class="upload-drop-zone" id="dropZone">
@@ -173,22 +135,32 @@
             </div>
 
             <div class="compressor-options" id="compressorOptions" style="display: none;">
-                <label for="qualitySlider">Quality: <span id="qualityValue">80%</span></label>
-                <input type="range" id="qualitySlider" min="0.1" max="1.0" step="0.1" value="0.8">
+                <div class="quality-slider-group">
+                    <label for="qualitySlider">Quality: <span id="qualityValue">80%</span></label>
+                    <input type="range" id="qualitySlider" min="0.1" max="1.0" step="0.1" value="0.8">
+                </div>
+                <!-- Add live size info here for UX -->
+                <p class="size-info">Original Size: <span id="originalSize">0 KB</span></p>
+                <p class="size-info">Estimated Compressed Size: <span id="estimatedSize">0 KB</span></p>
                 <button class="btn" id="goBtn">Compress Image</button>
             </div>
 
+            <!-- Previews and results area -->
             <div class="image-preview-container" id="imagePreviewContainer" style="display: none;">
                 <h3>Preview and Results:</h3>
                 <div style="margin-top: 1rem;">
-                    <p class="size-info">Original Size: <span id="originalSize">0 KB</span></p>
                     <img id="imagePreview" class="image-preview" src="" alt="Image Preview">
-                    <p class="size-info">Compressed Size: <span id="compressedSize">0 KB</span></p>
                 </div>
-                <div class="result-container">
-                    <a class="btn" id="downloadLink" href="#" download="compressed.jpg" style="margin-top: 1rem;">⬇️ Download Compressed Image</a>
-                    <button class="btn" id="shareBtn" style="margin-left: 0.5rem;">Share Image</button>
-                </div>
+            </div>
+
+            <!-- Loading indicator -->
+            <div class="loading-indicator" id="loadingIndicator" style="display:none;"></div>
+
+            <!-- Download and Share buttons -->
+            <div class="result-container" id="resultContainer" style="display: none;">
+                <a class="btn" id="downloadLink" href="#" download="compressed.jpg" style="margin-top: 1rem;">⬇️ Download Compressed Image</a>
+                <button class="btn" id="shareBtn" style="margin-left: 0.5rem;">Share Image</button>
+                <button class="btn" id="clearBtn" style="margin-top: 1rem;">Clear</button> <!-- NEW CLEAR BUTTON -->
             </div>
         </section>
 
@@ -196,7 +168,7 @@
             <h3>How to Use</h3>
             <ol>
                 <li>Click on the box or drag and drop your image file (JPG or PNG).</li>
-                <li>Adjust the quality slider to control the compression level.</li>
+                <li>Adjust the quality slider to control the compression level. The estimated file size will update live.</li>
                 <li>Click "Compress Image" to process.</li>
                 <li>View the original and compressed file sizes, then download or share the result.</li>
             </ol>
@@ -208,22 +180,17 @@
         <button class="btn" id="installButton" style="display:none;">Install App</button>
     </div>
 
-    <footer class="main-footer">
-        <ul class="footer-links">
-            <li><a href="../about.html">About Us</a></li>
-            <li><a href="../contact.html">Contact</a></li>
-            <li><a href="../blog.html">Blog</a></li>
-            <li><a href="../privacy.html">Privacy Policy</a></li>
-            <li><a href="../disclaimer.html">Disclaimer</a></li>
-        </ul>
-        <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
-    </footer>
+    <!-- 2. Footer Placeholder -->
+    <div id="footer-placeholder"></div>
 
     <!-- Scripts -->
-    <script src="../theme.js"></script>
+    <!-- NEW: Load the component loader script first -->
+    <script src="/js/load-components.js"></script>
+    <!-- Keep existing scripts here -->
+    <script src="/theme.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Image Compressor Tool Specific Logic ---
+            // --- Elements ---
             const dropZone = document.getElementById('dropZone');
             const imgInput = document.getElementById('imgInput');
             const compressorOptions = document.getElementById('compressorOptions');
@@ -235,12 +202,32 @@
             const downloadLink = document.getElementById('downloadLink');
             const shareBtn = document.getElementById('shareBtn');
             const originalSizeSpan = document.getElementById('originalSize');
-            const compressedSizeSpan = document.getElementById('compressedSize');
+            const compressedSizeSpan = document.getElementById('compressedSize'); // Old element
+            const estimatedSizeSpan = document.getElementById('estimatedSize'); // New element for live update
+            const clearBtn = document.getElementById('clearBtn');
+            const loadingIndicator = document.getElementById('loadingIndicator'); // New loading indicator
 
             let currentFile = null;
             let currentBlob = null;
 
-            // Handle file selection (click or drag/drop)
+            // --- UI Reset Function ---
+            function resetUI() {
+                dropZone.style.display = 'flex';
+                imagePreviewContainer.style.display = 'none';
+                compressorOptions.style.display = 'none';
+                resultContainer.style.display = 'none';
+                loadingIndicator.style.display = 'none';
+                imgInput.value = '';
+                currentFile = null;
+                currentBlob = null;
+                originalSizeSpan.textContent = '0 KB';
+                estimatedSizeSpan.textContent = '0 KB';
+                qualitySlider.value = 0.8; // Reset slider value
+                qualityValue.textContent = '80%';
+            }
+            clearBtn.addEventListener('click', resetUI);
+
+            // --- Image Handling ---
             dropZone.addEventListener('click', () => imgInput.click());
             dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('active'); });
             dropZone.addEventListener('dragleave', () => dropZone.classList.remove('active'));
@@ -266,25 +253,56 @@
                     imagePreviewContainer.style.display = 'block';
                     dropZone.style.display = 'none'; // Hide dropzone after file is selected
                     originalSizeSpan.textContent = formatBytes(file.size);
-                    compressedSizeSpan.textContent = '0 KB'; // Reset compressed size
-                    downloadLink.style.display = 'none'; // Hide download link initially
-                    shareBtn.style.display = 'none'; // Hide share button initially
+                    estimatedSizeSpan.textContent = formatBytes(file.size * 0.8); // Initial estimate based on default quality 0.8
+                    resultContainer.style.display = 'none'; // Hide previous results
                 };
                 reader.readAsDataURL(file);
             }
 
-            // Update quality value display
-            qualitySlider.addEventListener('input', () => {
-                qualityValue.textContent = Math.round(qualitySlider.value * 100) + '%';
-            });
+            // --- Compression Logic ---
+            goBtn.addEventListener('click', performCompression);
 
-            // Compression logic
-            goBtn.addEventListener('click', async () => {
+            // --- Live Compression Preview (NEW FEATURE) ---
+            async function updateEstimatedSize() {
                 if (!currentFile) return;
 
-                // Disable button and show processing message
+                const outputQuality = parseFloat(qualitySlider.value);
+                // Simple estimation based on file size ratio (not perfectly accurate but close enough for UX)
+                // We assume a base compression ratio for a standard JPG (e.g., 0.8 quality).
+                // A better approach would be to calculate a scaling factor relative to the original size.
+                // For a true live preview, we would compress the image on every slider change.
+                // Let's implement a simplified live estimation for now for better UX.
+
+                // A more accurate, but computationally intensive approach:
+                // if (currentFile.type === 'image/jpeg') {
+                //     // If we are compressing JPG to JPG, we can't accurately estimate new size without actually compressing.
+                //     // For now, let's just use a simplified model.
+                // } else { // PNG to JPG
+                //     // Perform a quick compression to get a rough estimate of the compressed size.
+                //     // This might be too slow on large images for a real-time slider.
+                // }
+
+                // Simplified live size estimation logic (based on quality percentage)
+                // This formula is a heuristic and may not be perfectly accurate.
+                // New size = Original Size * Quality.
+                const newSize = currentFile.size * outputQuality;
+                estimatedSizeSpan.textContent = formatBytes(newSize);
+            }
+
+            // Update quality value display and estimated size on slider input
+            qualitySlider.addEventListener('input', () => {
+                qualityValue.textContent = Math.round(qualitySlider.value * 100) + '%';
+                updateEstimatedSize();
+            });
+
+            // Compression logic function (called on button click)
+            async function performCompression() {
+                if (!currentFile) return;
+
+                // --- UI State: Start Compression ---
                 goBtn.disabled = true;
                 goBtn.textContent = 'Compressing...';
+                loadingIndicator.style.display = 'block';
 
                 // Read file data for compression via canvas
                 const dataUrl = await new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(currentFile); });
@@ -301,19 +319,20 @@
                 const outputMimeType = 'image/jpeg'; // Force conversion to JPG for compression
 
                 canvas.toBlob((blob) => {
+                    // --- UI State: End Compression ---
                     const compressedSize = blob.size;
-                    compressedSizeSpan.textContent = formatBytes(compressedSize);
+                    estimatedSizeSpan.textContent = formatBytes(compressedSize); // Update with actual size
                     currentBlob = blob;
                     const compressedDataUrl = URL.createObjectURL(blob);
                     downloadLink.href = compressedDataUrl;
                     downloadLink.download = `compressed_${outputQuality * 100}.jpg`;
-                    downloadLink.style.display = 'inline-block';
-                    shareBtn.style.display = 'inline-block';
+                    resultContainer.style.display = 'flex';
 
                     goBtn.disabled = false;
                     goBtn.textContent = 'Compress Image';
+                    loadingIndicator.style.display = 'none';
                 }, outputMimeType, outputQuality);
-            });
+            }
 
             // --- Web Share API Logic ---
             shareBtn.addEventListener('click', async () => {

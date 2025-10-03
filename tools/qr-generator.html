@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- SEO OPTIMIZATION -->
-    <title>Advanced QR Code Generator | Bulk Barcode Creator | ToolNine</title>
-    <meta name="description" content="Generate QR codes or barcodes from text or bulk data (CSV/Excel). Customize size, color, and export to PDF, Word, or PNG. Privacy-first client-side tool." />
+    <title>Free QR Code Generator Online | Bulk QR Code Creator | ToolNine</title>
+    <meta name="description" content="Generate QR codes or barcodes from single text input or bulk data (CSV/Excel). Customize and export to PDF or PNG, processed entirely in your browser." />
     <!-- END SEO OPTIMIZATION -->
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <!-- Include QR Code Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -15,6 +15,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
     <!-- Include jspdf for bulk PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Include JSZip for creating ZIP archives (needed for downloading multiple images) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         /* Tool-specific styles based on the common layout */
         .tool-page {
@@ -81,77 +83,8 @@
 </head>
 <body>
 
-    <header class="main-header">
-        <a href="../index.html" class="logo">ToolNine</a>
-        <button class="hamburger-btn" id="hamburgerBtn">☰</button>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="../index.html#category-image">Image Tools</a></li>
-                <li><a href="../index.html#category-text">Text Tools</a></li>
-                <li><a href="../blog.html">Blog</a></li>
-            </ul>
-            <button class="search-btn" id="searchBtn" aria-label="Search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
-            <button class="all-tools-btn" id="allToolsBtn">All Tools <span class="arrow">▼</span></button>
-            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
-        </nav>
-    </header>
-
-    <div class="mega-menu" id="allToolsMenu">
-        <!-- Mega menu content (full menu) -->
-        <div class="mega-menu-grid">
-            <div class="mega-menu-category">
-                <h3>Image Tools</h3>
-                <ul>
-                    <li><a href="image-to-pdf.html"><span class="tool-icon">📄</span> Image to PDF</a></li>
-                    <li><a href="image-compressor.html"><span class="tool-icon">🗜️</span> Image Compressor</a></li>
-                    <li><a href="image-resizer.html"><span class="tool-icon">📏</span> Image Resizer</a></li>
-                    <li><a href="convert-png-jpg.html"><span class="tool-icon">🖼️</span> PNG <> JPG</a></li>
-                    <li><a href="steganography.html"><span class="tool-icon">🕵️</span> Steganography</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Text & Writing</h3>
-                <ul>
-                    <li><a href="text-diff.html"><span class="tool-icon">🔍</span> Text Diff</a></li>
-                    <li><a href="text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
-                    <li><a href="text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
-                    <li><a href="word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
-                    <li><a href="line-operations.html"><span class="tool-icon">🔠</span> Line Operations</a></li>
-                    <li><a href="text-cleaner.html"><span class="tool-icon">🧹</span> Text Cleaner</a></li>
-                    <li><a href="delivery-note-generator.html"><span class="tool-icon">📝</span> Delivery Note Generator</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Converters</h3>
-                <ul>
-                    <li><a href="unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
-                    <li><a href="document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
-                    <li><a href="csv-editor.html"><span class="tool-icon">📊</span> CSV Editor</a></li>
-                    <li><a href="calculator.html"><span class="tool-icon">🧮</span> Calculator</a></li>
-                    <li><a href="pdf-editor.html"><span class="tool-icon">✍️</span> PDF Editor</a></li> <!-- New Tool Added -->
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Encoder/Decoder</h3>
-                <ul>
-                    <li><a href="url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
-                    <li><a href="hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
-                    <li><a href="password-manager.html"><span class="tool-icon">🔑</span> Password Manager</a></li>
-                    <li><a href="password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
-                    <li><a href="qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
-                    <li><a href="pwa-manifest-generator.html"><span class="tool-icon">⚙️</span> PWA Manifest Generator</a></li>
-                </ul>
-            </div>
-             <div class="mega-menu-category">
-                <h3>AI Tools</h3>
-                <ul>
-                    <li><a href="image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
-                    <li><a href="json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
-                    <li><a href="html-viewer.html"><span class="tool-icon">💻</span> HTML Viewer</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
 
     <main class="content tool-page">
         <section class="tool-card">
@@ -229,7 +162,22 @@
                         <h4>Code Customization</h4>
                         <label for="codeSize">Code Size (px):</label>
                         <input type="number" id="codeSize" value="256" min="100" class="tool-input">
-                        <!-- Add more customizations like color, error level here later -->
+                        <!-- Advanced Customizations (NEW) -->
+                        <div style="margin-top: 1rem;">
+                            <label for="colorDark">Code Color:</label>
+                            <input type="color" id="colorDark" value="#000000" class="tool-input">
+                        </div>
+                        <div id="qrSpecificOptions">
+                            <label for="errorCorrection">Error Correction:</label>
+                            <select id="errorCorrection" class="tool-input">
+                                <option value="L">Low (7%)</option>
+                                <option value="M">Medium (15%)</option>
+                                <option value="Q">Quartile (25%)</option>
+                                <option value="H">High (30%)</option>
+                            </select>
+                            <label for="marginSize">Margin:</label>
+                            <input type="number" id="marginSize" value="4" min="0" max="20" class="tool-input">
+                        </div>
                     </div>
 
                     <button class="btn" id="generateBtn">Generate</button>
@@ -269,21 +217,13 @@
         <button class="btn" id="installButton" style="display:none;">Install App</button>
     </div>
 
-    <footer class="main-footer">
-        <ul class="footer-links">
-            <li><a href="../about.html">About Us</a></li>
-            <li><a href="../contact.html">Contact</a></li>
-            <li><a href="../blog.html">Blog</a></li>
-            <li><a href="../privacy.html">Privacy Policy</a></li>
-            <li><a href="../disclaimer.html">Disclaimer</a></li>
-        </ul>
-        <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
-    </footer>
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
 
     <!-- Scripts -->
-    <script src="../theme.js"></script>
-    <!-- Include JSZip for creating ZIP archives (needed for downloading multiple images) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- NEW: Load the component loader script first -->
+    <script src="/js/load-components.js"></script>
+    <script src="/theme.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- Elements ---
@@ -297,12 +237,19 @@
             const barcodeSvgContainer = document.getElementById('barcodeSvg');
             const generateBtn = document.getElementById('generateBtn');
             const downloadPngBtn = document.getElementById('downloadPngBtn');
+            const singleDownloadActions = document.getElementById('singleDownloadActions'); // NEW element
             const bulkDownloadActions = document.getElementById('bulkDownloadActions');
             const bulkDownloadBtn = document.getElementById('bulkDownloadBtn');
             const codesPerPageSelect = document.getElementById('codesPerPage');
             const codeSizeInput = document.getElementById('codeSize');
             const printBtn = document.getElementById('printBtn');
             const bulkOutputOptions = document.getElementById('bulkOutputOptions');
+
+            // NEW customization elements
+            const qrSpecificOptions = document.getElementById('qrSpecificOptions');
+            const colorDarkInput = document.getElementById('colorDark');
+            const errorCorrectionSelect = document.getElementById('errorCorrection');
+            const marginSizeInput = document.getElementById('marginSize');
 
             let lastGeneratedCodes = []; // Store base64 data URLs for bulk download
 
@@ -314,26 +261,31 @@
                     bulkUploadSection.style.display = 'none';
                     bulkOutputOptions.style.display = 'none';
                     bulkDownloadActions.style.display = 'none';
-                    updateQrCode(); // Show single preview immediately
+                    singleDownloadActions.style.display = 'flex';
                 } else {
                     singleInputSection.style.display = 'none';
                     bulkUploadSection.style.display = 'block';
                     bulkOutputOptions.style.display = 'block';
-                    qrcodeContainer.innerHTML = ''; // Clear preview for bulk mode
-                    barcodeSvgContainer.style.display = 'none';
-                    downloadPngBtn.style.display = 'none';
-                    printBtn.style.display = 'none';
+                    bulkDownloadActions.style.display = 'flex';
+                    singleDownloadActions.style.display = 'none';
                 }
+                updateQrCode(); // Show/clear preview based on mode change
             });
 
             codeTypeSelect.addEventListener('change', () => {
-                if (inputModeSelect.value === 'single') {
-                    updateQrCode(); // Re-render preview on code type change
+                if (codeTypeSelect.value === 'qr') {
+                    qrSpecificOptions.style.display = 'block';
+                } else {
+                    qrSpecificOptions.style.display = 'none';
                 }
+                updateQrCode(); // Re-render preview on code type change
             });
 
             textInput.addEventListener('input', updateQrCode);
             codeSizeInput.addEventListener('input', updateQrCode);
+            colorDarkInput.addEventListener('input', updateQrCode);
+            errorCorrectionSelect.addEventListener('change', updateQrCode);
+            marginSizeInput.addEventListener('input', updateQrCode);
 
             // --- Single Code Generation (Live Preview) ---
             function updateQrCode() {
@@ -350,9 +302,10 @@
                         text: text,
                         width: codeSize,
                         height: codeSize,
-                        colorDark: "#000000",
+                        colorDark: colorDarkInput.value,
                         colorLight: "#ffffff",
-                        correctLevel: QRCode.CorrectLevel.H
+                        correctLevel: QRCode.CorrectLevel[errorCorrectionSelect.value],
+                        margin: parseInt(marginSizeInput.value)
                     });
                 } else if (text && codeType === 'barcode') {
                     barcodeSvgContainer.style.display = 'inline-block';
@@ -363,16 +316,16 @@
                         displayValue: true,
                         width: 2, // Barcode width adjustment
                         height: codeSize / 3, // Adjust height based on total code size input
-                        fontSize: 18
+                        fontSize: 18,
+                        background: '#ffffff',
+                        lineColor: colorDarkInput.value,
                     });
                 }
 
                 if (text && inputModeSelect.value === 'single') {
-                    downloadPngBtn.style.display = 'inline-block';
-                    printBtn.style.display = 'inline-block';
+                    singleDownloadActions.style.display = 'flex';
                 } else {
-                    downloadPngBtn.style.display = 'none';
-                    printBtn.style.display = 'none';
+                    singleDownloadActions.style.display = 'none';
                 }
             }
 
@@ -385,12 +338,16 @@
                 if (codeType === 'qr') {
                     const canvas = qrcodeContainer.querySelector('canvas');
                     dataUrl = canvas.toDataURL("image/png");
+                    const link = document.createElement('a');
+                    link.href = dataUrl;
+                    link.download = `qrcode_${codeSize}.png`;
+                    link.click();
                 } else if (codeType === 'barcode') {
                     // Get data URL from generated SVG
                     const svgXml = new XMLSerializer().serializeToString(barcodeSvgContainer);
                     const canvas = document.createElement('canvas');
-                    canvas.width = codeSize;
-                    canvas.height = codeSize; // Adjust height for barcode rendering logic if needed
+                    canvas.width = barcodeSvgContainer.getBBox().width; // Get actual size from SVG
+                    canvas.height = barcodeSvgContainer.getBBox().height;
                     const ctx = canvas.getContext('2d');
                     const img = new Image();
                     img.onload = () => {
@@ -403,13 +360,7 @@
                         link.click();
                     };
                     img.src = 'data:image/svg+xml;base64,' + btoa(svgXml);
-                    return; // Return early to prevent default download logic
                 }
-
-                const link = document.createElement('a');
-                link.href = dataUrl;
-                link.download = `code_${codeType}_${codeSize}.png`;
-                link.click();
             });
 
             // --- Bulk Processing Logic (CSV Upload) ---
@@ -436,15 +387,26 @@
                     const codeType = codeTypeSelect.value;
                     const codeSize = parseInt(codeSizeInput.value) || 256;
 
+                    // Clear preview area
+                    qrcodeContainer.innerHTML = '';
+                    barcodeSvgContainer.style.display = 'none';
+
+                    // Use first code for a quick preview (if needed, otherwise skip)
+                    // if (codeType === 'qr') {
+                    //     await createQrCodeCanvas(parsedData[0].join(','), codeSize, qrcodeContainer, colorDarkInput.value, errorCorrectionSelect.value, marginSizeInput.value);
+                    // } else if (codeType === 'barcode') {
+                    //     await createBarcodeSvg(parsedData[0].join(','), codeSize, barcodeSvgContainer, colorDarkInput.value);
+                    // }
+
                     for (const row of parsedData) {
                         const dataString = row.join(','); // Use entire row data for code generation
                         let codeDataUrl = '';
 
                         if (codeType === 'qr') {
-                            const canvas = await createQrCodeCanvas(dataString, codeSize);
+                            const canvas = await createQrCodeCanvas(dataString, codeSize, null, colorDarkInput.value, errorCorrectionSelect.value, marginSizeInput.value);
                             codeDataUrl = canvas.toDataURL('image/png');
                         } else if (codeType === 'barcode') {
-                            const canvas = await createBarcodeCanvas(dataString, codeSize);
+                            const canvas = await createBarcodeCanvas(dataString, codeSize, colorDarkInput.value);
                             codeDataUrl = canvas.toDataURL('image/png');
                         }
                         lastGeneratedCodes.push(codeDataUrl);
@@ -457,24 +419,50 @@
             });
 
             // Helper function to create QR code canvas from text
-            function createQrCodeCanvas(text, size) {
+            function createQrCodeCanvas(text, size, targetContainer, colorDark, correctionLevel, margin) {
                 return new Promise(resolve => {
-                    const container = document.createElement('div');
-                    new QRCode(container, { text: text, width: size, height: size });
-                    // Give QR code time to render
-                    setTimeout(() => resolve(container.querySelector('canvas')), 50);
+                    const container = targetContainer || document.createElement('div'); // Create temp container if no target
+                    container.innerHTML = ''; // Clear existing content
+                    new QRCode(container, {
+                        text: text,
+                        width: size,
+                        height: size,
+                        colorDark: colorDark,
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel[correctionLevel],
+                        margin: parseInt(margin)
+                    });
+
+                    // Wait for QR code to render to canvas (small timeout needed)
+                    setTimeout(() => {
+                        const canvas = container.querySelector('canvas');
+                        if (canvas) {
+                            resolve(canvas);
+                        } else {
+                            // In case of error (e.g., text too long for QR code parameters)
+                            resolve(document.createElement('canvas')); // Return empty canvas on failure
+                        }
+                    }, 50);
                 });
             }
 
             // Helper function to create barcode canvas from text
-            function createBarcodeCanvas(text, size) {
+            function createBarcodeCanvas(text, size, color) {
                 return new Promise(resolve => {
                     const svg = document.createElement('svg');
+                    // Ensure barcode has valid characters for Code 128
+                    if (!JsBarcode.valid(text, 'CODE128')) {
+                        console.warn('Invalid characters for barcode (Code 128):', text);
+                        text = 'Invalid Data'; // Fallback text
+                    }
                     JsBarcode(svg, text, {
+                        format: 'CODE128',
                         displayValue: true,
                         width: 2,
                         height: size / 3,
-                        fontSize: 18
+                        fontSize: 18,
+                        background: '#ffffff',
+                        lineColor: color
                     });
 
                     // Convert SVG to Canvas (more complex than QR code library's built-in conversion)
@@ -482,10 +470,14 @@
                     const ctx = canvas.getContext('2d');
                     const img = new Image();
                     img.onload = () => {
-                        canvas.width = size;
+                        canvas.width = size; // Set canvas width based on requested size input
                         canvas.height = size / 3; // Keep aspect ratio consistent
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                         resolve(canvas);
+                    };
+                    img.onerror = () => {
+                        console.error('Failed to load SVG into image for canvas conversion.');
+                        resolve(document.createElement('canvas'));
                     };
                     img.src = 'data:image/svg+xml;base64,' + btoa(new XMLSerializer().serializeToString(svg));
                 });
@@ -508,19 +500,24 @@
                 const codesPerPage = parseInt(codesPerPageSelect.value);
                 const doc = new jsPDF('p', 'mm', pageSize);
 
-                const margin = 10;
-                const pdfWidth = doc.internal.pageSize.getWidth();
-                const pdfHeight = doc.internal.pageSize.getHeight();
-
-                // Calculate layout parameters based on codes per page
+                // Define page layout based on codes per page
                 let numCols = 1;
                 let numRows = codesPerPage;
                 if (codesPerPage === 4) { numCols = 2; numRows = 2; }
                 else if (codesPerPage === 6) { numCols = 2; numRows = 3; }
                 else if (codesPerPage === 9) { numCols = 3; numRows = 3; }
 
-                const spacingX = (pdfWidth - 2 * margin) / numCols;
-                const spacingY = (pdfHeight - 2 * margin) / numRows;
+                // Calculate image dimensions and spacing for layout on the PDF page
+                const margin = 10;
+                const pdfWidth = doc.internal.pageSize.getWidth();
+                const pdfHeight = doc.internal.pageSize.getHeight();
+                const availableWidth = pdfWidth - 2 * margin;
+                const availableHeight = pdfHeight - 2 * margin;
+                const codeSize = parseInt(codeSizeInput.value) || 256;
+                const imgWidthMM = (codeSize / 3.78); // Convert requested pixel size to mm
+
+                const spaceX = (availableWidth - (numCols * imgWidthMM)) / (numCols + 1);
+                const spaceY = (availableHeight - (numRows * imgWidthMM)) / (numRows + 1);
 
                 for (let i = 0; i < imageUrls.length; i++) {
                     const imgData = imageUrls[i];
@@ -533,10 +530,10 @@
                         doc.addPage();
                     }
 
-                    const x = margin + col * spacingX + (spacingX - codeSizeInput.value / 3.78) / 2; // Conversion mm to pixels (approx 3.78 pixels per mm)
-                    const y = margin + row * spacingY + (spacingY - codeSizeInput.value / 3.78) / 2;
+                    const x = margin + col * imgWidthMM + (col + 1) * spaceX;
+                    const y = margin + row * imgWidthMM + (row + 1) * spaceY;
 
-                    doc.addImage(imgData, 'PNG', x, y, codeSizeInput.value / 3.78, codeSizeInput.value / 3.78);
+                    doc.addImage(imgData, 'PNG', x, y, imgWidthMM, imgWidthMM);
                 }
                 doc.save(`bulk_codes.pdf`);
             }
@@ -570,6 +567,23 @@
                 }
                 return result;
             }
+
+            // --- Print functionality ---
+            printBtn.addEventListener('click', () => {
+                const codeType = codeTypeSelect.value;
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write('<html><head><title>Print Code</title></head><body>');
+                if (codeType === 'qr') {
+                    const canvas = qrcodeContainer.querySelector('canvas');
+                    printWindow.document.write(`<img src="${canvas.toDataURL('image/png')}" style="width: 100%; max-width: ${codeSizeInput.value}px;">`);
+                } else if (codeType === 'barcode') {
+                    const svgXml = new XMLSerializer().serializeToString(barcodeSvgContainer);
+                    printWindow.document.write(svgXml);
+                }
+                printWindow.document.write('</body></html>');
+                printWindow.document.close();
+                printWindow.print();
+            });
 
             // Initial setup on load
             updateQrCode();

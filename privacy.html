@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <style>
-        /* Tool-specific styles based on the common layout */
         .tool-page {
             display: flex;
             flex-direction: column;
@@ -30,8 +29,6 @@
         .tool-header h1 { font-size: 2rem; color: var(--accent); font-weight: 700; }
         .tool-header .tool-desc { font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.5; }
         [data-theme="dark"] .tool-header .tool-desc { color: #94a3b8; }
-
-        /* --- Custom UI for Privacy Policy --- */
         .privacy-content h2 {
             font-size: 1.5rem;
             color: var(--text);
@@ -48,7 +45,6 @@
 </head>
 <body>
 
-    <!-- 1. Header Placeholder -->
     <div id="header-placeholder"></div>
 
     <main class="content tool-page">
@@ -57,22 +53,33 @@
                 <h1>Privacy Policy</h1>
                 <p class="tool-desc">Your privacy is important to us. Here's how we handle your data on ToolNine.</p>
             </header>
-
             <div class="privacy-content">
-                <!-- ... rest of your privacy policy ... -->
+                <h2>1. Data Collection and Processing</h2>
+                <p>ToolNine is designed as a privacy-first application. All data processing (such as image compression, PDF creation, and text encryption) occurs directly on your device using your browser. We do not upload your files or text to our servers.</p>
+                <h2>2. Cookies and Local Storage</h2>
+                <p>We use local storage for saving your theme preferences and favorites, but do not use tracking cookies or analytics.</p>
+                <ul>
+                    <li><strong>Functional Cookies:</strong> Only for theme, favorites, and basic preferences.</li>
+                    <li><strong>Analytics:</strong> We do not currently use third-party analytics services.</li>
+                </ul>
+                <h2>3. Third-Party Links</h2>
+                <p>Our website may contain links to other websites. We are not responsible for their privacy practices or content.</p>
+                <h2>4. Children's Privacy</h2>
+                <p>Our service is not directed to individuals under 13. We do not knowingly collect personal information from children under 13.</p>
+                <h2>5. Changes to This Policy</h2>
+                <p>We may update this privacy policy at any time. Changes will be posted on this page.</p>
+                <h2>6. Contact Us</h2>
+                <p>If you have any questions, contact us at <a href="mailto:contact@toolnine.in">contact@toolnine.in</a>.</p>
             </div>
         </section>
     </main>
 
-    <!-- PWA Install Button -->
     <div class="pwa-install-container">
         <button class="btn" id="installButton" style="display:none;">Install App</button>
     </div>
 
-    <!-- 2. Footer Placeholder -->
     <div id="footer-placeholder"></div>
 
-    <!-- Scripts -->
     <script src="/js/load-components.js"></script>
     <script src="/theme.js"></script>
 </body>

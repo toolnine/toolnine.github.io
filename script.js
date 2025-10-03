@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroSearchInput = document.getElementById('heroSearchInput');
     const toolGrid = document.getElementById('toolGrid');
     const megaMenuSearchInput = document.getElementById('megaMenuSearchInput'); // New search input
+    const allToolsMenu = document.getElementById('allToolsMenu'); // Reference to mega menu
 
     const favoritesSection = document.getElementById('favoritesSection');
     const favoritesGrid = document.getElementById('favoritesGrid');
@@ -57,7 +58,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (megaMenuSearchInput) {
         megaMenuSearchInput.addEventListener('input', () => {
+            // --- NEW: Close mega menu when search starts from within it ---
+            if (allToolsMenu) {
+                allToolsMenu.classList.remove('show');
+                document.body.classList.remove('menu-open');
+                const allToolsBtn = document.getElementById('allToolsBtn');
+                if(allToolsBtn) allToolsBtn.classList.remove('open');
+            }
+            // --- End NEW logic ---
             performInPlaceSearch(megaMenuSearchInput.value);
+            // Copy search term to hero input for consistent state
+            heroSearchInput.value = megaMenuSearchInput.value;
         });
     }
 

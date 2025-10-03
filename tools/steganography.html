@@ -1,11 +1,20 @@
+<!-- START OF FILE: tools/steganography.html (Upgraded) -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Steganography | ToolNine</title>
-    <link rel="stylesheet" href="../style.css">
+    <!-- SEO OPTIMIZATION -->
+    <title>Steganography Tool Online | Hide Text in Images Securely | ToolNine</title>
+    <meta name="description" content="Hide secret text messages inside images using LSB (Least Significant Bit) steganography or extract hidden messages from images with an optional password. Client-side, privacy-first tool." />
+    <!-- END SEO OPTIMIZATION -->
+    <!-- Updated to root-relative path -->
+    <link rel="stylesheet" href="/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <!-- Include crypto-js library for encryption (Local processing) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
     <style>
         /* Tool-specific styles based on the common layout */
         .tool-page {
@@ -71,77 +80,20 @@
             padding: 1rem;
             color: var(--text);
         }
+        /* New: Message capacity display */
+        .message-capacity { font-size: 0.9em; color: #64748b; margin-top: 0.2rem; }
+        [data-theme="dark"] .message-capacity { color: #94a3b8; }
     </style>
 </head>
 <body>
 
-    <header class="main-header">
-        <a href="../index.html" class="logo">ToolNine</a>
-        <button class="hamburger-btn" id="hamburgerBtn">☰</button>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="../index.html#category-image">Image Tools</a></li>
-                <li><a href="../index.html#category-text">Text Tools</a></li>
-                <li><a href="../blog.html">Blog</a></li>
-            </ul>
-            <button class="search-btn" id="searchBtn" aria-label="Search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
-            <button class="all-tools-btn" id="allToolsBtn">All Tools <span class="arrow">▼</span></button>
-            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
-        </nav>
-    </header>
-
-    <div class="mega-menu" id="allToolsMenu">
-        <!-- Mega menu content (full menu) -->
-        <div class="mega-menu-grid">
-            <div class="mega-menu-category">
-                <h3>Image Tools</h3>
-                <ul>
-                    <li><a href="image-to-pdf.html"><span class="tool-icon">📄</span> Image to PDF</a></li>
-                    <li><a href="image-compressor.html"><span class="tool-icon">🗜️</span> Image Compressor</a></li>
-                    <li><a href="image-resizer.html"><span class="tool-icon">📏</span> Image Resizer</a></li>
-                    <li><a href="convert-png-jpg.html"><span class="tool-icon">🖼️</span> PNG <> JPG</a></li>
-                    <li><a href="steganography.html"><span class="tool-icon">🕵️</span> Steganography</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Text & Writing</h3>
-                <ul>
-                    <li><a href="text-diff.html"><span class="tool-icon">🔍</span> Text Diff</a></li>
-                    <li><a href="text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
-                    <li><a href="text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
-                    <li><a href="word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Converters</h3>
-                <ul>
-                    <li><a href="unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
-                    <li><a href="document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Encoder/Decoder</h3>
-                <ul>
-                    <li><a href="url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
-                    <li><a href="hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
-                    <li><a href="password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
-                    <li><a href="qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
-                </ul>
-            </div>
-             <div class="mega-menu-category">
-                <h3>AI Tools</h3>
-                <ul>
-                    <li><a href="image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
-                    <li><a href="json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <!-- 1. Header Placeholder -->
+    <div id="header-placeholder"></div>
 
     <main class="content tool-page">
         <section class="tool-card">
             <header class="tool-header">
-                <h1>🕵️ Steganography</h1>
+                <h1>🕵️ Steganography Tool</h1>
                 <p class="tool-desc">Hide secret text inside an image or extract hidden text from an image (using LSB method). For educational purposes only.</p>
             </header>
 
@@ -156,8 +108,9 @@
                 <img id="previewImage" class="steg-preview-image" src="" alt="Image Preview">
             </div>
 
-            <div class="steg-message-input">
+            <div class="steg-message-input" id="messageInputArea"> <!-- Added ID to control visibility -->
                 <textarea id="msgInput" placeholder='Secret message to hide' class="tool-input"></textarea>
+                <div class="message-capacity" id="capacityInfo"></div> <!-- NEW capacity display -->
                 <input type="password" id="passwordInput" placeholder="Optional password" class="tool-input" style="margin-top: 10px;">
             </div>
 
@@ -175,6 +128,9 @@
                 <a class="btn" id="downloadBtn" download="stego.png">⬇️ Download Encoded Image</a>
             </div>
 
+            <div class="tool-controls">
+                <button class="btn" id="clearBtn" style="margin-top: 1rem;">Clear</button> <!-- NEW CLEAR BUTTON -->
+            </div>
         </section>
 
         <section class="how-to">
@@ -192,85 +148,48 @@
         <button class="btn" id="installButton" style="display:none;">Install App</button>
     </div>
 
-    <footer class="main-footer">
-        <ul class="footer-links">
-            <li><a href="../about.html">About Us</a></li>
-            <li><a href="../contact.html">Contact</a></li>
-            <li><a href="../blog.html">Blog</a></li>
-            <li><a href="../privacy.html">Privacy Policy</a></li>
-            <li><a href="../disclaimer.html">Disclaimer</a></li>
-        </ul>
-        <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
-    </footer>
+    <!-- 2. Footer Placeholder -->
+    <div id="footer-placeholder"></div>
 
     <!-- Scripts -->
-    <script src="../theme.js"></script>
+    <!-- NEW: Load the component loader script first -->
+    <script src="/js/load-components.js"></script>
+    <!-- Keep existing scripts here -->
+    <script src="/theme.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Navigation and Theme Toggle Logic ---
-            const allToolsBtn = document.getElementById('allToolsBtn');
-            const hamburgerBtn = document.getElementById('hamburgerBtn');
-            const allToolsMenu = document.getElementById('allToolsMenu');
-            const searchBtn = document.getElementById('searchBtn');
-
-            const toggleMenu = (event) => { event.stopPropagation(); allToolsMenu.classList.toggle('show'); allToolsBtn.classList.toggle('open'); };
-            allToolsBtn.addEventListener('click', toggleMenu);
-            hamburgerBtn.addEventListener('click', () => {
-                allToolsMenu.classList.toggle('show');
-                document.body.classList.toggle('menu-open');
-            });
-            document.addEventListener('click', (event) => {
-                if (window.innerWidth > 900) {
-                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && !event.target.closest('.main-nav')) {
-                        allToolsMenu.classList.remove('show'); allToolsBtn.classList.remove('open');
-                    }
-                } else {
-                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && event.target !== hamburgerBtn) {
-                        allToolsMenu.classList.remove('show');
-                        document.body.classList.remove('menu-open');
-                    }
-                }
-            });
-
-            // --- PWA Install Logic ---
-            let deferredPrompt;
-            const installButton = document.getElementById('installButton');
-
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                installButton.style.display = 'block';
-            });
-
-            installButton.addEventListener('click', () => {
-                installButton.style.display = 'none';
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        console.log('User response to install prompt:', choiceResult.outcome);
-                        deferredPrompt = null;
-                    });
-                }
-            });
-
-            window.addEventListener('appinstalled', () => {
-                installButton.style.display = 'none';
-            });
-
-            // --- Steganography Tool Specific Logic ---
+            // --- Elements ---
             const dropZone = document.getElementById('dropZone');
             const imgInput = document.getElementById('imgFile');
             const previewImage = document.getElementById('previewImage');
             const imagePreviewContainer = document.getElementById('imagePreviewContainer');
             const msgInput = document.getElementById('msgInput');
-            const passwordInput = document.getElementById('passwordInput'); // New: Password input field
+            const passwordInput = document.getElementById('passwordInput');
             const encodeBtn = document.getElementById('encodeBtn');
             const decodeBtn = document.getElementById('decodeBtn');
             const downloadContainer = document.getElementById('downloadContainer');
             const downloadBtn = document.getElementById('downloadBtn');
             const resultContainer = document.getElementById('resultContainer');
             const decodedMessage = document.getElementById('decodedMessage');
+            const capacityInfo = document.getElementById('capacityInfo'); // NEW element
+            const clearBtn = document.getElementById('clearBtn'); // NEW clear button
+
             let currentImageFile = null;
+            let currentImageCapacity = 0;
+
+            // --- UI Reset Function ---
+            function resetUI() {
+                dropZone.style.display = 'flex';
+                imagePreviewContainer.style.display = 'none';
+                msgInput.value = '';
+                passwordInput.value = '';
+                resultContainer.style.display = 'none';
+                downloadContainer.style.display = 'none';
+                capacityInfo.textContent = '';
+                currentImageFile = null;
+                currentImageCapacity = 0;
+            }
+            clearBtn.addEventListener('click', resetUI);
 
             // --- Helper Functions ---
             function toUint8(s) { return new TextEncoder().encode(s); }
@@ -358,6 +277,7 @@
                     dropZone.style.display = 'none';
                     resultContainer.style.display = 'none'; // Clear previous decode result
                     downloadContainer.style.display = 'none'; // Hide download link for new image
+                    updateMessageCapacity(reader.result); // NEW capacity update call
                 };
                 reader.readAsDataURL(file);
             }
@@ -452,6 +372,35 @@
                 return payloadBytes.slice(4, 4 + len);
             }
 
+            // --- Capacity Calculation (NEW FEATURE) ---
+            function updateMessageCapacity(dataUrl) {
+                const img = new Image();
+                img.src = dataUrl;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+                    // Max capacity calculation: (pixels * 3 bits per pixel) / 8 bits per byte = capacity bytes
+                    const maxCapacityBytes = Math.floor((imageData.data.length / 4) * 3 / 8) - 4; // Minus 4 bytes for length prefix
+                    currentImageCapacity = maxCapacityBytes;
+                    const maxMessageLength = maxCapacityBytes;
+
+                    msgInput.setAttribute('maxlength', maxMessageLength);
+                    msgInput.addEventListener('input', updateInputCount);
+                    updateInputCount();
+                };
+            }
+
+            function updateInputCount() {
+                const currentLength = msgInput.value.length;
+                const remaining = currentImageCapacity - currentLength;
+                capacityInfo.textContent = `Characters remaining: ${remaining} (Max: ${currentImageCapacity})`;
+            }
+
             // --- Event Listeners ---
             encodeBtn.addEventListener('click', async () => {
                 if (!currentImageFile) return alert('Please load an image first.');
@@ -476,6 +425,8 @@
                     const encodedDataUrl = await encodeImage(payloadBytes);
                     downloadBtn.href = encodedDataUrl;
                     downloadContainer.style.display = 'block';
+                    // Update preview image to show encoded version (for visual feedback)
+                    previewImage.src = encodedDataUrl;
                     alert('Message successfully hidden. Download the image.');
                 } catch (e) {
                     alert('Error during encoding: ' + e.message);

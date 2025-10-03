@@ -1,6 +1,7 @@
 // START OF FILE script.js
 
-document.addEventListener('DOMContentLoaded', () => {
+// --- Main application logic function ---
+function initializePageLogic() {
     // --- Elements and Initial setup ---
     const allToolCards = Array.from(document.querySelectorAll('.tool-card-home'));
     const tabButtons = document.querySelectorAll('.tab-btn');
@@ -64,11 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Search Input Event Listener ---
-    // Note: This needs to run *after* header.html content is loaded.
     if (headerSearchInput) {
         headerSearchInput.addEventListener('input', () => {
             performInPlaceSearch(headerSearchInput.value);
         });
+    } else {
+        console.warn('headerSearchInput element not found. Search functionality may not be initialized properly.');
     }
 
     // --- Handle search query from URL on page load ---
@@ -197,4 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderFavorites(); // Load and display favorites on page load
     updateToolVisibility(); // Initial filter call
     checkURLForSearchQuery(); // Check URL for search query on page load
-});```
+}
+
+// Ensure loadDynamicContent runs after the page has finished loading
+document.addEventListener('DOMContentLoaded', initializePageLogic);

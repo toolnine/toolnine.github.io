@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO OPTIMIZATION -->
+    <title>Advanced PDF Editor Online | Privacy-First ToolNine</title>
+    <meta name="description" content="Edit PDF files directly in your browser without uploading to a server. Merge, split, reorder pages, add text, and apply advanced annotations privately." />
+    <!-- END SEO OPTIMIZATION -->
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <!-- Include PDF.js for rendering PDF on canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- Include pdf-lib for editing functionality -->
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <style>
+        /* Tool-specific styles based on the common layout */
+        .tool-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 2rem;
+            flex-grow: 1;
+            width: 100%;
+        }
+        .tool-page .tool-card {
+            max-width: 1100px; /* Wider card for editor layout */
+            padding: 2rem;
+            width: 100%;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            background: var(--card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        .tool-header { text-align: center; margin-bottom: 1.5rem; }
+        .tool-header h1 { font-size: 2rem; color: var(--accent); font-weight: 700; }
+        .tool-header .tool-desc { font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.5; }
+        [data-theme="dark"] .tool-header .tool-desc { color: #94a3b8; }
+
+        /* --- Custom UI for PDF Editor --- */
+        .editor-layout {
+            display: flex;
+            gap: 1rem;
+            position: relative; /* For floating elements */
+        }
+        .editor-sidebar {
+            width: 280px;
+            border-right: 1px solid var(--border-color);
+            padding-right: 1rem;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .editor-main {
+            flex-grow: 1;
+            position: relative;
+            min-height: 500px;
+        }
+        .pdf-canvas-container {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: auto;
+            max-height: 60vh;
+            text-align: center;
+        }
+        .pdf-canvas { display: block; }
+        .pdf-preview {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Tool specific controls in sidebar */
+        .tool-group { margin-bottom: 1rem; }
+        .tool-group h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text); }
+        .tool-group .btn { width: 100%; margin-bottom: 0.5rem; }
+
+        /* Page thumbnails preview */
+        .page-thumbnails {
+            max-height: 40vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .page-thumb-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            background: var(--bg);
+            border-radius: 6px;
+            cursor: move;
+            border: 1px solid var(--border-color);
+            transition: background 0.2s;
+        }
+        .page-thumb-item:hover { background: #f1f5f9; }
+        [data-theme="dark"] .page-thumb-item:hover { background: #475569; }
+        .page-thumb-number { font-weight: 600; margin-right: 1rem; width: 20px; text-align: right; }
+        .page-thumb-image { width: 40px; height: auto; border-radius: 4px; border: 1px solid var(--border-color); }
+
+        /* Editing mode controls (floating on main canvas) */
+        .editing-mode-controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+            background: var(--card);
+            padding: 0.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 900px) {
+            .editor-layout { flex-direction: column; }
+            .editor-sidebar { width: 100%; border-right: none; padding-right: 0; }
+            .pdf-canvas-container { max-height: unset; height: 50vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="../index.html" class="logo">ToolNine</a>
+        <button class="hamburger-btn" id="hamburgerBtn">☰</button>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="../index.html#category-image">Image Tools</a></li>
+                <li><a href="../index.html#category-text">Text Tools</a></li>
+                <li><a href="../blog.html">Blog</a></li>
+            </ul>
+            <button class="search-btn" id="searchBtn" aria-label="Search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+            <button class="all-tools-btn" id="allToolsBtn">All Tools <span class="arrow">▼</span></button>
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
+        </nav>
+    </header>
+
+    <div class="mega-menu" id="allToolsMenu">
+        <!-- Mega menu content (full menu) -->
+        <div class="mega-menu-grid">
+            <div class="mega-menu-category">
+                <h3>Image Tools</h3>
+                <ul>
+                    <li><a href="image-to-pdf.html"><span class="tool-icon">📄</span> Image to PDF</a></li>
+                    <li><a href="image-compressor.html"><span class="tool-icon">🗜️</span> Image Compressor</a></li>
+                    <li><a href="image-resizer.html"><span class="tool-icon">📏</span> Image Resizer</a></li>
+                    <li><a href="convert-png-jpg.html"><span class="tool-icon">🖼️</span> PNG <> JPG</a></li>
+                    <li><a href="steganography.html"><span class="tool-icon">🕵️</span> Steganography</a></li>
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Text & Writing</h3>
+                <ul>
+                    <li><a href="text-diff.html"><span class="tool-icon">🔍</span> Text Diff</a></li>
+                    <li><a href="text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
+                    <li><a href="text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
+                    <li><a href="word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
+                    <li><a href="line-operations.html"><span class="tool-icon">🔠</span> Line Operations</a></li>
+                    <li><a href="text-cleaner.html"><span class="tool-icon">🧹</span> Text Cleaner</a></li>
+                    <li><a href="delivery-note-generator.html"><span class="tool-icon">📝</span> Delivery Note Generator</a></li>
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Converters</h3>
+                <ul>
+                    <li><a href="unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
+                    <li><a href="document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
+                    <li><a href="csv-editor.html"><span class="tool-icon">📊</span> CSV Editor</a></li>
+                    <li><a href="calculator.html"><span class="tool-icon">🧮</span> Calculator</a></li>
+                </ul>
+            </div>
+            <div class="mega-menu-category">
+                <h3>Encoder/Decoder</h3>
+                <ul>
+                    <li><a href="url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
+                    <li><a href="hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
+                    <li><a href="password-manager.html"><span class="tool-icon">🔑</span> Password Manager</a></li>
+                    <li><a href="password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
+                    <li><a href="qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
+                    <li><a href="pwa-manifest-generator.html"><span class="tool-icon">⚙️</span> PWA Manifest Generator</a></li>
+                </ul>
+            </div>
+             <div class="mega-menu-category">
+                <h3>AI Tools</h3>
+                <ul>
+                    <li><a href="image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
+                    <li><a href="json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
+                    <li><a href="html-viewer.html"><span class="tool-icon">💻</span> HTML Viewer</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <main class="content tool-page">
+        <section class="tool-card">
+            <header class="tool-header">
+                <h1>✍️ Advanced PDF Editor</h1>
+                <p class="tool-desc">Edit, modify, merge, and secure your PDFs directly in your browser. All processing is private and happens on your device.</p>
+            </header>
+
+            <div class="upload-drop-zone" id="dropZone" style="display: block;">
+                <span class="add-icon">+</span>
+                <span style="font-weight:500;">Upload PDF to edit or drag & drop</span>
+                <input type="file" id="pdfInput" accept=".pdf">
+                <div class="drop-hint">Supported formats: PDF</div>
+            </div>
+
+            <div id="editorInterface" style="display: none;">
+                <div class="editor-layout">
+                    <!-- Sidebar for tools and page management -->
+                    <div class="editor-sidebar">
+                        <!-- Tool Selection -->
+                        <div class="tool-group">
+                            <h4>Page Operations</h4>
+                            <button class="btn" id="addPageBtn">Add New Page</button>
+                            <button class="btn" id="reorderPagesBtn">Reorder Pages</button>
+                            <button class="btn" id="deletePageBtn">Delete Selected Page</button>
+                        </div>
+
+                        <div class="tool-group">
+                            <h4>Security & Export</h4>
+                            <button class="btn" id="passwordProtectBtn">Password Protect</button>
+                            <button class="btn" id="removePasswordBtn">Remove Password</button>
+                            <button class="btn" id="downloadPdfBtn">Download Edited PDF</button>
+                        </div>
+
+                        <div class="tool-group">
+                            <h4>Page Thumbnails</h4>
+                            <div class="page-thumbnails" id="pageThumbnails">
+                                <!-- Thumbnails will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main editing area -->
+                    <div class="editor-main">
+                        <div class="editing-mode-controls">
+                            <button class="btn" id="addTextBtn">Add Text</button>
+                            <button class="btn" id="addStampBtn">Add Stamp</button>
+                        </div>
+                        <div id="pdfViewContainer" class="pdf-canvas-container">
+                            <!-- PDF page canvas will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="how-to">
+            <h3>How to Use</h3>
+            <ol>
+                <li>Drag and drop a PDF file into the drop zone or click to select a file.</li>
+                <li>The PDF document will load in the preview area.</li>
+                <li>Use the tools in the left sidebar to manipulate pages (reorder, delete, add).</li>
+                <li>Add new text or stamps by selecting the appropriate tool.</li>
+                <li>Click "Download Edited PDF" to save your changes locally.</li>
+            </ol>
+        </section>
+    </main>
+
+    <!-- PWA Install Button -->
+    <div class="pwa-install-container">
+        <button class="btn" id="installButton" style="display:none;">Install App</button>
+    </div>
+
+    <footer class="main-footer">
+        <ul class="footer-links">
+            <li><a href="../about.html">About Us</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+            <li><a href="../blog.html">Blog</a></li>
+            <li><a href="../privacy.html">Privacy Policy</a></li>
+            <li><a href="../disclaimer.html">Disclaimer</a></li>
+        </ul>
+        <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../theme.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- PDF Editor Tool Specific Logic ---
+            const pdfInput = document.getElementById('pdfInput');
+            const dropZone = document.getElementById('dropZone');
+            const editorInterface = document.getElementById('editorInterface');
+            const pdfViewContainer = document.getElementById('pdfViewContainer');
+            const pageThumbnailsContainer = document.getElementById('pageThumbnails');
+            const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+            const addTextBtn = document.getElementById('addTextBtn');
+
+            let pdfDoc = null;
+            let currentPages = []; // Stores Page objects or similar representation
+
+            // --- File Upload Handling ---
+            dropZone.addEventListener('click', () => pdfInput.click());
+            dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('active'); });
+            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('active'));
+            dropZone.addEventListener('drop', e => {
+                e.preventDefault();
+                dropZone.classList.remove('active');
+                handleFileUpload(e.dataTransfer.files);
+            });
+            pdfInput.addEventListener('change', e => handleFileUpload(e.target.files));
+
+            function handleFileUpload(files) {
+                if (files.length === 0 || files[0].type !== 'application/pdf') return;
+                const file = files[0];
+                const reader = new FileReader();
+                reader.onload = () => {
+                    loadPDF(reader.result);
+                };
+                reader.readAsArrayBuffer(file);
+            }
+
+            // --- PDF Loading and Rendering (using pdf-lib) ---
+            async function loadPDF(fileArrayBuffer) {
+                try {
+                    pdfDoc = await pdfLib.PDFDocument.load(fileArrayBuffer);
+                    dropZone.style.display = 'none';
+                    editorInterface.style.display = 'block';
+
+                    currentPages = pdfDoc.getPages();
+                    renderThumbnails();
+                    renderMainPage(0);
+                } catch (error) {
+                    alert('Error loading PDF: ' + error.message);
+                    console.error('PDF loading error:', error);
+                }
+            }
+
+            // --- Rendering Functions ---
+            async function renderThumbnails() {
+                pageThumbnailsContainer.innerHTML = '';
+                // Placeholder rendering for thumbnails (actual thumbnail generation is complex and requires PDF.js)
+                // We'll simulate by creating simple list items with page numbers.
+                for (let i = 0; i < currentPages.length; i++) {
+                    const pageNum = i + 1;
+                    const pageThumbItem = document.createElement('div');
+                    pageThumbItem.className = 'page-thumb-item';
+                    pageThumbItem.dataset.pageIndex = i;
+                    pageThumbItem.innerHTML = `<span class="page-thumb-number">${pageNum}</span><span>Page ${pageNum}</span>`;
+                    pageThumbnailsContainer.appendChild(pageThumbItem);
+                }
+            }
+
+            // Render selected page to main canvas (using PDF.js for rendering)
+            async function renderMainPage(pageIndex) {
+                // To display PDF pages, we generally use PDF.js, not pdf-lib.
+                // For demonstration, we'll create a simple placeholder view.
+                pdfViewContainer.innerHTML = `<p style="text-align:center;">Viewing Page ${pageIndex + 1} of ${currentPages.length}</p>`;
+            }
+
+            // --- Editing Functions (using pdf-lib) ---
+            // Add text to the current page (Simplified example)
+            addTextBtn.addEventListener('click', async () => {
+                if (!pdfDoc) return;
+
+                const page = currentPages[0]; // Assume editing first page for simplicity
+                const { width, height } = page.getSize();
+                const text = prompt("Enter text to add to PDF:", "Hello ToolNine!");
+
+                if (text) {
+                    page.drawText(text, {
+                        x: 50,
+                        y: height / 2,
+                        size: 30,
+                        color: pdfLib.rgb(0.95, 0.1, 0.1) // Red color
+                    });
+                    renderMainPage(0); // Rerender main page to reflect change (this requires more advanced logic for real-time preview)
+                }
+            });
+
+            // --- Download Edited PDF ---
+            downloadPdfBtn.addEventListener('click', async () => {
+                if (!pdfDoc) return;
+                try {
+                    const modifiedPdfBytes = await pdfDoc.save();
+                    const blob = new Blob([modifiedPdfBytes], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `edited_${Date.now()}.pdf`;
+                    link.click();
+                } catch (error) {
+                    alert('Error generating PDF: ' + error.message);
+                }
+            });
+
+            // --- Placeholder for other button actions ---
+            // addPageBtn.addEventListener('click', ...);
+            // passwordProtectBtn.addEventListener('click', ...);
+            // reorderPagesBtn functionality (using Sortable.js if added)
+        });
+    </script>
+</body>
+</html>

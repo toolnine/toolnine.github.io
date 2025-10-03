@@ -11,8 +11,6 @@ async function loadDynamicContent() {
             // Re-initialize scripts after content insertion (Theme Toggle, Navigation)
             setupNavigationListeners();
             setupThemeToggle(); // Initialize theme toggle for new header content
-            // NEW: Initialize live usage counter gadget
-            setupLiveUsageCounter();
 
         } catch (error) {
             console.error('Failed to load header content:', error);
@@ -30,30 +28,6 @@ async function loadDynamicContent() {
             console.error('Failed to load footer content:', error);
         }
     }
-}
-
-// --- Live Usage Counter Gadget Function (NEW) ---
-function setupLiveUsageCounter() {
-    const gadget = document.getElementById('liveUsageGadget');
-    const statusText = document.getElementById('liveUsageText');
-    if (!gadget || !statusText) return;
-
-    // Simulate real-time usage increase
-    let baseCount = parseInt(localStorage.getItem('toolNineUsageCount') || '12345');
-    let incrementInterval = null;
-
-    function startCounter() {
-        if (incrementInterval) clearInterval(incrementInterval);
-        incrementInterval = setInterval(() => {
-            // Add a small random increment to make it feel "live"
-            const increment = Math.floor(Math.random() * 5) + 1;
-            baseCount += increment;
-            statusText.textContent = `${baseCount.toLocaleString()} Used Today`;
-            localStorage.setItem('toolNineUsageCount', baseCount);
-        }, 5000); // Update every 5 seconds
-    }
-
-    startCounter();
 }
 
 // --- Initialization functions for new injected content ---

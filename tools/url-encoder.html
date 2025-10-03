@@ -1,10 +1,16 @@
+<!-- START OF FILE: tools/url-encoder.html (Upgraded) -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Encoder/Decoder | ToolNine</title>
-    <link rel="stylesheet" href="../style.css">
+    <!-- SEO OPTIMIZATION -->
+    <title>URL Encoder/Decoder Online | Percent-Encode and Decode URLs | ToolNine</title>
+    <meta name="description" content="Encode or decode text for use in URLs and query strings. Convert special characters to percent-encoded format and back. Fast and private in-browser tool." />
+    <!-- END SEO OPTIMIZATION -->
+    <!-- Updated to root-relative path -->
+    <link rel="stylesheet" href="/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <style>
         /* Tool-specific styles based on the common layout */
@@ -56,72 +62,14 @@
             border-radius: 6px;
             cursor: pointer;
         }
+        /* New: Swap button placement */
+        .swap-button { margin-left: 0.5rem; }
     </style>
 </head>
 <body>
 
-    <header class="main-header">
-        <a href="../index.html" class="logo">ToolNine</a>
-        <button class="hamburger-btn" id="hamburgerBtn">☰</button>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="../index.html#category-image">Image Tools</a></li>
-                <li><a href="../index.html#category-text">Text Tools</a></li>
-                <li><a href="../blog.html">Blog</a></li>
-            </ul>
-            <button class="search-btn" id="searchBtn" aria-label="Search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
-            <button class="all-tools-btn" id="allToolsBtn">All Tools <span class="arrow">▼</span></button>
-            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
-        </nav>
-    </header>
-
-    <div class="mega-menu" id="allToolsMenu">
-        <!-- Mega menu content (full menu) -->
-        <div class="mega-menu-grid">
-            <div class="mega-menu-category">
-                <h3>Image Tools</h3>
-                <ul>
-                    <li><a href="image-to-pdf.html"><span class="tool-icon">📄</span> Image to PDF</a></li>
-                    <li><a href="image-compressor.html"><span class="tool-icon">🗜️</span> Image Compressor</a></li>
-                    <li><a href="image-resizer.html"><span class="tool-icon">📏</span> Image Resizer</a></li>
-                    <li><a href="convert-png-jpg.html"><span class="tool-icon">🖼️</span> PNG <> JPG</a></li>
-                    <li><a href="steganography.html"><span class="tool-icon">🕵️</span> Steganography</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Text & Writing</h3>
-                <ul>
-                    <li><a href="text-diff.html"><span class="tool-icon">🔍</span> Text Diff</a></li>
-                    <li><a href="text-encryptor.html"><span class="tool-icon">🔐</span> Text Encryptor</a></li>
-                    <li><a href="text-to-pdf.html"><span class="tool-icon">📄</span> Text to PDF</a></li>
-                    <li><a href="word-counter.html"><span class="tool-icon">✏️</span> Word Counter</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Converters</h3>
-                <ul>
-                    <li><a href="unit-converter.html"><span class="tool-icon">⚖️</span> Unit Converter</a></li>
-                    <li><a href="document-scanner.html"><span class="tool-icon">📑</span> Document Scanner</a></li>
-                </ul>
-            </div>
-            <div class="mega-menu-category">
-                <h3>Encoder/Decoder</h3>
-                <ul>
-                    <li><a href="url-encoder.html"><span class="tool-icon">🔗</span> URL Encoder</a></li>
-                    <li><a href="hash-generator.html"><span class="tool-icon">🛡️</span> Hash Generator</a></li>
-                    <li><a href="password-generator.html"><span class="tool-icon">🔑</span> Password Generator</a></li>
-                    <li><a href="qr-generator.html"><span class="tool-icon">📱</span> QR Generator</a></li>
-                </ul>
-            </div>
-             <div class="mega-menu-category">
-                <h3>AI Tools</h3>
-                <ul>
-                    <li><a href="image-to-prompt.html"><span class="tool-icon">🤖</span> Image to Prompt</a></li>
-                    <li><a href="json-formatter.html"><span class="tool-icon">🧩</span> JSON Formatter</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <!-- 1. Header Placeholder -->
+    <div id="header-placeholder"></div>
 
     <main class="content tool-page">
         <section class="tool-card">
@@ -137,6 +85,7 @@
             <div class="tool-controls">
                 <button class="btn" id="encodeBtn">Encode URL</button>
                 <button class="btn" id="decodeBtn">Decode URL</button>
+                <button class="btn swap-button" id="swapBtn">Swap Input/Output</button> <!-- NEW SWAP BUTTON -->
                 <button class="btn" id="clearBtn">Clear</button>
             </div>
 
@@ -152,6 +101,7 @@
                 <li>Paste text into the input box.</li>
                 <li>Click "Encode URL" to convert special characters into a URL-safe format.</li>
                 <li>Click "Decode URL" to convert an encoded string back to regular text.</li>
+                <li>(New) Use the "Swap Input/Output" button to switch the text between the input and output areas.</li>
                 <li>Use the "Copy" button to save the result to your clipboard.</li>
             </ol>
         </section>
@@ -162,76 +112,22 @@
         <button class="btn" id="installButton" style="display:none;">Install App</button>
     </div>
 
-    <footer class="main-footer">
-        <ul class="footer-links">
-            <li><a href="../about.html">About Us</a></li>
-            <li><a href="../contact.html">Contact</a></li>
-            <li><a href="../blog.html">Blog</a></li>
-            <li><a href="../privacy.html">Privacy Policy</a></li>
-            <li><a href="../disclaimer.html">Disclaimer</a></li>
-        </ul>
-        <p class="footer-copyright">&copy; 2025 ToolNine. All Tools Run in Your Browser.</p>
-    </footer>
+    <!-- 2. Footer Placeholder -->
+    <div id="footer-placeholder"></div>
 
     <!-- Scripts -->
-    <script src="../theme.js"></script>
+    <!-- NEW: Load the component loader script first -->
+    <script src="/js/load-components.js"></script>
+    <!-- Keep existing scripts here -->
+    <script src="/theme.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Navigation and Theme Toggle Logic ---
-            const allToolsBtn = document.getElementById('allToolsBtn');
-            const hamburgerBtn = document.getElementById('hamburgerBtn');
-            const allToolsMenu = document.getElementById('allToolsMenu');
-            const searchBtn = document.getElementById('searchBtn');
-
-            const toggleMenu = (event) => { event.stopPropagation(); allToolsMenu.classList.toggle('show'); allToolsBtn.classList.toggle('open'); };
-            allToolsBtn.addEventListener('click', toggleMenu);
-            hamburgerBtn.addEventListener('click', () => {
-                allToolsMenu.classList.toggle('show');
-                document.body.classList.toggle('menu-open');
-            });
-            document.addEventListener('click', (event) => {
-                if (window.innerWidth > 900) {
-                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && !event.target.closest('.main-nav')) {
-                        allToolsMenu.classList.remove('show'); allToolsBtn.classList.remove('open');
-                    }
-                } else {
-                    if (allToolsMenu.classList.contains('show') && !allToolsMenu.contains(event.target) && event.target !== hamburgerBtn) {
-                        allToolsMenu.classList.remove('show');
-                        document.body.classList.remove('menu-open');
-                    }
-                }
-            });
-
-            // --- PWA Install Logic ---
-            let deferredPrompt;
-            const installButton = document.getElementById('installButton');
-
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                installButton.style.display = 'block';
-            });
-
-            installButton.addEventListener('click', () => {
-                installButton.style.display = 'none';
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        console.log('User response to install prompt:', choiceResult.outcome);
-                        deferredPrompt = null;
-                    });
-                }
-            });
-
-            window.addEventListener('appinstalled', () => {
-                installButton.style.display = 'none';
-            });
-
-            // --- URL Encoder/Decoder Tool Specific Logic ---
+            // --- Elements ---
             const txtInput = document.getElementById('txtInput');
             const encodeBtn = document.getElementById('encodeBtn');
             const decodeBtn = document.getElementById('decodeBtn');
             const clearBtn = document.getElementById('clearBtn');
+            const swapBtn = document.getElementById('swapBtn'); // NEW swap button
             const outputText = document.getElementById('outputText');
             const copyBtn = document.getElementById('copyBtn');
 
@@ -257,6 +153,14 @@
 
             clearBtn.addEventListener('click', () => {
                 txtInput.value = '';
+                outputText.textContent = '';
+                copyBtn.style.display = 'none';
+            });
+
+            // Swap button logic (NEW)
+            swapBtn.addEventListener('click', () => {
+                const currentOutput = outputText.textContent;
+                txtInput.value = currentOutput;
                 outputText.textContent = '';
                 copyBtn.style.display = 'none';
             });

@@ -1,19 +1,22 @@
-// START: js/load-components.js
+// START OF FILE: js/load-components.js
 
 async function loadDynamicContent() {
-    // 1. Load Header content
+    // 1. Load Header content from includes/header.html into placeholder div
     const headerPlaceholder = document.getElementById('header-placeholder');
     if (headerPlaceholder) {
         try {
             const response = await fetch('/includes/header.html');
             const headerHtml = await response.text();
             headerPlaceholder.innerHTML = headerHtml;
+            // Re-initialize scripts after content insertion (Theme Toggle, Navigation)
+            // Call initialization functions for elements inside header here.
+            setupNavigationListeners();
         } catch (error) {
             console.error('Failed to load header content:', error);
         }
     }
 
-    // 2. Load Footer content
+    // 2. Load Footer content from includes/footer.html into placeholder div
     const footerPlaceholder = document.getElementById('footer-placeholder');
     if (footerPlaceholder) {
         try {
@@ -25,27 +28,90 @@ async function loadDynamicContent() {
         }
     }
 
-    // 3. Re-initialize scripts after content insertion
-    // Note: If you have scripts (like theme.js or main script logic) that depend on
-    // elements within the header/footer (like hamburger menu buttons), you must call their initialization logic here.
-    // Let's call the functions from theme.js and script.js here, or ensure those scripts are modified to run after this injection.
-    
-    // --- Re-initialization for Theme and Navigation ---
-    // The existing theme.js logic should be modified slightly to be called here after injection,
-    // or you can include a simple initialization function here.
-    // Since theme.js and script.js are already included at the bottom, they will run after this script,
-    // but a DOMContentLoaded event inside them might fire before the injection completes.
-    // To be safest, we'll call a re-initialization function here.
-
-    // Let's assume you modify theme.js to expose its initialization function, e.g., initTheme();
-    // In theme.js, wrap the DOMContentLoaded code in a function:
-    // function initTheme() { //... existing theme.js logic ... }
-    // document.addEventListener('DOMContentLoaded', initTheme); // remove this line from theme.js itself.
-    // Then call initTheme(); here after injection.
-    // For this example, let's just make sure theme.js and script.js are loaded after this script.
+    // Call theme toggle initialization (assuming theme.js is loaded)
+    setupThemeToggle();
 }
 
-// Ensure the function runs after the main page content is loaded
+// --- Initialization functions for new injected content ---
+function setupNavigationListeners() {
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const allToolsBtn = document.getElementById('allToolsBtn');
+    const allToolsMenu = document.getElementById('allToolsMenu');
+
+    // Toggle logic for hamburger menu (mobile) and all tools button (desktop)
+    const toggleMenu = (event) => {
+        event.stopPropagation();
+        allToolsMenu.classList.toggle('show');
+        document.body.classList.toggle('menu-open');
+    };
+
+    if (hamburgerBtn) {
+        hamburgerBtn.addEventListener('click', toggleMenu);
+    }
+    if (allToolsBtn) {
+        allToolsBtn.addEventListener('click', toggleMenu);
+    }
+
+    // Close menu when clicking outside (on desktop view only)
+    document.addEventListener('click', (event) => {
+        const isDesktopView = window.innerWidth > 900;
+        const clickedOutsideMenu = !allToolsMenu.contains(event.target) && !event.target.closest('.main-nav');
+
+        if (isDesktopView) {
+            if (allToolsMenu.classList.contains('show') && clickedOutsideMenu) {
+                allToolsMenu.classList.remove('show');
+                allToolsBtn.classList.remove('open'); // Also close the desktop button state
+            }
+        } else {
+            if (allToolsMenu.classList.contains('show') && clickedOutsideMenu && event.target !== hamburgerBtn) {
+                allToolsMenu.classList.remove('show');
+                document.body.classList.remove('menu-open');
+            }
+        }
+    });
+}
+
+function setupThemeToggle() {
+    const themeToggle = document.getElementById("theme-toggle");
+    const body = document.body;
+
+    // --- Theme Toggle Logic ---
+    function setInitialTheme() {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "dark") {
+            body.setAttribute("data-theme", "dark");
+            if (themeToggle) themeToggle.textContent = "☀️";
+        } else if (savedTheme === "black") {
+            body.setAttribute("data-theme", "black");
+            if (themeToggle) themeToggle.textContent = "🌑";
+        } else {
+            body.removeAttribute("data-theme");
+            if (themeToggle) themeToggle.textContent = "🌙";
+        }
+    }
+    setInitialTheme();
+
+    if (themeToggle) {
+        themeToggle.addEventListener("click", () => {
+            const currentTheme = localStorage.getItem("theme") || "light";
+            if (currentTheme === "light") {
+                body.setAttribute("data-theme", "dark");
+                localStorage.setItem("theme", "dark");
+                themeToggle.textContent = "☀️";
+            } else if (currentTheme === "dark") {
+                body.setAttribute("data-theme", "black");
+                localStorage.setItem("theme", "black");
+                themeToggle.textContent = "🌑";
+            } else {
+                body.removeAttribute("data-theme");
+                localStorage.setItem("theme", "light");
+                themeToggle.textContent = "🌙";
+            }
+        });
+    }
+}
+
+// Ensure loadDynamicContent runs after the page has finished loading
 document.addEventListener('DOMContentLoaded', loadDynamicContent);
 
-// END: js/load-components.js
+// END OF FILE: js/load-components.js

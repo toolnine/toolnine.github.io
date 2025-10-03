@@ -82,7 +82,7 @@ body.menu-open {
 .mega-menu {
     position: fixed;
     top: var(--header-height);
-    right: 0; /* Changed to right for slide-in from right */
+    right: 0; /* Changed back to right: 0; for slide-in from right */
     bottom: 0;
     width: 100%;
     max-width: 300px; /* Default width for side menu */

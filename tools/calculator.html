@@ -1,4 +1,4 @@
-<!-- START OF FILE: tools/calculator.html (Upgraded) -->
+<!-- START OF FILE: tools/calculator.html (Upgraded with advanced features and SEO) -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <!-- SEO OPTIMIZATION -->
   <title>Advanced Calculator | Basic, Scientific & Programmer Modes | ToolNine</title>
-  <meta name="description" content="A user-friendly, feature-rich calculator for basic, scientific, and programmer calculations. Memory and calculation history included. Fast, in-browser processing." />
+  <meta name="description" content="Use ToolNine's free, advanced calculator for basic arithmetic, scientific calculations (trigonometry, log, power), and programmer operations (hex, binary, bitwise). Features memory, history, and a privacy-first local processing design." />
   <!-- END SEO OPTIMIZATION -->
 
   <!-- Updated to root-relative path -->
@@ -23,7 +23,7 @@
     [data-theme="dark"] .tool-desc { color: #94a3b8; }
 
     .mode-tabs { display:flex; gap:0.5rem; justify-content:center; margin-bottom:1rem; }
-    .mode-tab { padding:0.5rem 0.9rem; border-radius:8px; cursor:pointer; font-weight:600; border:1px solid transparent; background:var(--card); }
+    .mode-tab { padding:0.5rem 0.9rem; border-radius:8px; cursor:pointer; font-weight:600; border:1px solid transparent; background:var(--card); transition: all 0.2s ease; }
     .mode-tab:hover { background: var(--border-color); }
     .mode-tab.active { background:var(--accent); color:white; border-color:var(--accent); }
     [data-theme="dark"] .mode-tab.active { background:var(--accent); border-color:var(--accent); }
@@ -97,7 +97,7 @@
   <main class="content tool-page">
     <section class="tool-card">
       <header class="tool-header">
-        <h1>🧮 Calculator</h1>
+        <h1>🧮 Advanced Calculator</h1>
         <p class="tool-desc">Choose mode and calculate — Basic, Scientific, or Programmer. Memory & History included.</p>
       </header>
 
@@ -120,7 +120,7 @@
           <div id="keypadContainer">
             <!-- BASIC KEYPAD -->
             <div class="keypad keypad-basic" data-mode="basic">
-              <button class="btn btn-clear">C</button>
+              <button class="btn btn-clear">AC</button>
               <button class="btn" data-op="backspace">⌫</button>
               <button class="btn" data-op="(">(</button>
               <button class="btn" data-op=")">)</button>
@@ -154,9 +154,9 @@
               <button class="btn btn-wide" data-op="ans">Ans</button>
             </div>
 
-            <!-- SCIENTIFIC KEYPAD -->
+            <!-- SCIENTIFIC KEYPAD (Upgraded) -->
             <div class="keypad keypad-scientific" data-mode="scientific" style="display:none;">
-              <button class="btn btn-clear">C</button>
+              <button class="btn btn-clear">AC</button>
               <button class="btn" data-op="backspace">⌫</button>
               <button class="btn" data-op="(">(</button>
               <button class="btn" data-op=")">)</button>
@@ -167,7 +167,7 @@
               <button class="btn" data-op="cos">cos</button>
               <button class="btn" data-op="tan">tan</button>
               <button class="btn" data-op="sqrt">√</button>
-              <button class="btn" data-op="^">xʸ</button>
+              <button class="btn" data-op="pow">xʸ</button>
               <button class="btn btn-operator" data-op="*">×</button>
 
               <button class="btn" data-value="7">7</button>
@@ -195,16 +195,19 @@
               <button class="btn" data-value=".">.</button>
               <button class="btn btn-equal" data-op="=">=</button>
               <button class="btn btn-wide" data-op="ans">Ans</button>
+
+              <!-- Degree/Radian toggle (NEW FEATURE) -->
+              <button class="btn btn-wide" data-op="toggle_deg_rad" id="degRadToggle">Deg</button>
             </div>
 
-            <!-- PROGRAMMER KEYPAD (UI Improvement) -->
+            <!-- PROGRAMMER KEYPAD (Upgraded) -->
             <div class="keypad keypad-programmer" data-mode="programmer" style="display:none;">
-              <button class="btn btn-clear">C</button>
+              <button class="btn btn-clear">AC</button>
               <button class="btn" data-op="backspace">⌫</button>
               <button class="btn" data-op="(">(</button>
               <button class="btn" data-op=")">)</button>
-              <button class="btn" data-op="%">%</button>
-              <button class="btn btn-operator" data-op="/">÷</button>
+              <button class="btn" data-op="HEX">HEX</button>
+              <button class="btn" data-op="BIN">BIN</button>
 
               <button class="btn" data-op="AND">AND</button>
               <button class="btn" data-op="OR">OR</button>
@@ -213,7 +216,6 @@
               <button class="btn" data-op="<<"><<</button>
               <button class="btn" data-op=">>">>></button>
 
-              <!-- Number/Hex inputs -->
               <button class="btn" data-value="7">7</button>
               <button class="btn" data-value="8">8</button>
               <button class="btn" data-value="9">9</button>
@@ -236,7 +238,7 @@
               <button class="btn btn-operator" data-op="*">×</button>
 
               <button class="btn" data-value="0">0</button>
-              <button class="btn" data-value=".">.</button>
+              <button class="btn btn-operator" data-op="/">÷</button>
               <button class="btn btn-equal" data-op="=">=</button>
               <button class="btn btn-wide" data-op="ans">Ans</button>
             </div>
@@ -279,6 +281,8 @@
     <script src="/js/load-components.js"></script>
     <!-- Keep existing scripts here -->
     <script src="/theme.js"></script>
+
+  <!-- Calculator Script -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // Elements
@@ -288,6 +292,7 @@
       const resultEl = document.getElementById('calcResult');
       const historyListEl = document.getElementById('historyList');
       const memValueEl = document.getElementById('memValue');
+      const degRadToggle = document.getElementById('degRadToggle');
 
       // State
       let mode = 'basic';                 // basic | scientific | programmer
@@ -296,6 +301,7 @@
       let memory = 0;                     // memory slot (number)
       let history = [];                   // {expr, result, mode}
       let programmerBase = 'DEC';         // active base for programmer mode display
+      let angleMode = 'deg';              // deg | rad
 
       // Helpers
       function setMode(m) {
@@ -325,9 +331,19 @@
             resultEl.textContent = 'Error';
           }
         } else {
-          resultEl.textContent = (ans === null ? '0' : String(ans));
+          try {
+            // Re-evaluate current expression to show preview on display change
+            const tempResult = safeEval(expr);
+            if (expr && expr.length > 0) {
+              resultEl.textContent = formatResult(tempResult);
+            } else {
+              resultEl.textContent = ans === null ? '0' : formatResult(ans);
+            }
+          } catch {
+            resultEl.textContent = 'Error';
+          }
         }
-        memValueEl.textContent = String(memory);
+        memValueEl.textContent = formatResult(memory);
       }
 
       // Format programmer mode result for display
@@ -342,6 +358,15 @@
         }
       }
 
+      // Format result (basic/scientific) for display, handling large numbers with scientific notation
+      function formatResult(value) {
+        if (value === null) return '0';
+        if (Math.abs(value) > 1e15 || (Math.abs(value) < 1e-15 && value !== 0)) {
+            return value.toExponential(10); // Use scientific notation for very large/small numbers
+        }
+        return String(value);
+      }
+
       function pushHistory(entry) {
         history.unshift(entry);
         if (history.length > 200) history.pop();
@@ -353,7 +378,7 @@
         history.forEach((h) => {
           const div = document.createElement('div');
           div.className = 'history-entry';
-          div.textContent = `${h.mode.toUpperCase()}: ${h.expr} = ${h.result}`;
+          div.textContent = `${h.mode.toUpperCase()}: ${h.expr} = ${formatResult(h.result)}`;
           div.title = 'Click to reuse';
           div.addEventListener('click', () => {
             expr = h.expr;
@@ -365,38 +390,43 @@
       }
 
       // Evaluate expression safely-ish:
-      function safeEval(input, modeForEval) {
+      function safeEval(input) {
         if (!input) return 0;
         try {
-          // Preprocess percentage: turn '50%' -> '(50/100)'
+          // 1. Preprocess percentage: turn '50%' -> '(50/100)'
           input = input.replace(/(\d+(\.\d+)?)%/g, '($1/100)');
-          // Replace unicode operator chars
-          input = input.replace(/×/g, '*').replace(/÷/g, '/');
-          // ^ to **
-          input = input.replace(/\^/g, '**');
-          // Replace trig/log functions to Math.
-          input = input.replace(/\bsin\(/g, 'Math.sin(');
-          input = input.replace(/\bcos\(/g, 'Math.cos(');
-          input = input.replace(/\btan\(/g, 'Math.tan(');
-          input = input.replace(/\blog\(/g, 'Math.log10(');
-          input = input.replace(/\bln\(/g, 'Math.log(');
-          input = input.replace(/\bsqrt\(/g, 'Math.sqrt(');
-          input = input.replace(/\babs\(/g, 'Math.abs(');
-          input = input.replace(/\bpi\b/g, String(Math.PI));
-          input = input.replace(/\be\b/g, String(Math.E));
-          // Replace x² and x³ patterns like "5 x2" or "5 x²"
-          input = input.replace(/\b(\d+(\.\d+)?)\s*x2\b/g, '($1**2)');
-          input = input.replace(/\b(\d+(\.\d+)?)\s*x3\b/g, '($1**3)');
+          // 2. Replace unicode operator chars and powers
+          input = input.replace(/×/g, '*').replace(/÷/g, '/').replace(/xʸ/g, '**').replace(/x²/g, '**2').replace(/x³/g, '**3');
 
-          // Evaluate using Function to sandbox a bit:
+          // 3. Replace trig/log functions to Math. and handle angle mode
+          if (mode === 'scientific') {
+            const angleConversion = angleMode === 'deg' ? ' * Math.PI / 180' : '';
+            // Match sin(x), cos(x), tan(x) and wrap a conversion factor if needed
+            input = input.replace(/\b(sin|cos|tan)\(([^)]+)\)/g, (match, fnName, arg) => {
+              // Only apply conversion if argument is not pi or e (for simplicity, assumes user enters pi/e in radians)
+              if (arg.includes('pi') || arg.includes('e')) {
+                return `Math.${fnName}(${arg})`;
+              }
+              return `Math.${fnName}(${arg}${angleConversion})`;
+            });
+
+            input = input.replace(/\blog\(/g, 'Math.log10(');
+            input = input.replace(/\bln\(/g, 'Math.log(');
+            input = input.replace(/\bsqrt\(/g, 'Math.sqrt(');
+            input = input.replace(/\babs\(/g, 'Math.abs(');
+            input = input.replace(/\bpow\(/g, 'Math.pow('); // Add pow function
+            input = input.replace(/\bpi\b/g, String(Math.PI));
+            input = input.replace(/\be\b/g, String(Math.E));
+          }
+
+          // 4. Evaluate using Function (safer sandbox approach)
           const fn = new Function('return (' + input + ')');
           let res = fn();
 
           if (!isFinite(res) || Number.isNaN(res)) throw new Error('Math Error');
-          if (Math.abs(res) < 1e-12) res = 0;
-          if (typeof res === 'number') {
-            res = Math.round((res + Number.EPSILON) * 1e12) / 1e12;
-          }
+
+          // Round small floating precision issues
+          res = Math.round((res + Number.EPSILON) * 1e12) / 1e12;
           return res;
         } catch (e) {
           throw new Error('Error');
@@ -406,18 +436,17 @@
       // Programmer mode evaluate (Fixed Logic)
       function evalProgrammer(input) {
         try {
-          // 1. Convert HEX to decimal for evaluation
-          input = input.replace(/0x([0-9a-fA-F]+)/g, (match, hex) => parseInt(hex, 16));
-          // 2. Normalize spaces
+          // 1. Normalize spaces
           input = input.replace(/\s+/g, ' ').trim();
 
-          // 3. Replace text operators with bitwise JS operators
+          // 2. Replace text operators with bitwise JS operators
           let s = input.replace(/\bAND\b/gi, '&');
           s = s.replace(/\bOR\b/gi, '|');
           s = s.replace(/\bXOR\b/gi, '^');
           s = s.replace(/\bNOT\b/gi, '~');
 
-          // 4. Evaluate using Function (safer sandbox approach)
+          // 3. Evaluate using Function (safer sandbox approach)
+          // Evaluate using Function (safer sandbox approach)
           const fn = new Function('return (' + s + ')');
           let res = fn();
 
@@ -436,6 +465,7 @@
         const op = btn.dataset.op;
 
         if (value !== undefined) {
+          // Append number or hex letter (in programmer)
           if (value === '.') {
             const tokens = expr.split(/[\s+\-*/%^()]+/).filter(Boolean);
             const last = tokens[tokens.length - 1] || '';
@@ -454,31 +484,35 @@
             if (expr === '') expr = '';
             render();
             break;
-          case 'C':
+          case 'AC': // All Clear button
             expr = '';
             ans = null;
             render();
             break;
           case 'toggle_sign':
-            // Naive approach for sign toggle, can be improved for scientific mode.
-            // expr = expr.replace(/(-?\d+(\.\d+)?)(?!.*(-?\d+(\.\d+)?))/,'(' + '(-1*' + '$1' + '))');
-            // A safer method for Basic mode: if result is displayed, toggle sign of result.
-            // If text in input, toggle sign of last number.
+            // Toggle sign of current expression/result
             if (expr === '') {
                 ans = ans !== null ? ans * -1 : 0;
             } else {
-                expr = expr.replace(/(\d+(\.\d+)?)(?!.*[\d\.])/, (match) => `(-${match})`);
+                expr = expr.startsWith('-') ? expr.substring(1) : '-' + expr;
             }
             render();
             break;
           case 'pi':
           case 'e':
-            expr += (op === 'pi' ? 'pi' : 'e');
+            expr += op;
             render();
             break;
-          case 'x2':
-          case 'x3':
-            expr += (op === 'x2' ? 'x²' : 'x³');
+          case 'x2': // x²
+            expr += 'x²';
+            render();
+            break;
+          case 'x3': // x³
+            expr += 'x³';
+            render();
+            break;
+          case 'pow': // xʸ
+            expr += 'xʸ';
             render();
             break;
           case 'sin':
@@ -521,11 +555,15 @@
             render();
             break;
           case 'HEX':
+            programmerBase = 'HEX'; render(); break;
           case 'BIN':
+            programmerBase = 'BIN'; render(); break;
           case 'DEC':
-            programmerBase = op;
-            // Re-render display according to base change
-            if (mode === 'programmer') render();
+            programmerBase = 'DEC'; render(); break;
+          case 'toggle_deg_rad':
+            angleMode = angleMode === 'deg' ? 'rad' : 'deg';
+            degRadToggle.textContent = angleMode.toUpperCase();
+            render();
             break;
           case 'AND':
           case 'OR':
@@ -537,7 +575,7 @@
             render();
             break;
           case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
-            expr += op;
+            if (mode === 'programmer') expr += op; // Only append hex letters in programmer mode
             render();
             break;
           case '=':
@@ -566,7 +604,7 @@
         if (mode === 'programmer') {
           return evalProgrammer(expr);
         } else {
-          return safeEval(expr, mode);
+          return safeEval(expr);
         }
       }
 
@@ -577,13 +615,13 @@
         if (mode === 'programmer') {
           res = evalProgrammer(expr);
         } else {
-          res = safeEval(expr, mode);
+          res = safeEval(expr);
         }
         pushHistory({ expr: expr, result: res, mode });
-        expr = String(res);
         return res;
       }
 
+      // --- Event Listeners ---
       // Attach event listeners to keypad buttons
       document.querySelectorAll('.keypad .btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -593,20 +631,23 @@
 
       // Tabs
       tabs.forEach(t => {
-        t.addEventListener('click', () => setMode(t.dataset.mode));
+        t.addEventListener('click', () => {
+          setMode(t.dataset.mode);
+          // Update button appearance (active state logic is in CSS and setMode)
+        });
       });
 
       // Memory buttons on right
-      document.getElementById('memMC').addEventListener('click', () => { memory = 0; memValueEl.textContent = memory; });
+      document.getElementById('memMC').addEventListener('click', () => { memory = 0; memValueEl.textContent = formatResult(memory); });
       document.getElementById('memMR').addEventListener('click', () => { expr += String(memory); render(); });
-      document.getElementById('memMplus').addEventListener('click', () => { try { memory += computeCurrent(); memValueEl.textContent = memory; } catch{} });
-      document.getElementById('memMminus').addEventListener('click', () => { try { memory -= computeCurrent(); memValueEl.textContent = memory; } catch{} });
+      document.getElementById('memMplus').addEventListener('click', () => { try { memory += computeCurrent(); memValueEl.textContent = formatResult(memory); } catch{} });
+      document.getElementById('memMminus').addEventListener('click', () => { try { memory -= computeCurrent(); memValueEl.textContent = formatResult(memory); } catch{} });
 
       // History controls
       document.getElementById('clearHistory').addEventListener('click', () => { history = []; renderHistory(); });
       document.getElementById('exportHistory').addEventListener('click', () => {
         if (!history.length) return alert('No history to export');
-        const text = history.map(h => `${h.mode.toUpperCase()}: ${h.expr} = ${h.result}`).join('\n');
+        const text = history.map(h => `${h.mode.toUpperCase()}: ${h.expr} = ${formatResult(h.result)}`).join('\n');
         const blob = new Blob([text], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -615,37 +656,38 @@
         URL.revokeObjectURL(url);
       });
 
-      // Keyboard support
+      // Keyboard support (Improved)
       document.addEventListener('keydown', (e) => {
         const key = e.key;
-        const targetElement = e.target.tagName; // Prevents interference if user is typing elsewhere
+        const targetElement = e.target.tagName;
 
         if (targetElement === 'INPUT' || targetElement === 'TEXTAREA') {
-            return;
+            return; // Don't interfere if focus is on input/textarea
         }
 
-        if ((key >= '0' && key <= '9') || key === '.') {
-          expr += key; render(); return;
+        e.preventDefault(); // Prevent default browser actions for common keys
+
+        // Numeric input and basic operators
+        if (/[0-9]/.test(key) || key === '.') {
+          expr += key; render();
+        } else if (key === '+' || key === '-' || key === '*' || key === '/') {
+          expr += ' ' + key + ' '; render();
+        } else if (key === 'Enter' || key === '=') {
+          try { ans = computeAndRecord(); expr = ''; render(); } catch { ans = 'Error'; expr = ''; render(); }
+        } else if (key === 'Backspace') {
+          expr = expr.slice(0, -1); render();
+        } else if (key === 'Escape') {
+          expr = ''; ans = null; render();
+        } else if (mode === 'scientific' && (key === 'D' || key === 'd')) {
+          degRadToggle.click(); // Toggle degree/radian
+        } else if (mode === 'programmer') {
+          if (/[A-F]/.test(key.toUpperCase())) { expr += key.toUpperCase(); render(); }
+          // Add other programmer specific key bindings here (like bitwise shifts)
         }
-        if (key === '+' || key === '-' || key === '*' || key === '/') {
-          expr += ' ' + key + ' '; render(); return;
-        }
-        if (key === 'Enter' || key === '=') {
-          try { ans = computeAndRecord(); render(); } catch { ans = 'Error'; render(); }
-          return;
-        }
-        if (key === 'Backspace') {
-          e.preventDefault(); // Prevent navigating back in browser history
-          expr = expr.slice(0, -1); render(); return;
-        }
-        if (key === 'Escape') {
-          e.preventDefault(); // Prevent browser close/exit
-          expr = ''; ans = null; render(); return;
-        }
-        // switch tabs by 1/2/3 (using number keys on keyboard)
-        if (key === '1') { setMode('basic'); return; }
-        if (key === '2') { setMode('scientific'); return; }
-        if (key === '3') { setMode('programmer'); return; }
+        // Switch tabs by 1/2/3 keys
+        if (key === '1') { setMode('basic'); }
+        if (key === '2') { setMode('scientific'); }
+        if (key === '3') { setMode('programmer'); }
       });
 
       // initial render

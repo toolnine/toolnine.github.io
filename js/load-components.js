@@ -11,9 +11,8 @@ async function loadDynamicContent() {
             // Re-initialize scripts after content insertion (Theme Toggle, Navigation)
             setupNavigationListeners();
             setupThemeToggle(); // Initialize theme toggle for new header content
-            // NEW: Initialize privacy gadget state
-            window.updatePrivacyGadget = setupPrivacyGadget();
-            window.updatePrivacyGadget('secure'); // Set default state on load
+            // NEW: Initialize live usage counter gadget
+            setupLiveUsageCounter();
 
         } catch (error) {
             console.error('Failed to load header content:', error);
@@ -33,31 +32,28 @@ async function loadDynamicContent() {
     }
 }
 
-// --- Privacy Gadget Management Function (NEW) ---
-function setupPrivacyGadget() {
-    const gadget = document.getElementById('privacyStatusGadget');
-    const statusText = document.getElementById('privacyStatusText');
+// --- Live Usage Counter Gadget Function (NEW) ---
+function setupLiveUsageCounter() {
+    const gadget = document.getElementById('liveUsageGadget');
+    const statusText = document.getElementById('liveUsageText');
+    if (!gadget || !statusText) return;
 
-    if (!gadget || !statusText) {
-        // console.warn('Privacy Status Gadget elements not found in header.');
-        return () => {}; // Return a dummy function if elements don't exist
+    // Simulate real-time usage increase
+    let baseCount = parseInt(localStorage.getItem('toolNineUsageCount') || '12345');
+    let incrementInterval = null;
+
+    function startCounter() {
+        if (incrementInterval) clearInterval(incrementInterval);
+        incrementInterval = setInterval(() => {
+            // Add a small random increment to make it feel "live"
+            const increment = Math.floor(Math.random() * 5) + 1;
+            baseCount += increment;
+            statusText.textContent = `${baseCount.toLocaleString()} Used Today`;
+            localStorage.setItem('toolNineUsageCount', baseCount);
+        }, 5000); // Update every 5 seconds
     }
 
-    /**
-     * Updates the visual state of the privacy status gadget.
-     * @param {string} status - 'processing' or 'secure'.
-     */
-    return function updateGadget(status) {
-        if (status === 'processing') {
-            gadget.classList.remove('secure');
-            gadget.classList.add('processing');
-            statusText.textContent = 'Processing locally...';
-        } else if (status === 'secure') {
-            gadget.classList.remove('processing');
-            gadget.classList.add('secure');
-            statusText.textContent = 'Secure';
-        }
-    };
+    startCounter();
 }
 
 // --- Initialization functions for new injected content ---

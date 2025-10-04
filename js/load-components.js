@@ -11,7 +11,7 @@ async function loadDynamicContent() {
             // Re-initialize scripts after content insertion (Theme Toggle, Navigation)
             setupNavigationListeners();
             setupThemeToggle();
-            // NEW: Setup universal search logic and live suggestions
+            // NEW: Setup universal search logic for redirection and live suggestions on non-homepages
             setupUniversalSearchLogic();
         } catch (error) {
             console.error('Failed to load header content:', error);
@@ -45,7 +45,6 @@ function setupUniversalSearchLogic() {
     const searchResultsDropdown = document.getElementById('searchResultsDropdown');
 
     // Tool Data (Manually hardcoded array of tool names and links)
-    // In a production app, this would be loaded from a JSON file for easier updates.
     const allToolsData = [
         { name: "Image to PDF", url: "/tools/image-to-pdf.html", keywords: ["image", "pdf", "convert"] },
         { name: "Image Compressor", url: "/tools/image-compressor.html", keywords: ["image", "compress", "resize"] },
@@ -79,29 +78,41 @@ function setupUniversalSearchLogic() {
     ];
 
     if (headerSearchInput) {
-        // --- Live Suggestions Logic ---
-        headerSearchInput.addEventListener('input', () => {
-            const query = headerSearchInput.value.trim().toLowerCase();
-            const matchingTools = allToolsData.filter(tool =>
-                tool.name.toLowerCase().includes(query) || tool.keywords.some(keyword => keyword.includes(query))
-            ).slice(0, 5); // Show top 5 results
+        // --- Get current page status ---
+        const isOnHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
 
-            renderSuggestions(matchingTools, query);
-        });
+        // --- Live Suggestions Logic (Only run on non-homepage) ---
+        if (!isOnHomePage) {
+            headerSearchInput.addEventListener('input', () => {
+                const query = headerSearchInput.value.trim().toLowerCase();
+                const matchingTools = allToolsData.filter(tool => {
+                    const searchString = tool.name.toLowerCase() + ' ' + (tool.keywords ? tool.keywords.join(' ') : '');
+                    return searchString.includes(query);
+                }).slice(0, 5); // Show top 5 results
+
+                renderSuggestions(matchingTools, query);
+            });
+        }
 
         // --- Redirection Logic (on Enter key or when suggestions are clicked) ---
         headerSearchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault(); // Prevent default form submission
 
+                const query = headerSearchInput.value.trim();
+
                 // If on homepage, perform in-place filtering directly (for full results)
-                const isOnHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
-                if (isOnHomePage && typeof performInPlaceSearch === "function") {
-                    performInPlaceSearch(headerSearchInput.value.trim());
-                    searchResultsDropdown.style.display = 'none'; // Hide suggestions on Enter press
-                } else {
+                if (isOnHomePage) {
+                    // We let script.js handle the input event, here we just ensure a clean redirect on empty search
+                    if (query.length === 0 && window.location.search.includes('search=')) {
+                        window.location.href = `/index.html`;
+                    }
+                } else if (query.length > 0) {
                     // If not on homepage, redirect to homepage with query for full results display
-                    window.location.href = `/index.html?search=${encodeURIComponent(headerSearchInput.value.trim())}`;
+                    window.location.href = `/index.html?search=${encodeURIComponent(query)}`;
+                } else if (query.length === 0 && window.location.search.includes('search=')) {
+                    // Clear search and redirect back to clean homepage URL
+                    window.location.href = `/index.html`;
                 }
             }
         });
@@ -112,39 +123,40 @@ function setupUniversalSearchLogic() {
                 searchResultsDropdown.style.display = 'none';
             }
         });
-    }
 
-    function renderSuggestions(matches, query) {
-        if (query.length === 0 || matches.length === 0) {
-            searchResultsDropdown.style.display = 'none';
-            return;
-        }
+        // --- Render Suggestions UI ---
+        function renderSuggestions(matches, query) {
+            if (query.length === 0 || matches.length === 0) {
+                searchResultsDropdown.style.display = 'none';
+                return;
+            }
 
-        searchResultsDropdown.innerHTML = '';
-        const ul = document.createElement('ul');
-        ul.className = 'suggestions-list';
+            searchResultsDropdown.innerHTML = '';
+            const ul = document.createElement('ul');
+            ul.className = 'suggestions-list';
 
-        matches.forEach(tool => {
-            const li = document.createElement('li');
-            li.className = 'suggestion-item';
-            li.textContent = tool.name;
-            li.dataset.url = tool.url;
+            matches.forEach(tool => {
+                const li = document.createElement('li');
+                li.className = 'suggestion-item';
+                li.textContent = tool.name;
+                li.dataset.url = tool.url;
 
-            li.addEventListener('click', () => {
-                window.location.href = tool.url;
+                li.addEventListener('click', () => {
+                    window.location.href = tool.url;
+                });
+                ul.appendChild(li);
             });
-            ul.appendChild(li);
-        });
 
-        searchResultsDropdown.appendChild(ul);
-        searchResultsDropdown.style.display = 'block';
+            searchResultsDropdown.appendChild(ul);
+            searchResultsDropdown.style.display = 'block';
+        }
     }
 }
 
 
 // --- Initialization functions for new injected content ---
 function setupNavigationListeners() {
-    // ... (unchanged navigation code) ...
+    // ... (unchanged navigation code from previous update) ...
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const allToolsBtn = document.getElementById('allToolsBtn');
     const allToolsMenu = document.getElementById('allToolsMenu');
@@ -207,7 +219,7 @@ function setupNavigationListeners() {
 }
 
 function setupThemeToggle() {
-    // ... (unchanged theme logic code) ...
+    // ... (unchanged theme logic code from previous update) ...
     const themeToggle = document.getElementById("theme-toggle");
     const body = document.body;
 

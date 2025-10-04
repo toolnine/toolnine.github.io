@@ -1,7 +1,7 @@
 {
-  "name": "ToolNine",
-  "short_name": "ToolNine",
-  "description": "All-in-One Online Toolkit. Privacy-first tools for creators and developers.",
+  "name": "MySafeTool",
+  "short_name": "MySafeTool",
+  "description": "Privacy First, Offline Power. Tools for creators and developers.",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",

@@ -10,8 +10,7 @@ async function loadDynamicContent() {
             headerPlaceholder.innerHTML = headerHtml;
             // Re-initialize scripts after content insertion (Theme Toggle, Navigation)
             setupNavigationListeners();
-            setupThemeToggle(); // Initialize theme toggle for new header content
-
+            setupThemeToggle();
         } catch (error) {
             console.error('Failed to load header content:', error);
         }
@@ -28,6 +27,14 @@ async function loadDynamicContent() {
             console.error('Failed to load footer content:', error);
         }
     }
+
+    // 3. Initialize main page logic AFTER header/footer are loaded
+    // Wait a tick to let the HTML render
+    setTimeout(() => {
+        if (typeof initializePageLogic === "function") {
+            initializePageLogic();
+        }
+    }, 0);
 }
 
 // --- Initialization functions for new injected content ---
@@ -135,3 +142,5 @@ function setupThemeToggle() {
 
 // Ensure loadDynamicContent runs after the page has finished loading
 document.addEventListener('DOMContentLoaded', loadDynamicContent);
+
+// END OF FILE: js/load-components.js

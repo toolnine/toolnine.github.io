@@ -181,11 +181,6 @@ main {
 }
 [data-theme="dark"] .suggestion-item:hover { background-color: #475569; }
 [data-theme="black"] .suggestion-item:hover { background-color: #2a2a2a; }
-/* Add visual focus for keyboard navigation (optional) */
-.suggestion-item.focused {
-    background-color: #e0ebff;
-}
-[data-theme="dark"] .suggestion-item.focused { background-color: #475569; }
 
 /* Mega Menu Overlay (Mobile) */
 .mega-menu {

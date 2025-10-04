@@ -19,8 +19,8 @@ function initializePageLogic() {
     // Get the new header search input from the loaded header component
     const headerSearchInput = document.getElementById('headerSearchInput');
 
-    // Refactored: This function now only handles filtering on the current page.
-    // Redirection logic has been moved to load-components.js to be truly universal.
+    // Refactored: This function now only handles filtering on the current page (homepage).
+    // The live suggestions are handled by the separate universal logic in load-components.js.
     function performInPlaceSearch(query) {
         const lowerCaseQuery = query.toLowerCase().trim();
 
@@ -53,16 +53,6 @@ function initializePageLogic() {
                 card.style.display = 'none';
             }
         });
-    }
-
-    // --- Search Input Event Listener ---
-    // Bind input event listener here. This will only run on the homepage.
-    if (headerSearchInput) {
-        headerSearchInput.addEventListener('input', () => {
-            performInPlaceSearch(headerSearchInput.value);
-        });
-    } else {
-        console.warn('headerSearchInput element not found. Search functionality may not be initialized properly.');
     }
 
     // --- Handle search query from URL on page load ---

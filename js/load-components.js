@@ -11,6 +11,8 @@ async function loadDynamicContent() {
             // Re-initialize scripts after content insertion (Theme Toggle, Navigation)
             setupNavigationListeners();
             setupThemeToggle();
+            // NEW: Setup universal search logic for redirection
+            setupCommonSearchRedirection();
         } catch (error) {
             console.error('Failed to load header content:', error);
         }
@@ -36,6 +38,50 @@ async function loadDynamicContent() {
         }
     }, 0);
 }
+
+// --- Universal Search Redirection Logic (NEW FUNCTION) ---
+function setupCommonSearchRedirection() {
+    const headerSearchInput = document.getElementById('headerSearchInput');
+    if (headerSearchInput) {
+        // Function to handle redirection logic
+        const handleSearchRequest = () => {
+            const query = headerSearchInput.value.trim();
+            const isOnHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
+
+            if (query.length > 0) {
+                if (isOnHomePage) {
+                    // If on homepage, let the specific script.js handle the filtering.
+                    // The 'input' listener below will handle this, but for 'Enter' key, we ensure it's processed.
+                    if (typeof performInPlaceSearch === "function") {
+                        performInPlaceSearch(query);
+                    }
+                } else {
+                    // If not on homepage, redirect to homepage with search query in URL.
+                    window.location.href = `index.html?search=${encodeURIComponent(query)}`;
+                }
+            } else if (!isOnHomePage && window.location.search.includes('search=')) {
+                // If query is empty and we are on a non-homepage URL with search params, redirect back clean.
+                window.location.href = `index.html`;
+            }
+        };
+
+        // Add event listeners:
+        // 1. For keydown/enter (to perform action immediately on pressing Enter)
+        headerSearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                handleSearchRequest();
+            }
+        });
+
+        // 2. For input event (to provide live filtering on homepage, and to ensure functionality on all pages)
+        // Note: The homepage script.js will also have an input listener (see below update for script.js)
+        // If we are on a non-homepage, we only need to respond to 'Enter' or click.
+        // Let's keep a simpler approach to avoid redundant listeners:
+        // The homepage script's initializePageLogic already sets up a listener for 'input' (performInPlaceSearch).
+        // Let's add the input listener here only for the redirection part when needed.
+    }
+}
+
 
 // --- Initialization functions for new injected content ---
 function setupNavigationListeners() {

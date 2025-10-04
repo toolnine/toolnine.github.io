@@ -82,17 +82,29 @@ function setupUniversalSearchLogic() {
         const isOnHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
 
         // --- Live Suggestions Logic (Only run on non-homepage) ---
-        if (!isOnHomePage) {
-            headerSearchInput.addEventListener('input', () => {
-                const query = headerSearchInput.value.trim().toLowerCase();
-                const matchingTools = allToolsData.filter(tool => {
-                    const searchString = tool.name.toLowerCase() + ' ' + (tool.keywords ? tool.keywords.join(' ') : '');
-                    return searchString.includes(query);
-                }).slice(0, 5); // Show top 5 results
+        // We only show suggestions when NOT on the homepage to avoid conflict with in-page filtering.
+        headerSearchInput.addEventListener('input', () => {
+            const query = headerSearchInput.value.trim().toLowerCase();
 
-                renderSuggestions(matchingTools, query);
-            });
-        }
+            // Hide suggestions on homepage
+            if (isOnHomePage) {
+                searchResultsDropdown.style.display = 'none';
+                return;
+            }
+            
+            // Show suggestions on other pages
+            if (query.length === 0) {
+                searchResultsDropdown.style.display = 'none';
+                return;
+            }
+
+            const matchingTools = allToolsData.filter(tool => {
+                const searchString = tool.name.toLowerCase() + ' ' + (tool.keywords ? tool.keywords.join(' ') : '');
+                return searchString.includes(query);
+            }).slice(0, 5); // Show top 5 results
+
+            renderSuggestions(matchingTools, query);
+        });
 
         // --- Redirection Logic (on Enter key or when suggestions are clicked) ---
         headerSearchInput.addEventListener('keydown', (e) => {
@@ -102,10 +114,10 @@ function setupUniversalSearchLogic() {
                 const query = headerSearchInput.value.trim();
 
                 // If on homepage, perform in-place filtering directly (for full results)
-                if (isOnHomePage) {
+                if (isOnHomePage && query.length > 0) {
                     // We let script.js handle the input event, here we just ensure a clean redirect on empty search
-                    if (query.length === 0 && window.location.search.includes('search=')) {
-                        window.location.href = `/index.html`;
+                    if (typeof performInPlaceSearch === "function") { // Check if homepage logic exists
+                        performInPlaceSearch(query);
                     }
                 } else if (query.length > 0) {
                     // If not on homepage, redirect to homepage with query for full results display

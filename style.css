@@ -175,6 +175,12 @@ main {
     font-size: 0.95rem;
     color: var(--text);
     transition: background-color 0.2s;
+    /* FIX: Ensure items are block elements for vertical stacking */
+    display: block;
+    border-bottom: 1px solid var(--border-color); /* Add separators like Google suggestions */
+}
+.suggestion-item:last-child {
+    border-bottom: none; /* Remove separator from last item */
 }
 .suggestion-item:hover {
     background-color: #f1f5f9;

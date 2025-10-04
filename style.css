@@ -313,15 +313,17 @@ main {
 [data-theme="black"] .tool-desc { color: #aaaaaa; }
 
 /* ==== Tool Page Layout (New) ==== */
-.tool-page { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 2rem 0; flex-grow: 1; width: 100%; }
-.tool-page h1, .tool-page h2 { color: var(--accent); text-align: center; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
-.tool-page .small { font-size: 1rem; color: #475569; max-width: 600px; text-align: center; margin-bottom: 1.5rem; }
-[data-theme="dark"] .tool-page .small { color: #94a3b8; }
-[data-theme="black"] .tool-page .small { color: #aaaaaa; }
+/* These styles define the general layout for all tool pages, individual tool styles will be separate */
+.tool-page { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 2rem; flex-grow: 1; width: 100%; }
+.tool-card { background: var(--card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; max-width: 900px; width: 100%; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+.tool-header { text-align: center; margin-bottom: 1.5rem; }
+.tool-header h1 { font-size: 2rem; color: var(--accent); font-weight: 700; }
+.tool-header .tool-desc { font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.5; }
+[data-theme="dark"] .tool-header .tool-desc { color: #94a3b8; }
+[data-theme="black"] .tool-header .tool-desc { color: #aaaaaa; }
 
-.tool-card { background: var(--card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; max-width: 700px; width: 100%; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
-.tool-controls { display: flex; gap: 1rem; margin-top: 1.5rem; align-items: center; }
 .tool-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg); color: var(--text); font-size: 1rem; resize: none; }
+.tool-controls { display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; align-items: center; }
 .tool-output { background: var(--bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); white-space: pre-wrap; margin-top: 1.5rem; color: var(--text); }
 
 /* ==== Footer ==== */
@@ -359,16 +361,19 @@ main {
 #favoritesSection { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color); display: none; }
 #favoritesSection h2 { margin-bottom: 1.5rem; text-align: left; }
 
-/* Tool Page Content */
-.tool-page { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 2rem; flex-grow: 1; width: 100%; }
-.tool-page .tool-card { max-width: 900px; padding: 2rem; width: 100%; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); background: var(--card); border-radius: 12px; border: 1px solid var(--border-color);}
-.tool-header { text-align: center; margin-bottom: 1.5rem; }
-.tool-header h1 { font-size: 2rem; color: var(--accent); font-weight: 700; }
-.tool-header .tool-desc { font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.5; }
-[data-theme="dark"] .tool-header .tool-desc { color: #94a3b8; }
-
-.tool-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg); color: var(--text); font-size: 1rem; }
-.tool-controls { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; align-items: center; }
+/* --- How To Section --- */
+.how-to {
+    max-width: 900px;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--card);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+.how-to h3 { color: var(--text); margin-bottom: 1rem; }
+.how-to ol { list-style-position: inside; padding-left: 0; }
+.how-to li { margin-bottom: 0.5rem; color: #475569; }
+[data-theme="dark"] .how-to li { color: #94a3b8; }
 
 /* --- Mobile responsive adjustments (start) --- */
 @media (max-width: 900px) {

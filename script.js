@@ -15,6 +15,9 @@ function initializePageLogic() {
     const favoritesGrid = document.getElementById('favoritesGrid');
     const favoritesKey = 'ToolNineFavourites';
 
+    // NEW element for "Not Found" message
+    const searchResultsMessage = document.getElementById('searchResultsMessage');
+
     // --- Search Logic (Homepage Specific) ---
     // Get the new header search input from the loaded header component
     const headerSearchInput = document.getElementById('headerSearchInput');
@@ -23,7 +26,9 @@ function initializePageLogic() {
     function performInPlaceSearch(query) {
         const lowerCaseQuery = query.toLowerCase().trim();
 
+        // 1. Reset UI state for empty query
         if (lowerCaseQuery.length === 0) {
+            searchResultsMessage.style.display = 'none'; // Hide "Not Found" message
             // Show regular content when search is empty
             if (getFavorites().length === 0) {
                 featureHighlights.style.display = 'flex';
@@ -35,12 +40,13 @@ function initializePageLogic() {
             return;
         }
 
-        // Hide sections during search
+        // 2. Hide sections during search
         featureHighlights.style.display = 'none';
         allToolsTitle.style.display = 'none';
         filterTabs.style.display = 'none';
         favoritesSection.style.display = 'none';
 
+        // 3. Perform filtering and count results
         let resultsFound = false;
         allToolCards.forEach(card => {
             const keywords = card.dataset.keywords.toLowerCase();
@@ -52,6 +58,13 @@ function initializePageLogic() {
                 card.style.display = 'none';
             }
         });
+
+        // 4. Show "Not Found" message if no results found
+        if (resultsFound) {
+            searchResultsMessage.style.display = 'none';
+        } else {
+            searchResultsMessage.style.display = 'block';
+        }
     }
 
     // --- Search Input Event Listener (Homepage Specific) ---
@@ -59,6 +72,15 @@ function initializePageLogic() {
     if (headerSearchInput) {
         headerSearchInput.addEventListener('input', () => {
             // When user types on homepage, perform in-place filtering directly.
+            // PWA prompt link logic
+            const pwaPromptLink = document.getElementById('pwaPromptLink');
+            if (pwaPromptLink) {
+                pwaPromptLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Simulate click on the main install button
+                    document.getElementById('installButton').click();
+                });
+            }
             performInPlaceSearch(headerSearchInput.value);
         });
     } else {

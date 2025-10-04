@@ -8,10 +8,8 @@ async function loadDynamicContent() {
             const response = await fetch('/includes/header.html');
             const headerHtml = await response.text();
             headerPlaceholder.innerHTML = headerHtml;
-            // Re-initialize scripts after content insertion (Theme Toggle, Navigation)
             setupNavigationListeners();
             setupThemeToggle();
-            // NEW: Setup universal search logic for redirection and live suggestions on non-homepages
             setupUniversalSearchLogic();
         } catch (error) {
             console.error('Failed to load header content:', error);
@@ -31,7 +29,6 @@ async function loadDynamicContent() {
     }
 
     // 3. Initialize main page logic AFTER header/footer are loaded
-    // Wait a tick to let the HTML render
     setTimeout(() => {
         if (typeof initializePageLogic === "function") {
             initializePageLogic();
@@ -44,37 +41,41 @@ function setupUniversalSearchLogic() {
     const headerSearchInput = document.getElementById('headerSearchInput');
     const searchResultsDropdown = document.getElementById('searchResultsDropdown');
 
-    // Tool Data (Manually hardcoded array of tool names and links)
+    // Tool Data List (Updated with 'type' field)
     const allToolsData = [
-        { name: "Image to PDF", url: "/tools/image-to-pdf.html", keywords: ["image", "pdf", "convert"] },
-        { name: "Image Compressor", url: "/tools/image-compressor.html", keywords: ["image", "compress", "resize"] },
-        { name: "Image Resizer", url: "/tools/image-resizer.html", keywords: ["image", "resize", "scale"] },
-        { name: "PNG <> JPG Converter", url: "/tools/convert-png-jpg.html", keywords: ["image", "png", "jpg", "convert"] },
-        { name: "Steganography", url: "/tools/steganography.html", keywords: ["image", "hide", "secret"] },
-        { name: "Palette Extractor", url: "/tools/image-palette-extractor.html", keywords: ["image", "color", "palette"] },
-        { name: "Placeholder Generator", url: "/tools/image-placeholder-generator.html", keywords: ["image", "placeholder", "generate"] },
-        { name: "Text Diff Checker", url: "/tools/text-diff.html", keywords: ["text", "compare", "diff"] },
-        { name: "Word Counter", url: "/tools/word-counter.html", keywords: ["text", "word", "count"] },
-        { name: "Text Encryptor", url: "/tools/text-encryptor.html", keywords: ["text", "encrypt", "password"] },
-        { name: "Text to PDF", url: "/tools/text-to-pdf.html", keywords: ["text", "pdf", "convert"] },
-        { name: "Line Operations", url: "/tools/line-operations.html", keywords: ["text", "sort", "shuffle"] },
-        { name: "Text Cleaner", url: "/tools/text-cleaner.html", keywords: ["text", "clean", "format"] },
-        { name: "Delivery Note Generator", url: "/tools/delivery-note-generator.html", keywords: ["text", "delivery", "note", "challan"] },
-        { name: "Unit Converter", url: "/tools/unit-converter.html", keywords: ["convert", "unit", "length", "weight"] },
-        { name: "Document Scanner", url: "/tools/document-scanner.html", keywords: ["convert", "document", "scan", "pdf"] },
-        { name: "CSV Editor", url: "/tools/csv-editor.html", keywords: ["convert", "csv", "editor", "spreadsheet"] },
-        { name: "Calculator", url: "/tools/calculator.html", keywords: ["convert", "calculator", "math"] },
-        { name: "PDF Editor", url: "/tools/pdf-editor.html", keywords: ["convert", "pdf", "edit", "merge", "split"] },
-        { name: "QR & Barcode Reader", url: "/tools/qr-reader.html", keywords: ["encode", "qr", "barcode", "scan"] },
-        { name: "URL Encoder", url: "/tools/url-encoder.html", keywords: ["encode", "url"] },
-        { name: "Hash Generator", url: "/tools/hash-generator.html", keywords: ["encode", "hash", "md5", "sha"] },
-        { name: "Password Manager", url: "/tools/password-manager.html", keywords: ["encode", "password", "manager"] },
-        { name: "Password Generator", url: "/tools/password-generator.html", keywords: ["encode", "password", "generate"] },
-        { name: "QR Generator", url: "/tools/qr-generator.html", keywords: ["encode", "qr", "generate"] },
-        { name: "PWA Manifest Generator", url: "/tools/pwa-manifest-generator.html", keywords: ["encode", "pwa", "manifest"] },
-        { name: "Image to Prompt (AI)", url: "/tools/image-to-prompt.html", keywords: ["ai", "image", "prompt"] },
-        { name: "JSON Formatter", url: "/tools/json-formatter.html", keywords: ["ai", "json", "formatter"] },
-        { name: "HTML Viewer", url: "/tools/html-viewer.html", keywords: ["ai", "html", "code", "viewer"] }
+        // --- Client-side tools ---
+        { name: "Image to PDF", url: "/tools/image-to-pdf.html", keywords: ["image", "pdf", "convert"], type: "client" },
+        { name: "Image Compressor", url: "/tools/image-compressor.html", keywords: ["image", "compress", "resize"], type: "client" },
+        { name: "Image Resizer", url: "/tools/image-resizer.html", keywords: ["image", "resize", "scale"], type: "client" },
+        { name: "PNG <> JPG Converter", url: "/tools/convert-png-jpg.html", keywords: ["image", "png", "jpg", "convert"], type: "client" },
+        { name: "Steganography", url: "/tools/steganography.html", keywords: ["image", "hide", "secret"], type: "client" },
+        { name: "Palette Extractor", url: "/tools/image-palette-extractor.html", keywords: ["image", "color", "palette"], type: "client" },
+        { name: "Placeholder Generator", url: "/tools/image-placeholder-generator.html", keywords: ["image", "placeholder", "generate"], type: "client" },
+        { name: "Text Diff Checker", url: "/tools/text-diff.html", keywords: ["text", "compare", "diff"], type: "client" },
+        { name: "Word Counter", url: "/tools/word-counter.html", keywords: ["text", "word", "count"], type: "client" },
+        { name: "Text Encryptor", url: "/tools/text-encryptor.html", keywords: ["text", "encrypt", "password"], type: "client" },
+        { name: "Text to PDF", url: "/tools/text-to-pdf.html", keywords: ["text", "pdf", "convert"], type: "client" },
+        { name: "Line Operations", url: "/tools/line-operations.html", keywords: ["text", "sort", "shuffle"], type: "client" },
+        { name: "Text Cleaner", url: "/tools/text-cleaner.html", keywords: ["text", "clean", "format"], type: "client" },
+        { name: "Delivery Note Generator", url: "/tools/delivery-note-generator.html", keywords: ["text", "delivery", "note", "challan"], type: "client" },
+        { name: "Unit Converter", url: "/tools/unit-converter.html", keywords: ["convert", "unit", "length", "weight"], type: "client" },
+        { name: "Document Scanner", url: "/tools/document-scanner.html", keywords: ["convert", "document", "scan", "pdf"], type: "client" },
+        { name: "CSV Editor", url: "/tools/csv-editor.html", keywords: ["convert", "csv", "editor", "spreadsheet"], type: "client" },
+        { name: "Calculator", url: "/tools/calculator.html", keywords: ["convert", "calculator", "math"], type: "client" },
+        { name: "PDF Editor", url: "/tools/pdf-editor.html", keywords: ["convert", "pdf", "edit", "merge", "split"], type: "client" },
+        { name: "QR & Barcode Reader", url: "/tools/qr-reader.html", keywords: ["encode", "qr", "barcode", "scan"], type: "client" },
+        { name: "URL Encoder", url: "/tools/url-encoder.html", keywords: ["encode", "url"], type: "client" },
+        { name: "Hash Generator", url: "/tools/hash-generator.html", keywords: ["encode", "hash", "md5", "sha"], type: "client" },
+        { name: "Password Manager", url: "/tools/password-manager.html", keywords: ["encode", "password", "manager"], type: "client" },
+        { name: "Password Generator", url: "/tools/password-generator.html", keywords: ["encode", "password", "generate"], type: "client" },
+        { name: "QR Generator", url: "/tools/qr-generator.html", keywords: ["encode", "qr", "generate"], type: "client" },
+        { name: "PWA Manifest Generator", url: "/tools/pwa-manifest-generator.html", keywords: ["encode", "pwa", "manifest"], type: "client" },
+        { name: "Image to Prompt (AI)", url: "/tools/image-to-prompt.html", keywords: ["ai", "image", "prompt"], type: "client" },
+        { name: "JSON Formatter", url: "/tools/json-formatter.html", keywords: ["ai", "json", "formatter"], type: "client" },
+        { name: "HTML Viewer", url: "/tools/html-viewer.html", keywords: ["ai", "html", "code", "viewer"], type: "client" },
+        // --- Server-side tools (NEW CONCEPT) ---
+        // { name: "DOCX to PDF Converter", url: "https://toolnine.cloud/docx-to-pdf.html", keywords: ["docx", "pdf", "convert"], type: "server" },
+        // { name: "Video Converter", url: "https://toolnine.cloud/video-converter.html", keywords: ["video", "convert"], type: "server" }
     ];
 
     if (headerSearchInput) {
@@ -82,13 +83,12 @@ function setupUniversalSearchLogic() {
         const isOnHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
 
         // --- Live Suggestions Logic (Only run on non-homepage) ---
-        // We only show suggestions when NOT on the homepage to avoid conflict with in-page filtering.
         headerSearchInput.addEventListener('input', () => {
             const query = headerSearchInput.value.trim().toLowerCase();
 
             // Hide suggestions on homepage
             if (isOnHomePage) {
-                // Do nothing here, script.js on homepage handles this.
+                searchResultsDropdown.style.display = 'none';
                 return;
             }
             
@@ -115,7 +115,6 @@ function setupUniversalSearchLogic() {
 
                 // If on homepage, perform in-place filtering directly (for full results)
                 if (isOnHomePage) {
-                    // We let script.js handle the input event, here we just ensure a clean redirect on empty search
                     if (typeof performInPlaceSearch === "function") { // Check if homepage logic exists
                         performInPlaceSearch(query);
                     }

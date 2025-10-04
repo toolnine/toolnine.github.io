@@ -201,5 +201,6 @@ function initializePageLogic() {
     checkURLForSearchQuery(); // Check URL for search query on page load
 }
 
-// Ensure loadDynamicContent runs after the page has finished loading
-document.addEventListener('DOMContentLoaded', initializePageLogic);
+// NOTE: Initialization now happens from load-components.js AFTER header/footer load
+
+// END OF FILE: script.js

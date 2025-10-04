@@ -1,29 +1,29 @@
 /* ==== Global Reset & Variables ==== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
-    --bg: #f8fafc;        /* Light Mode Background */
-    --text: #0f172a;      /* Light Mode Text */
-    --card: #ffffff;      /* Light Mode Card Background */
-    --accent: #2563eb;    /* Accent Color (Blue) */
-    --border-color: #e2e8f0; /* Light Mode Border Color */
+    --bg: #f8fafc;
+    --text: #0f172a;
+    --card: #ffffff;
+    --accent: #2563eb;
+    --border-color: #e2e8f0;
     --header-height: 70px;
 }
 [data-theme="dark"] {
-    --bg: #1e293b;        /* Dark Mode Background (Slate Blue) */
-    --text: #f8fafc;      /* Dark Mode Text */
-    --card: #334155;      /* Dark Mode Card Background */
-    --accent: #60a5fa;    /* Dark Mode Accent Color (Lighter Blue) */
-    --border-color: #475569; /* Dark Mode Border Color */
+    --bg: #1e293b;
+    --text: #f8fafc;
+    --card: #334155;
+    --accent: #60a5fa;
+    --border-color: #475569;
 }
 [data-theme="black"] {
-    --bg: #000000;        /* True Black Background */
-    --text: #f8fafc;      /* Light Text on Black Background */
-    --card: #1f1f1f;      /* Dark Grey Card Background */
-    --accent: #60a5fa;    /* Accent Color (Lighter Blue) */
-    --border-color: #333333; /* Dark Border Color */
+    --bg: #000000;
+    --text: #f8fafc;
+    --card: #1f1f1f;
+    --accent: #60a5fa;
+    --border-color: #333333;
 }
 
-/* --- Sticky Header Fix: Remove flex from body --- */
+/* --- CRITICAL: REMOVE flex from body for sticky header support --- */
 body {
     font-family: "Inter", "Segoe UI", Arial, sans-serif;
     background: var(--bg);
@@ -31,10 +31,10 @@ body {
     line-height: 1.6;
     min-height: 100vh;
     transition: background 0.3s, color 0.3s;
-    /* REMOVE flex for sticky header support */
+    /* DO NOT use flex or flex-direction here! */
 }
 
-/* Optional: If you want footer always at bottom, use this wrapper structure in your HTML:
+/* Optional: If you want sticky footer, use .page-container in your HTML:
    <body>
      <div class="page-container">
        <div id="header-placeholder"></div>
@@ -50,7 +50,7 @@ body {
     flex-direction: column;
 }
 main {
-    flex: 1 0 auto;
+    flex: 1;
 }
 
 /* New: Prevent scrolling when mobile menu is open */
@@ -68,8 +68,8 @@ body.menu-open {
     align-items: center;
     justify-content: space-between;
     padding: 0 2rem;
-    position: sticky; /* Sticky Header */
-    top: 0;          /* Sticky Header */
+    position: sticky;
+    top: 0;
     z-index: 1001;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
@@ -78,46 +78,22 @@ body.menu-open {
     font-weight: bold;
     color: var(--accent);
     text-decoration: none;
-    transition: color 0.3s ease; /* Smooth color transition */
+    transition: color 0.3s ease;
     animation: breathing-logo 3s ease-in-out infinite alternate;
 }
 @keyframes breathing-logo {
-    0% {
-        transform: scale(1);
-        text-shadow: 0 0 5px rgba(37, 99, 235, 0.2);
-        color: var(--accent);
-    }
-    50% {
-        transform: scale(1.03);
-        text-shadow: 0 0 10px rgba(37, 99, 235, 0.6);
-        color: #60a5fa;
-    }
-    100% {
-        transform: scale(1);
-        text-shadow: 0 0 5px rgba(37, 99, 235, 0.2);
-        color: var(--accent);
-    }
+    0% { transform: scale(1); text-shadow: 0 0 5px rgba(37,99,235,0.2); color: var(--accent);}
+    50% { transform: scale(1.03); text-shadow: 0 0 10px rgba(37,99,235,0.6); color: #60a5fa;}
+    100% { transform: scale(1); text-shadow: 0 0 5px rgba(37,99,235,0.2); color: var(--accent);}
 }
 [data-theme="dark"] .logo {
     color: var(--accent);
     animation: breathing-logo-dark 3s ease-in-out infinite alternate;
 }
 @keyframes breathing-logo-dark {
-    0% {
-        transform: scale(1);
-        text-shadow: 0 0 5px rgba(96, 165, 250, 0.2);
-        color: var(--accent);
-    }
-    50% {
-        transform: scale(1.03);
-        text-shadow: 0 0 10px rgba(96, 165, 250, 0.6);
-        color: #fff;
-    }
-    100% {
-        transform: scale(1);
-        text-shadow: 0 0 5px rgba(96, 165, 250, 0.2);
-        color: var(--accent);
-    }
+    0% { transform: scale(1); text-shadow: 0 0 5px rgba(96,165,250,0.2); color: var(--accent);}
+    50% { transform: scale(1.03); text-shadow: 0 0 10px rgba(96,165,250,0.6); color: #fff;}
+    100% { transform: scale(1); text-shadow: 0 0 5px rgba(96,165,250,0.2); color: var(--accent);}
 }
 
 .main-nav { display: flex; align-items: center; gap: 0.5rem; }
@@ -204,9 +180,7 @@ body.menu-open {
     color: var(--accent);
     margin-bottom: 0.5rem;
 }
-.mega-menu-category ul {
-    list-style: none;
-}
+.mega-menu-category ul { list-style: none; }
 .mega-menu-category li a {
     display: block;
     padding: 0.5rem;
@@ -215,9 +189,7 @@ body.menu-open {
     font-size: 0.95rem;
     border-radius: 4px;
     transition: background-color 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    display: flex; align-items: center; gap: 0.5rem;
 }
 .mega-menu-category li a:hover { background-color: #f1f5f9; }
 [data-theme="dark"] .mega-menu-category li a:hover { background-color: #475569; }
@@ -299,13 +271,13 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
 }
 .tool-card-home:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 10px 25px -5px rgba(37,99,235,0.1);
     border-color: var(--accent);
 }
 [data-theme="dark"] .tool-card-home { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
-[data-theme="dark"] .tool-card-home:hover { box-shadow: 0 10px 25px -5px rgba(96, 165, 250, 0.2); border-color: var(--accent); }
+[data-theme="dark"] .tool-card-home:hover { box-shadow: 0 10px 25px -5px rgba(96,165,250,0.2); border-color: var(--accent); }
 [data-theme="black"] .tool-card-home { box-shadow: 0 10px 25px -5px rgba(255,255,255,0.05); }
-[data-theme="black"] .tool-card-home:hover { box-shadow: 0 10px 25px -5px rgba(96, 165, 250, 0.2); border-color: var(--accent); }
+[data-theme="black"] .tool-card-home:hover { box-shadow: 0 10px 25px -5px rgba(96,165,250,0.2); border-color: var(--accent); }
 
 .tool-header-home { display: flex; align-items: center; gap: 1rem; }
 .tool-logo { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
@@ -379,69 +351,21 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
     transition: opacity 0.2s, fill 0.2s, stroke 0.2s;
     z-index: 50;
 }
-.favorite-btn:hover {
-    opacity: 1;
-}
-.favorite-btn svg {
-    width: 20px;
-    height: 20px;
-    stroke: var(--text);
-    fill: none;
-}
-.favorite-btn.active svg {
-    fill: #f59e0b;
-    stroke: #f59e0b;
-}
-#favoritesSection {
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
-    display: none;
-}
-#favoritesSection h2 {
-    margin-bottom: 1.5rem;
-    text-align: left;
-}
+.favorite-btn:hover { opacity: 1; }
+.favorite-btn svg { width: 20px; height: 20px; stroke: var(--text); fill: none; }
+.favorite-btn.active svg { fill: #f59e0b; stroke: #f59e0b; }
+#favoritesSection { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color); display: none; }
+#favoritesSection h2 { margin-bottom: 1.5rem; text-align: left; }
 
-.tool-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding-top: 2rem;
-    flex-grow: 1;
-    width: 100%;
-}
-.tool-page .tool-card {
-    max-width: 900px;
-    padding: 2rem;
-    width: 100%;
-    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
-    background: var(--card);
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-}
+.tool-page { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 2rem; flex-grow: 1; width: 100%; }
+.tool-page .tool-card { max-width: 900px; padding: 2rem; width: 100%; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); background: var(--card); border-radius: 12px; border: 1px solid var(--border-color);}
 .tool-header { text-align: center; margin-bottom: 1.5rem; }
 .tool-header h1 { font-size: 2rem; color: var(--accent); font-weight: 700; }
 .tool-header .tool-desc { font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.5; }
 [data-theme="dark"] .tool-header .tool-desc { color: #94a3b8; }
 
-.tool-input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--bg);
-    color: var(--text);
-    font-size: 1rem;
-}
-.tool-controls {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-    flex-wrap: wrap;
-    align-items: center;
-}
+.tool-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg); color: var(--text); font-size: 1rem; }
+.tool-controls { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; align-items: center; }
 
 /* --- Mobile responsive adjustments (start) --- */
 @media (max-width: 900px) {
@@ -484,17 +408,11 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
         pointer-events: auto;
         border-radius: 0;
     }
-    .mega-menu.show {
-        transform: translateX(0);
-    }
-    body.menu-open {
-        overflow: hidden;
-    }
+    .mega-menu.show { transform: translateX(0); }
+    body.menu-open { overflow: hidden; }
 }
 @media (max-width: 600px) {
-    .home-hero h1 {
-        font-size: 1.6rem;
-    }
+    .home-hero h1 { font-size: 1.6rem; }
     .feature-highlights {
         display: flex;
         justify-content: center;
@@ -511,21 +429,13 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
         box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
     .feature-highlights .highlight-item p { font-size: 0.85rem; }
-    .header-search-container {
-        max-width: calc(100% - 100px);
-    }
+    .header-search-container { max-width: calc(100% - 100px); }
 }
 @media (max-width: 768px) {
-    .tool-grid-home {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 1rem;
-    }
+    .tool-grid-home { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
 }
 @media (max-width: 480px) {
-    .tool-grid-home {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        gap: 0.8rem;
-    }
+    .tool-grid-home { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.8rem; }
 }
 @media (max-width: 600px) {
     main { padding: 0 1rem; }
@@ -545,11 +455,7 @@ main { flex-grow: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 
         pointer-events: none;
         transition: all 0.3s ease-in-out;
     }
-    .mega-menu.show {
-        transform: translateY(0);
-        opacity: 1;
-        pointer-events: auto;
-    }
+    .mega-menu.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
     .hamburger-btn { display: none; }
     .main-nav ul { display: flex; }
     .tool-icon { margin-right: 0.5rem; }

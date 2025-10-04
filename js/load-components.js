@@ -57,11 +57,13 @@ function setupCommonSearchRedirection() {
                     }
                 } else {
                     // If not on homepage, redirect to homepage with search query in URL.
-                    window.location.href = `index.html?search=${encodeURIComponent(query)}`;
+                    // FIX: Changed relative path 'index.html' to absolute path '/index.html'
+                    window.location.href = `/index.html?search=${encodeURIComponent(query)}`;
                 }
             } else if (!isOnHomePage && window.location.search.includes('search=')) {
                 // If query is empty and we are on a non-homepage URL with search params, redirect back clean.
-                window.location.href = `index.html`;
+                // FIX: Changed relative path 'index.html' to absolute path '/index.html'
+                window.location.href = `/index.html`;
             }
         };
 

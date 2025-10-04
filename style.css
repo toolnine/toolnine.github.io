@@ -36,7 +36,6 @@ body {
     line-height: 1.6;
     min-height: 100vh;
     transition: background 0.3s, color 0.3s;
-    /* Removed flex to avoid sticky issues (as in the new code comments) */
 }
 
 /* New: Prevent scrolling when mobile menu is open */
@@ -128,7 +127,7 @@ main {
     margin: 0 1rem;
     flex-grow: 1;
     max-width: 300px;
-    position: relative; /* Add position relative for suggestions dropdown */
+    position: relative;
 }
 .header-search-container input {
     width: 100%;
@@ -150,7 +149,7 @@ main {
 [data-theme="dark"] .header-search-container input { background: #475569; }
 [data-theme="black"] .header-search-container input { background: #2a2a2a; }
 
-/* NEW: Search Suggestions Dropdown Styles */
+/* NEW: Search Suggestions Dropdown Styles (Refined for simplicity) */
 .search-suggestions {
     position: absolute;
     top: calc(100% + 5px); /* Position below input */
@@ -182,6 +181,11 @@ main {
 }
 [data-theme="dark"] .suggestion-item:hover { background-color: #475569; }
 [data-theme="black"] .suggestion-item:hover { background-color: #2a2a2a; }
+/* Add visual focus for keyboard navigation (optional) */
+.suggestion-item.focused {
+    background-color: #e0ebff;
+}
+[data-theme="dark"] .suggestion-item.focused { background-color: #475569; }
 
 /* Mega Menu Overlay (Mobile) */
 .mega-menu {

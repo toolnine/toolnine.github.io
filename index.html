@@ -11,6 +11,34 @@
     <!-- END SEO OPTIMIZATION -->
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* CSS for 'Not Found' message */
+        .search-message-container {
+            padding: 2rem;
+            text-align: center;
+            background: var(--card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: none; /* Hidden by default */
+        }
+        .search-message-container h2 {
+            font-size: 1.5rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        .search-message-container p {
+            font-size: 1rem;
+            color: #475569;
+            margin-bottom: 1rem;
+        }
+        .search-message-container .action-link {
+            text-decoration: none;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        [data-theme="dark"] .search-message-container p { color: #94a3b8; }
+    </style>
 </head>
 <body>
 
@@ -62,6 +90,13 @@
             <button class="tab-btn" data-filter="convert">Converters</button>
             <button class="tab-btn" data-filter="encode">Encoders</button>
             <button class="tab-btn" data-filter="ai">AI</button>
+        </div>
+        
+        <!-- NEW: "Not Found" message container -->
+        <div class="search-message-container" id="searchResultsMessage" style="display: none;">
+            <h2>No Tools Found</h2>
+            <p>We couldn't find any tools matching your search query. Try searching for a different keyword or check out these options:</p>
+            <p><a href="/contact.html" class="action-link">Suggest a new tool</a> | <a href="#" id="pwaPromptLink" class="action-link">Install our PWA for offline access</a></p>
         </div>
 
         <div class="tool-grid-home" id="toolGrid">

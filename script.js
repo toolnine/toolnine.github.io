@@ -19,19 +19,10 @@ function initializePageLogic() {
     // Get the new header search input from the loaded header component
     const headerSearchInput = document.getElementById('headerSearchInput');
 
+    // Refactored: This function now only handles filtering on the current page.
+    // Redirection logic has been moved to load-components.js to be truly universal.
     function performInPlaceSearch(query) {
         const lowerCaseQuery = query.toLowerCase().trim();
-        const isOnHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
-
-        if (!isOnHomePage) {
-            // If not on homepage, redirect to homepage with the search query as a parameter
-            if (lowerCaseQuery.length > 0) {
-                window.location.href = `index.html?search=${encodeURIComponent(lowerCaseQuery)}`;
-            } else {
-                // If query is empty, simply return to prevent unnecessary actions.
-            }
-            return;
-        }
 
         if (lowerCaseQuery.length === 0) {
             // Show regular content when search is empty
@@ -65,6 +56,7 @@ function initializePageLogic() {
     }
 
     // --- Search Input Event Listener ---
+    // Bind input event listener here. This will only run on the homepage.
     if (headerSearchInput) {
         headerSearchInput.addEventListener('input', () => {
             performInPlaceSearch(headerSearchInput.value);

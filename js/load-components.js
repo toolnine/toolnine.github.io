@@ -88,7 +88,7 @@ function setupUniversalSearchLogic() {
 
             // Hide suggestions on homepage
             if (isOnHomePage) {
-                searchResultsDropdown.style.display = 'none';
+                // Do nothing here, script.js on homepage handles this.
                 return;
             }
             
@@ -114,7 +114,7 @@ function setupUniversalSearchLogic() {
                 const query = headerSearchInput.value.trim();
 
                 // If on homepage, perform in-place filtering directly (for full results)
-                if (isOnHomePage && query.length > 0) {
+                if (isOnHomePage) {
                     // We let script.js handle the input event, here we just ensure a clean redirect on empty search
                     if (typeof performInPlaceSearch === "function") { // Check if homepage logic exists
                         performInPlaceSearch(query);
